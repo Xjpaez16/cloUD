@@ -2,8 +2,8 @@
 
 class CarreraDTO
 {
-    public $codigo;
-    public $nom_carrera;
+    private $codigo;
+    private $nom_carrera;
 
     public function __construct($codigo, $nom_carrera)
     {

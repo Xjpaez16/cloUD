@@ -4,7 +4,7 @@ require_once('UsuarioDTO.php');
 
 class EstudianteDTO extends UsuarioDTO
 {
-    public $cod_carrera;
+    private $cod_carrera;
 
     public function __construct($cod_carrera)
     {

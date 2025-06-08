@@ -4,7 +4,7 @@ require_once('UsuarioDTO.php');
 
 class TutorDTO extends UsuarioDTO
 {
-    public $calificacion_general;
+    private $calificacion_general;
 
     public function __construct($calificacion_general)
     {

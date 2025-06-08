@@ -2,8 +2,8 @@
 
 class AreaDTO
 {
-    public $codigo;
-    public $nombre;
+    private $codigo;
+    private $nombre;
 
     public function __construct($codigo, $nombre)
     {

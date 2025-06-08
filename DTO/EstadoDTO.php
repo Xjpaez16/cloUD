@@ -2,8 +2,8 @@
 
 class EstadoDTO
 {
-    public $codigo;
-    public $tipo_estado;
+    private $codigo;
+    private $tipo_estado;
 
     public function __construct($codigo, $tipo_estado)
     {

@@ -2,8 +2,8 @@
 
 class ProfesorDTO
 {
-    public $cod;
-    public $nom;
+    private $cod;
+    private $nom;
 
     public function __construct($cod, $nom)
     {

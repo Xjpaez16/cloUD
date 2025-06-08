@@ -2,11 +2,11 @@
 
 class UsuarioDTO
 {
-    public $codigo;
-    public $nombre;
-    public $correo;
-    public $contrasena;
-    public $respuesta_preg;
+    private $codigo;
+    private $nombre;
+    private $correo;
+    private $contrasena;
+    private $respuesta_preg;
 
     public function __construct($codigo, $nombre, $correo, $contrasena, $respuesta_preg)
     {

@@ -2,11 +2,11 @@
 
 class HorarioDTO
 {
-    public $id;
-    public $id_dia;
-    public $cod_tutor;
-    public $hora_inicio;
-    public $hora_fin;
+    private $id;
+    private $id_dia;
+    private $cod_tutor;
+    private $hora_inicio;
+    private $hora_fin;
 
     public function __construct($id, $id_dia, $cod_tutor, $hora_inicio, $hora_fin)
     {

@@ -2,12 +2,12 @@
 
 class DisponibilidadDTO
 {
-    public $cod_tutor;
-    public $hora_inicio;
-    public $hora_fin;
-    public $fecha;
-    public $id_horario;
-    public $cod_estado;
+    private $cod_tutor;
+    private $hora_inicio;
+    private $hora_fin;
+    private $fecha;
+    private $id_horario;
+    private $cod_estado;
 
     public function __construct($cod_tutor, $hora_inicio, $hora_fin, $fecha, $id_horario, $cod_estado)
     {

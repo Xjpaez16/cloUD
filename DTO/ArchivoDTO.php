@@ -2,15 +2,15 @@
 
 class ArchivoDTO
 {
-    public $id;
-    public $ruta;
-    public $tamano;
-    public $cod_profesor;
-    public $cod_area;
-    public $cod_estudiante;
-    public $cod_estado;
-    public $id_tipo;
-    public $id_materia;
+    private $id;
+    private $ruta;
+    private $tamano;
+    private $cod_profesor;
+    private $cod_area;
+    private $cod_estudiante;
+    private $cod_estado;
+    private $id_tipo;
+    private $id_materia;
 
     public function __construct($id, $ruta, $tamano, $cod_profesor, $cod_area, $cod_estudiante, $cod_estado, $id_tipo, $id_materia)
     {

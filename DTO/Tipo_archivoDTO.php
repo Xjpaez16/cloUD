@@ -2,8 +2,8 @@
 
 class Tipo_archivoDTO
 {
-    public $id;
-    public $tipo;
+    private $id;
+    private $tipo;
 
     public function __construct($id, $tipo)
     {

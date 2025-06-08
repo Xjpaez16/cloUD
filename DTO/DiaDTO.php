@@ -2,8 +2,8 @@
 
 class DiaDTO
 {
-    public $id;
-    public $dia;
+    private $id;
+    private $dia;
 
     public function __construct($id, $dia)
     {

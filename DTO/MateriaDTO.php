@@ -2,8 +2,8 @@
 
 class MateriaDTO
 {
-    public $id;
-    public $nom_materia;
+    private $id;
+    private $nom_materia;
 
     public function __construct($id, $nom_materia)
     {
