@@ -15,15 +15,22 @@ class EstudianteDAO {
         try {
             $sql = "INSERT INTO estudiante (codigo, nombre, correo, contraseña, respuesta_preg, cod_carrera, cod_estado) VALUES (?, ?, ?, ?, ?, ?, ?)";
             $stmt = $this->conn->prepare($sql);
+            $codigo = $estudiante->getCodigo();
+            $nombre = $estudiante->getNombre();
+            $correo = $estudiante->getCorreo();
+            $contrasena = $estudiante->getContrasena();
+            $respuesta_preg = $estudiante->getRespuesta_preg();
+            $cod_carrera = $estudiante->getCod_carrera();
+            $cod_estado = $estudiante->getCod_estado();
             $stmt->bind_param(
                 'ssssiii',
-                $estudiante->getCodigo(),
-                $estudiante->getNombre(),
-                $estudiante->getCorreo(),
-                $estudiante->getContrasena(),
-                $estudiante->getRespuesta_preg(),
-                $estudiante->getCod_carrera(),
-                $estudiante->getCod_estado()
+                $codigo,
+                $nombre,
+                $correo,
+                $contrasena,
+                $respuesta_preg,
+                $cod_carrera,
+                $cod_estado
             );
             return $stmt->execute();
         } catch (Exception $e) {
@@ -53,7 +60,7 @@ class EstudianteDAO {
             }
             return null;
         } catch (Exception $e) {
-            error_log('Error en getByCodigo EstudianteDAO: ' . $e->getMessage());
+            error_log('Error en getid EstudianteDAO: ' . $e->getMessage());
             return null;
         }
     }
@@ -87,14 +94,20 @@ class EstudianteDAO {
         try {
             $sql = "UPDATE estudiante SET nombre = ?, correo = ?, contraseña = ?, respuesta_preg = ?, cod_carrera = ?, cod_estado = ? WHERE codigo = ?";
             $stmt = $this->conn->prepare($sql);
+            $nombre = $estudiante->getNombre();
+            $correo = $estudiante->getCorreo();
+            $contrasena = $estudiante->getContrasena();
+            $respuesta_preg = $estudiante->getRespuesta_preg();
+            $cod_carrera = $estudiante->getCod_carrera();
+            $cod_estado = $estudiante->getCod_estado();
             $stmt->bind_param(
                 'ssssiii',
-                $estudiante->getNombre(),
-                $estudiante->getCorreo(),
-                $estudiante->getContrasena(),
-                $estudiante->getRespuesta_preg(),
-                $estudiante->getCod_carrera(),
-                $estudiante->getCod_estado(),
+                $nombre,
+                $correo,
+                $contrasena,
+                $respuesta_preg,
+                $cod_carrera,
+                $cod_estado,
                 $codigo
             );
             return $stmt->execute();
@@ -114,6 +127,74 @@ class EstudianteDAO {
             return $stmt->execute();
         } catch (Exception $e) {
             error_log('Error en softDelete EstudianteDAO: ' . $e->getMessage());
+            return false;
+        }
+    }
+
+    // Validar login de estudiante
+    public function validarLogin($correo, $contrasena) {
+        try {
+            $sql = "SELECT * FROM estudiante WHERE correo = ? AND contraseña = ? AND cod_estado = 1";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bind_param('ss', $correo, $contrasena);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            if ($row = $result->fetch_assoc()) {
+                return new EstudianteDTO(
+                    $row['codigo'],
+                    $row['nombre'],
+                    $row['correo'],
+                    $row['contraseña'],
+                    $row['respuesta_preg'],
+                    $row['cod_carrera'],
+                    $row['cod_estado']
+                );
+            }
+            return null;
+        } catch (Exception $e) {
+            error_log('Error en validar el Login EstudianteDAO: ' . $e->getMessage());
+            return null;
+        }
+    }
+
+    //comprobar correo
+    public function comprobarCorreo($correo) {
+        try {
+            $sql = "SELECT * FROM estudiante WHERE correo = ?";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bind_param('s', $correo);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            return $result->num_rows > 0; // Retorna true si existe, false si no
+        } catch (Exception $e) {
+            error_log('Error en comprobar correo EstudianteDAO: ' . $e->getMessage());
+            return false;
+        }
+    }
+
+    //comprobar rta_seguridad
+    public function comprobarRtaSeguridad($correo, $respuesta_preg) {
+        try {
+            $sql = "SELECT * FROM estudiante WHERE correo = ? AND respuesta_preg = ?";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bind_param('ss', $correo, $respuesta_preg);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            return $result->num_rows > 0; 
+        } catch (Exception $e) {
+            error_log('Error en comprobar rta_seguridad EstudianteDAO: ' . $e->getMessage());
+            return false;
+        }
+    }
+    //cambiar contraseña
+    public function cambiarContrasena($correo, $nuevaContrasena) {
+        try {
+            $sql = "UPDATE estudiante SET contraseña = ? WHERE correo = ?";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bind_param('ss', $nuevaContrasena, $correo);
+            return $stmt->execute();
+        } catch (Exception $e) {
+            error_log('Error en cambiar contraseña EstudianteDAO: ' . $e->getMessage());
             return false;
         }
     }

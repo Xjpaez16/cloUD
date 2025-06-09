@@ -5,10 +5,14 @@ require_once('UsuarioDTO.php');
 class TutorDTO extends UsuarioDTO
 {
     private $calificacion_general;
+    private $cod_estado;
+    private $areas = [];
 
-    public function __construct($calificacion_general)
+    public function __construct($codigo, $nombre, $correo, $contrasena, $respuesta_preg, $calificacion_general, $cod_estado)
     {
+        parent::__construct($codigo, $nombre, $correo, $contrasena, $respuesta_preg);
         $this->calificacion_general = $calificacion_general;
+        $this->cod_estado = $cod_estado;
     }
 
     public function getCalificacion_general()
@@ -19,6 +23,28 @@ class TutorDTO extends UsuarioDTO
     public function setCalificacion_general($calificacion_general)
     {
         $this->calificacion_general = $calificacion_general;
+        return $this;
+    }
+
+    public function getCod_estado()
+    {
+        return $this->cod_estado;
+    }
+
+    public function setCod_estado($cod_estado)
+    {
+        $this->cod_estado = $cod_estado;
+        return $this;
+    }
+
+    public function getAreas()
+    {
+        return $this->areas;
+    }
+
+    public function setAreas($areas)
+    {
+        $this->areas = $areas;
         return $this;
     }
 }
