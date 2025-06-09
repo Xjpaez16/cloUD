@@ -14,7 +14,7 @@
 
   <!-- Contenido principal -->
   <div class="relative z-10">
-    <?php require_once './layouts/header.php'; ?>
+    <?php require_once __DIR__ . '/layouts/header.php'; ?>
     <!-- Mensaje principal -->
     <main class="text-center py-16 px-4">
       <h1 class="text-4xl sm:text-5xl font-bold mb-12">
