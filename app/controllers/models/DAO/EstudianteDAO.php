@@ -1,5 +1,6 @@
 <?php
 require_once(__DIR__ . '/../DTO/EstudianteDTO.php');
+require_once(__DIR__ . '/EstadoDAO.php');
 
 class EstudianteDAO {
     private $conn;
@@ -66,7 +67,7 @@ class EstudianteDAO {
     }
 
     // Obtener todos los estudiantes
-    public function todos() {
+    public function getAll() {
         try {
             $sql = "SELECT * FROM estudiante";
             $result = $this->conn->query($sql);
@@ -130,7 +131,24 @@ class EstudianteDAO {
             return false;
         }
     }
-
+    //Verificar si el estudiante está activo donde el estado es 1
+    public function verificarEstado() {
+        try {
+            $sql = "SELECT cod_estado FROM estudiante e 
+            JOIN estado es ON e.cod_estado = es.codigo
+            WHERE  es.tipo_estado = 'Autorizado'";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            if ($row = $result->fetch_assoc() ) {
+                return $row['cod_estado'] == 1; //retorna true
+            }
+            
+        } catch (Exception $e) {
+            error_log('Error en verificarEstado EstudianteDAO: ' . $e->getMessage());
+            return false;
+        }
+    }
     // Validar login de estudiante
     public function validarLogin($correo, $contrasena) {
         try {

@@ -24,6 +24,8 @@
             $email = $_POST['email'];
             $password = $_POST['password'];
             $estudiante = $this->estudianteDAO->validarLogin($email, $password);
+            //rellenar bd con campos de prueba para poder completar el controlador
+            
             if ($estudiante && password_verify($password, $estudiante->getContrasena())) {
                 session_start();
                 $_SESSION['usuario'] = $estudiante;
