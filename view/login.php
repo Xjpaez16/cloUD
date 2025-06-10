@@ -62,12 +62,16 @@
                         </div>
 
                         <div class="!mt-12">
-                            <button type="button"
+                            <button type="submit"
                                 class="xl:text-lg w-full py-2 px-4 text-[15px] font-medium tracking-wide rounded-md text-white bg-purple-600 hover:bg-purple-900 focus:outline-none cursor-pointer">
                                 Ingresar
                             </button>
                         </div>
                         <p class="text-slate-900 text-sm !mt-6 text-center xl:text-lg">¿No tienes una cuenta? <a
+<<<<<<< HEAD
+=======
+                                href="<?= BASE_URL ?>AuthController/register"
+>>>>>>> controllers
                                 class="text-purple-600 hover:underline ml-1 whitespace-nowrap font-semibold">Registrate
                                 Ahora</a></p>
                     </form>
@@ -75,7 +79,47 @@
             </div>
         </div>
     </div>
+    
     <script src="<?= BASE_URL ?>public/js/eye.js"></script>
+    <?php if (isset($_GET['error'])){ ?>
+    <script>
+            const notyf = new Notyf({
+            duration: 3000,
+            position: {
+            x: 'center',
+            y: 'top'
+            },
+            ripple: true,
+            dismissible: true,
+            dismissAction: {
+                icon: {
+                    className: 'material-icons text-white',
+                    tagName: 'i',
+                    text: 'close'
+                },
+                action: (notyf) => notyf.close()
+            },
+            types: [
+            {
+                type: 'error',
+                background: '#e53e3e',
+                className: 'rounded-lg bg-red-400 text-white text-[11px] sm:text-sm md:text-base px-2 sm:px-4 py-1.5 sm:py-2 shadow-md font-sans font-semibold max-w-[95vw] w-fit min-w-[120px] min-h-[36px] sm:min-h-[44px]',
+                icon: {
+                className: 'material-icons',
+                tagName: 'i',
+                text: 'error'
+                }
+            }
+            ]
+        });
+
+        
+        notyf.open({
+            type: 'error',
+            message: 'Correo o contraseña incorrectos'
+        });
+    </script>
+    <?php } ?>
 
 
 </body>

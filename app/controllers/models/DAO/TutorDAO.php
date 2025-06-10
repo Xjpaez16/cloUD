@@ -4,8 +4,8 @@ require_once(__DIR__ . '/../DTO/TutorDTO.php');
 class TutorDAO {
     private $conn;
 
-    public function __construct($db = null) {
-        require_once(__DIR__ . '/../../../core/Conexion.php');
+    public function __construct() {
+        require_once(__DIR__ . '/../../../../core/Conexion.php');
         $conexion = new Conexion();
         $this->conn = $conexion->getConexion();
     }
@@ -64,6 +64,8 @@ class TutorDAO {
             return null;
         }
     }
+
+    
 
     // Obtener todos los tutores
     public function todos() {
