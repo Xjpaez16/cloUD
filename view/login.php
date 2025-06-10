@@ -7,6 +7,12 @@
     <title>Login</title>
     <!-- Tailwind CSS vía CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
+   
+
+    <!-- JS de Notyf y css -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
+    
 </head>
 
 <body class="relative min-h-screen bg-cover bg-bottom bg-no-repeat text-white font-sans "
@@ -19,13 +25,13 @@
                         class="w-40 mb-8 mx-auto block" />
                 </a>
 
-                <div class="p-6 sm:p-8 rounded-2xl bg-white border border-gray-200 shadow-sm font-sans">
+                < class="p-6 sm:p-8 rounded-2xl bg-white border border-gray-200 shadow-sm font-sans">
                     <h1 class="text-slate-900 text-center text-3xl font-bold xl:text-4xl">Iniciar sesión</h1>
-                    <form class="mt-12 space-y-6">
+                    <form class="mt-12 space-y-6" action="<?= BASE_URL ?>LoginController/login" method="POST">
                         <div>
                             <label class="text-slate-900 text-sm font-medium mb-2 block xl:text-xl">Correo</label>
                             <div class="relative flex items-center">
-                                <input name="username" type="text" required
+                                <input name="email" type="email" required
                                     class="w-full text-slate-900 text-sm border border-slate-300 px-4 py-3 pr-8 rounded-md outline-blue-600 xl:text-lg"
                                     placeholder="Ingrese su corrreo institucional" />
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="#bbb" stroke="#bbb"
@@ -68,14 +74,11 @@
                             </button>
                         </div>
                         <p class="text-slate-900 text-sm !mt-6 text-center xl:text-lg">¿No tienes una cuenta? <a
-<<<<<<< HEAD
-=======
                                 href="<?= BASE_URL ?>AuthController/register"
->>>>>>> controllers
                                 class="text-purple-600 hover:underline ml-1 whitespace-nowrap font-semibold">Registrate
                                 Ahora</a></p>
                     </form>
-                </div>
+                </>
             </div>
         </div>
     </div>
