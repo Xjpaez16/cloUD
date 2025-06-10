@@ -122,7 +122,8 @@
             message: 'Correo o contraseña incorrectos'
         });
     </script>
-    <?php } ?>
+    <?php }?>
+         
 
 
 </body>

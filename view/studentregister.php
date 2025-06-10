@@ -14,7 +14,7 @@
     style="background-image: url('<?= BASE_URL ?>public/img/sabio.png');">
 
     <section>
-        <div class="flex flex-col items-end justify-end mt-10 mb-10 w-96 pl-5">
+        <div class="flex flex-col items-end justify-end mt-10 mb-10  pl-5">
 
             <div class="xl:pr-56 lg:pr-14 md:pr-7">
                 <a href="<?= BASE_URL ?>RouteController/index" class="flex justify-center items-center"><img

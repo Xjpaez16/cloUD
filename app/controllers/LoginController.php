@@ -40,10 +40,12 @@
                 $ruta = base64_encode('dashboard');
                 header('Location: ' . BASE_URL . '?url=' . $ruta);
                 exit;
+            }else{
+                // Si falla el login, redirige con error para Toastify y vuelve a AuthController/login usando BASE_URL
+                header('Location: ' . BASE_URL . 'AuthController/login?error=1');
+                exit;
             }
-            // Si falla el login, redirige con error para Toastify y vuelve a AuthController/login usando BASE_URL
-            header('Location: ' . BASE_URL . 'AuthController/login?error=1');
-            exit;
+            
             }
         }
 
