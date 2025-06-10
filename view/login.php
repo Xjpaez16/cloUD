@@ -68,7 +68,6 @@
                             </button>
                         </div>
                         <p class="text-slate-900 text-sm !mt-6 text-center xl:text-lg">¿No tienes una cuenta? <a
-                                href="javascript:void(0);"
                                 class="text-purple-600 hover:underline ml-1 whitespace-nowrap font-semibold">Registrate
                                 Ahora</a></p>
                     </form>
