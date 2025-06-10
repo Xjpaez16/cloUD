@@ -4,8 +4,8 @@ require_once(__DIR__ . '/../DTO/EstudianteDTO.php');
 class EstudianteDAO {
     private $conn;
 
-    public function __construct($db) {
-        require_once(__DIR__ . '/../../../core/Conexion.php');
+    public function __construct() {
+        require_once(__DIR__ . '/../../../../core/Conexion.php');
         $conexion = new Conexion();
         $this->conn = $conexion->getConexion();
     }
@@ -198,5 +198,7 @@ class EstudianteDAO {
             return false;
         }
     }
+
+   
 }
 ?>

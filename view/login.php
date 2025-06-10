@@ -7,6 +7,12 @@
     <title>Login</title>
     <!-- Tailwind CSS vía CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
+   
+
+    <!-- JS de Notyf y css -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
+    
 </head>
 
 <body class="relative min-h-screen bg-cover bg-bottom bg-no-repeat text-white font-sans "
@@ -21,11 +27,11 @@
 
                 <div class="p-6 sm:p-8 rounded-2xl bg-white border border-gray-200 shadow-sm font-sans">
                     <h1 class="text-slate-900 text-center text-3xl font-bold xl:text-4xl">Iniciar sesión</h1>
-                    <form class="mt-12 space-y-6">
+                    <form class="mt-12 space-y-6" action="<?= BASE_URL ?>LoginController/login" method="POST">
                         <div>
                             <label class="text-slate-900 text-sm font-medium mb-2 block xl:text-xl">Correo</label>
                             <div class="relative flex items-center">
-                                <input name="username" type="text" required
+                                <input name="email" type="email" required
                                     class="w-full text-slate-900 text-sm border border-slate-300 px-4 py-3 pr-8 rounded-md outline-blue-600 xl:text-lg"
                                     placeholder="Ingrese su corrreo institucional" />
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="#bbb" stroke="#bbb"
@@ -62,7 +68,7 @@
                         </div>
 
                         <div class="!mt-12">
-                            <button type="button"
+                            <button type="submit"
                                 class="xl:text-lg w-full py-2 px-4 text-[15px] font-medium tracking-wide rounded-md text-white bg-purple-600 hover:bg-purple-900 focus:outline-none cursor-pointer">
                                 Ingresar
                             </button>
@@ -76,7 +82,47 @@
             </div>
         </div>
     </div>
+    
     <script src="<?= BASE_URL ?>public/js/eye.js"></script>
+    <?php if (isset($_GET['error'])){ ?>
+    <script>
+            const notyf = new Notyf({
+            duration: 3000,
+            position: {
+            x: 'center',
+            y: 'top'
+            },
+            ripple: true,
+            dismissible: true,
+            dismissAction: {
+                icon: {
+                    className: 'material-icons text-white',
+                    tagName: 'i',
+                    text: 'close'
+                },
+                action: (notyf) => notyf.close()
+            },
+            types: [
+            {
+                type: 'error',
+                background: '#e53e3e',
+                className: 'rounded-lg bg-red-400 text-white text-[11px] sm:text-sm md:text-base px-2 sm:px-4 py-1.5 sm:py-2 shadow-md font-sans font-semibold max-w-[95vw] w-fit min-w-[120px] min-h-[36px] sm:min-h-[44px]',
+                icon: {
+                className: 'material-icons',
+                tagName: 'i',
+                text: 'error'
+                }
+            }
+            ]
+        });
+
+        
+        notyf.open({
+            type: 'error',
+            message: 'Correo o contraseña incorrectos'
+        });
+    </script>
+    <?php } ?>
 
 
 </body>
