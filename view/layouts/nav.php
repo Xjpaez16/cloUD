@@ -7,8 +7,10 @@
             <img src="<?= BASE_URL ?>public/img/logo.png" class="h-14 xl:h-24 lg:h-16" alt="cloud Logo" />
         </a>
         <div class="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
-            <button type="button" class=""><img src="<?= BASE_URL ?>public/img/login.png" alt="login logo"
-                    class="h-14 xl:h-32 lg:h-16 hover:scale-105 transition-transform duration-300" /></button>
+            <a href="<?= BASE_URL ?>AuthController/login">
+                <img src="<?= BASE_URL ?>public/img/login.png" alt="login logo"
+                    class="h-14 xl:h-32 lg:h-16 hover:scale-105 transition-transform duration-300" />
+            </a>
             <button data-collapse-toggle="navbar-cta" type="button"
                 class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm  rounded-lg md:hidden  focus:outline-none focus:ring-2"
                 aria-controls="navbar-cta" aria-expanded="false">
