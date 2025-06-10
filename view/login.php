@@ -25,7 +25,7 @@
                         class="w-40 mb-8 mx-auto block" />
                 </a>
 
-                < class="p-6 sm:p-8 rounded-2xl bg-white border border-gray-200 shadow-sm font-sans">
+                <div class="p-6 sm:p-8 rounded-2xl bg-white border border-gray-200 shadow-sm font-sans">
                     <h1 class="text-slate-900 text-center text-3xl font-bold xl:text-4xl">Iniciar sesión</h1>
                     <form class="mt-12 space-y-6" action="<?= BASE_URL ?>LoginController/login" method="POST">
                         <div>
@@ -78,7 +78,7 @@
                                 class="text-purple-600 hover:underline ml-1 whitespace-nowrap font-semibold">Registrate
                                 Ahora</a></p>
                     </form>
-                </>
+                </div>
             </div>
         </div>
     </div>
