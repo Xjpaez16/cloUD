@@ -21,11 +21,11 @@
             //verifica si el rol es estudiante o tutor
             if ($role === "estudiante") {
                 $role = "estudiante";
-                header('Location: ' . BASE_URL . 'AuthController/studentregister');
+                header('Location: ' . BASE_URL . 'index.php?url=RouteController/studentregister');
                 
             } elseif ($_GET === "tutor") {
                 $role = "tutor";
-                header('Location: ' . BASE_URL . 'AuthController/tutorregister');
+                header('Location: ' . BASE_URL . 'index.php?url=RouteController/tutorregister');
             }
             
             return $role;

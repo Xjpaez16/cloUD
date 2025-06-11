@@ -74,7 +74,7 @@
                             </button>
                         </div>
                         <p class="text-slate-900 text-sm !mt-6 text-center xl:text-lg">¿No tienes una cuenta? <a
-                                href="<?= BASE_URL ?>AuthController/register"
+                                href="<?= BASE_URL ?>index.php?url=RouteController/register"
                                 class="text-purple-600 hover:underline ml-1 whitespace-nowrap font-semibold">Registrate
                                 Ahora</a></p>
                     </form>

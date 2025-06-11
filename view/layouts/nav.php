@@ -7,7 +7,7 @@
             <img src="<?= BASE_URL ?>public/img/logo.png" class="h-14 xl:h-24 lg:h-16" alt="cloud Logo" />
         </a>
         <div class="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
-            <a href="<?= BASE_URL ?>AuthController/login">
+            <a href="<?= BASE_URL ?>index.php?url=RouteController/login">
                 <img src="<?= BASE_URL ?>public/img/login.png" alt="login logo"
                     class="h-14 xl:h-32 lg:h-16 hover:scale-105 transition-transform duration-300" />
             </a>
@@ -24,7 +24,7 @@
         </div>
         <div class="items-center justify-between hidden w-full md:flex md:w-auto md:order-1" id="navbar-cta">
             <ul
-                class="flex flex-col font-medium p-4 md:p-0 mt-4  rounded-lg  md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 xl:text-[25px] text-[15px] lg:text-[20px] xl:text-[25px] text-center ">
+                class="flex flex-col font-medium p-4 md:p-0 mt-4  rounded-lg  md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0  text-[15px] lg:text-[20px] xl:text-[25px] text-center ">
 
                 <li>
                     <a href="#"
