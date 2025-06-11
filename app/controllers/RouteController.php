@@ -15,5 +15,11 @@
         public function studentregister() {
             $this->view('studentregister'); // muestra la vista login.php
         }
+        public function student() {
+            $this->view('student'); // muestra la vista student.php
         }
+        public function tutor() {
+            $this->view('tutor'); // muestra la vista student.php
+        }
+    }
 ?>
