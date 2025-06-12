@@ -154,7 +154,7 @@ class EstudianteDAO {
         try {
             $sql = "SELECT * FROM estudiante WHERE correo = ?";
             $stmt = $this->conn->prepare($sql);
-            $stmt->bind_param('ss', $correo, );
+            $stmt->bind_param('s', $correo, );
             $stmt->execute();
             $result = $stmt->get_result();
             if ($row = $result->fetch_assoc()) {

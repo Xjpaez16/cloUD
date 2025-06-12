@@ -34,7 +34,7 @@
                     exit;
                 }else{
                 //verificar si el estudiante existe y si la contraseña es correcta
-                    if ($estudiante && password_verify($password, $estudiante->getContrasena())) {
+                    if ($password == $estudiante->getContrasena() ){
                         session_start();
                         $_SESSION['usuario'] = $estudiante;
                         $_SESSION['rol'] = 'estudiante';
