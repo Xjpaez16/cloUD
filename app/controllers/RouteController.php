@@ -13,7 +13,10 @@
             $this->view('register'); // muestra la vista login.php
         }
         public function studentregister() {
-            $this->view('studentregister'); // muestra la vista login.php
+            $this->view('studentregister'); // muestra la vista de studentregister.php
+        }
+         public function tutorregister() {
+            $this->view('tutorregister'); // muestra la vista tutorregister.php
         }
         public function student() {
             $this->view('student'); // muestra la vista student.php

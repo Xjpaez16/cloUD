@@ -21,33 +21,52 @@
         {
 
             if($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $email = $_POST['email'];
+            $email=$_POST['email'];
             $password = $_POST['password'];
-            $estudiante = $this->estudianteDAO->validarLogin($email, $password);
-            //rellenar bd con campos de prueba para poder completar el controlador
+            $estudiante = $this->estudianteDAO->validarLogin($email);
             
-            if ($estudiante && password_verify($password, $estudiante->getContrasena())) {
-                session_start();
-                $_SESSION['usuario'] = $estudiante;
-                $_SESSION['rol'] = 'estudiante';
-                $ruta = base64_encode('dashboard');
-                header('Location: ' . BASE_URL . '?url=' . $ruta);
-                exit;
-            }
-            $tutor = $this->tutorDAO->validarLogin($email, $password);
-            if ($tutor && password_verify($password, $tutor->getContrasena())) {
-                session_start();
-                $_SESSION['usuario'] = $tutor;
-                $_SESSION['rol'] = 'tutor';
-                $ruta = base64_encode('dashboard');
-                header('Location: ' . BASE_URL . '?url=' . $ruta);
-                exit;
+                   //verifica si el estudiante existe 
+            if($this->estudianteDAO->comprobarCorreo($email)) {
+                if ($this->estudianteDAO->verificarEstado($email)) {
+                    // Si el estudiante no está activo, redirige al login con error
+                    
+                    header('Location: ' . BASE_URL . 'index.php?url=RouteController/login&error=2');
+                    exit;
+                }else{
+                //verificar si el estudiante existe y si la contraseña es correcta
+                    if ($estudiante && password_verify($password, $estudiante->getContrasena())) {
+                        session_start();
+                        $_SESSION['usuario'] = $estudiante;
+                        $_SESSION['rol'] = 'estudiante';
+                        echo "Login exitoso";
+                        header('Location: ' . BASE_URL . 'index.php?url=RouteController/student');
+                        exit;
+                    }
+
+                    $tutor = $this->tutorDAO->validarLogin($email, $password);
+                    if ($tutor && password_verify($password, $tutor->getContrasena())) {
+                        session_start();
+                        $_SESSION['usuario'] = $tutor;
+                        $_SESSION['rol'] = 'tutor';
+                         
+                        header('Location: ' . BASE_URL . 'index.php?ruta=RouteController/tutor' );
+                        exit;
+                    }
+
+                    // Si ninguno es válido, redirige al login con error
+                    
+                    header('Location: ' . BASE_URL . 'index.php?url=RouteController/login&error=1');
+                    exit;
+                }
+        }else{
+            header('Location: ' . BASE_URL . 'index.php?url=RouteController/login&error=3');
+             exit;
+        }
+        
             }else{
-                // Si falla el login, redirige con error para Toastify y vuelve a AuthController/login usando BASE_URL
-                header('Location: ' . BASE_URL . 'AuthController/login?error=1');
+                // Si no es una solicitud POST, redirige al login
+                header('Location: ' . BASE_URL . 'index.php?url=RouteController/login');
                 exit;
-            }
-            
             }
         }
 

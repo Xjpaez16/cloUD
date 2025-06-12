@@ -13,7 +13,7 @@ class TutorDAO {
     // Crear tutor (la contraseña debe venir hasheada desde el controlador)
     public function create(TutorDTO $tutor) {
         try {
-            $sql = "INSERT INTO tutor (codigo, nombre, correo, contrasena, calificacion_general, respuesta_preg, cod_estado) VALUES (?, ?, ?, ?, ?, ?, ?)";
+            $sql = "INSERT INTO tutor (codigo, nombre, correo, contrasena, calificacion_general, respuesta_preg, cod_estado) VALUES (?, ?, ?, ?,?, ?, ?)";
             $stmt = $this->conn->prepare($sql);
             $codigo = $tutor->getCodigo();
             $nombre = $tutor->getNombre();

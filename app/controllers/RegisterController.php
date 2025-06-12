@@ -19,11 +19,12 @@
 {
             $role = isset($_GET['role']) ? $_GET['role'] : null;
             //verifica si el rol es estudiante o tutor
+            
             if ($role === "estudiante") {
                 $role = "estudiante";
                 header('Location: ' . BASE_URL . 'index.php?url=RouteController/studentregister');
                 
-            } elseif ($_GET === "tutor") {
+            } elseif ($role=== "tutor") {
                 $role = "tutor";
                 header('Location: ' . BASE_URL . 'index.php?url=RouteController/tutorregister');
             }

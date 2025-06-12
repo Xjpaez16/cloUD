@@ -132,11 +132,11 @@ class EstudianteDAO {
         }
     }
     //Verificar si el estudiante está activo donde el estado es 1
-    public function verificarEstado() {
+    public function verificarEstado($email) {
         try {
             $sql = "SELECT cod_estado FROM estudiante e 
             JOIN estado es ON e.cod_estado = es.codigo
-            WHERE  es.tipo_estado = 'Autorizado'";
+            WHERE  es.tipo_estado = 'Verificado' AND e.correo = ?";  ;
             $stmt = $this->conn->prepare($sql);
             $stmt->execute();
             $result = $stmt->get_result();
@@ -144,17 +144,17 @@ class EstudianteDAO {
                 return $row['cod_estado'] == 1; //retorna true
             }
             
-        } catch (Exception $e) {
-            error_log('Error en verificarEstado EstudianteDAO: ' . $e->getMessage());
+        } catch (Exception $email) {
+            error_log('Error en verificarEstado EstudianteDAO: ' . $email->getMessage());
             return false;
         }
     }
     // Validar login de estudiante
-    public function validarLogin($correo, $contrasena) {
+    public function validarLogin($correo) {
         try {
-            $sql = "SELECT * FROM estudiante WHERE correo = ? AND contraseña = ? AND cod_estado = 1";
+            $sql = "SELECT * FROM estudiante WHERE correo = ?";
             $stmt = $this->conn->prepare($sql);
-            $stmt->bind_param('ss', $correo, $contrasena);
+            $stmt->bind_param('ss', $correo, );
             $stmt->execute();
             $result = $stmt->get_result();
             if ($row = $result->fetch_assoc()) {
