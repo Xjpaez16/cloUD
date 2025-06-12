@@ -25,9 +25,11 @@
             $password = $_POST['password'];
             $estudiante = $this->estudianteDAO->validarLogin($email);
             
+$correoExiste = $this->estudianteDAO->comprobarCorreo($email);
+error_log("¿Correo existe? " . ($correoExiste ? 'Sí' : 'No'));
                    //verifica si el estudiante existe 
             if($this->estudianteDAO->comprobarCorreo($email)) {
-                if ($this->estudianteDAO->verificarEstado($email)) {
+                if (!$this->estudianteDAO->verificarEstado($email)) {
                     // Si el estudiante no está activo, redirige al login con error
                     
                     header('Location: ' . BASE_URL . 'index.php?url=RouteController/login&error=2');

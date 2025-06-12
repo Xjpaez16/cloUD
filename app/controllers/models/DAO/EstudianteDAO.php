@@ -136,7 +136,7 @@ class EstudianteDAO {
         try {
             $sql = "SELECT cod_estado FROM estudiante e 
             JOIN estado es ON e.cod_estado = es.codigo
-            WHERE  es.tipo_estado = 'Verificado' AND e.correo = ?";  ;
+            WHERE  es.tipo_estado = 'Verificado' AND e.correo = ?";
             $stmt = $this->conn->prepare($sql);
             $stmt->execute();
             $result = $stmt->get_result();
