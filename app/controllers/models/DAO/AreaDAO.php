@@ -3,7 +3,7 @@ class AreaDAO {
     private $conn;
 
     public function __construct() {
-        require_once(__DIR__ . '/../../../core/Conexion.php');
+        require_once(__DIR__ . '../../../core/Conexion.php');
         $conexion = new Conexion();
         $this->conn = $conexion->getConexion();
     }

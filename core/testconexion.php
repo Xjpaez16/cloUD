@@ -1,6 +1,6 @@
 <?php
 
-require_once(__DIR__ . '/core/Conexion.php');
+require_once(__DIR__ . '/Conexion.php');
 
 // Usamos reflexión para acceder a las propiedades privadas
 function mostrarCredenciales($conexion) {

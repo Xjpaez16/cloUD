@@ -12,7 +12,7 @@
 
 
 
-<body class="relative min-h-screen bg-cover bg-bottom bg-no-repeat text-white font-sans "
+<body class="relative min-h-screen bg-cover bg-no-repeatbg-bottom bg-no-repeat text-white font-sans "
     style="background-image: url('<?= BASE_URL ?>public/img/udfondo.jpg');">
 
     <!-- Contenido principal -->
@@ -60,50 +60,125 @@
             <br>
 
             <!-- Tarjetas de áreas -->
-            <div class="font-bold font-sans grid grid-cols-1 xl:grid-cols-5 sm:grid-cols-3 md:grid-cols-3 gap-6 px-6 ">
-                <div
-                    class="bg-white/10 backdrop-blur-sm p-4 rounded-lg text-center hover:scale-105 transition-transform">
-                    <a href="#">
-                        <img src="<?= BASE_URL ?>public/img/database.png" class="w-32 h-40 mx-auto mb-2"
-                            alt="Bases de Datos">
-                    </a>
-                    <p class="text-[20px] xl:text-[25px] lg:text-[20px] md:text-[20px] sm:text-[30px]">Bases de Datos
-                    </p>
+             
+            <div class="font-bold font-sans grid grid-cols-1 xl:grid-cols-7 sm:grid-cols-3 md:grid-cols-3 gap-6 px-6 ">
+                <div class="card-container w-full h-60 sm:h-62 md:h-70 xl:h-80">
+                    <div class="card-inner relative" >
+                        <div
+                            class="bg-white/10 backdrop-blur-sm p-4 rounded-lg text-center  transition-transform card-front flex flex-col items-center justify-center absolute inset-0">
+                            <a href="#">
+                                <img src="<?= BASE_URL ?>public/img/database.png" class="w-32 h-40 mx-auto mb-2"
+                                    alt="Bases de Datos">
+                            </a>
+                            <p class="text-[20px] xl:text-[25px] lg:text-[20px] md:text-[20px] sm:text-[30px]">Bases de Datos
+                            </p>
+                        </div>
+                        <div class="bg-white/10 backdrop-blur-sm p-4 rounded-lg text-center transition-transform card-back flex flex-col items-center justify-center absolute inset-0" style="transform: rotateY(180deg);">
+                            <p class="text-[20px] xl:text-[25px] lg:text-[20px] md:text-[20px] sm:text-[30px]">Explicacion BD</p>
+                        </div>
+                    </div>
                 </div>
-                <div
-                    class="bg-white/10 backdrop-blur-sm p-4 rounded-lg text-center hover:scale-105 transition-transform">
-                    <a href="#">
-                        <img src="<?= BASE_URL ?>public/img/math.png" class="w-32 h-40 mx-auto mb-2" alt="Matemáticas">
-                    </a>
-                    <p class="text-[20px] xl:text-[25px] lg:text-[20px] md:text-[20px]">Matemáticas</p>
+               <div class="card-container w-full h-60 sm:h-62 md:h-70 xl:h-80">
+                    <div class="card-inner relative" >
+                        <div
+                            class="bg-white/10 backdrop-blur-sm p-4 rounded-lg text-center  transition-transform card-front flex flex-col items-center justify-center absolute inset-0">
+                            <a href="#">
+                                <img src="<?= BASE_URL ?>public/img/math.png" class="w-32 h-40 mx-auto mb-2"
+                                    alt="Bases de Datos">
+                            </a>
+                            <p class="text-[20px] xl:text-[25px] lg:text-[20px] md:text-[20px] sm:text-[30px]">Matemáticas
+                            </p>
+                        </div>
+                        <div class="bg-white/10 backdrop-blur-sm p-4 rounded-lg text-center transition-transform card-back flex flex-col items-center justify-center absolute inset-0" style="transform: rotateY(180deg);">
+                            <p class="text-[20px] xl:text-[25px] lg:text-[20px] md:text-[20px] sm:text-[30px]">Explicacion Matemáticas</p>
+                        </div>
+                    </div>
                 </div>
-                <div
-                    class="bg-white/10 backdrop-blur-sm p-4 rounded-lg text-center hover:scale-105 transition-transform">
-                    <a href="#">
-                        <img src="<?= BASE_URL ?>public/img/programming.png" class="w-32 h-40 mx-auto mb-2"
-                            alt="Programación Teórica">
-                    </a>
-                    <p class="text-[20px] xl:text-[25px] lg:text-[20px] md:text-[20px]">Programación Teórica</p>
+                <div class="card-container w-full h-60 sm:h-62 md:h-70 xl:h-80">
+                    <div class="card-inner relative" >
+                        <div
+                            class="bg-white/10 backdrop-blur-sm p-4 rounded-lg text-center  transition-transform card-front flex flex-col items-center justify-center absolute inset-0">
+                            <a href="#">
+                                <img src="<?= BASE_URL ?>public/img/programming2.png" class="w-32 h-40 mx-auto mb-2"
+                                    alt="Bases de Datos">
+                            </a>
+                            <p class="text-[20px] xl:text-[25px] lg:text-[20px] md:text-[20px] sm:text-[30px]">Programación Practica
+                            </p>
+                        </div>
+                        <div class="bg-white/10 backdrop-blur-sm p-4 rounded-lg text-center transition-transform card-back flex flex-col items-center justify-center absolute inset-0" style="transform: rotateY(180deg);">
+                            <p class="text-[20px] xl:text-[25px] lg:text-[20px] md:text-[20px] sm:text-[30px]">Explicacion Programación</p>
+                        </div>
+                    </div>
                 </div>
-                <div
-                    class="bg-white/10 backdrop-blur-sm p-4 rounded-lg text-center hover:scale-105 transition-transform">
-                    <a href="#">
-                        <img src="<?= BASE_URL ?>public/img/physic.png" class="w-32 h-40 mx-auto mb-2" alt="Física">
-                    </a>
-                    <p class="text-[20px] xl:text-[25px] lg:text-[20px] md:text-[20px]">Física</p>
+                <div class="card-container w-full h-60 sm:h-62 md:h-70 xl:h-80">
+                    <div class="card-inner relative" >
+                        <div
+                            class="bg-white/10 backdrop-blur-sm p-4 rounded-lg text-center  transition-transform card-front flex flex-col items-center justify-center absolute inset-0">
+                            <a href="#">
+                                <img src="<?= BASE_URL ?>public/img/physic.png" class="w-32 h-40 mx-auto mb-2"
+                                    alt="Bases de Datos">
+                            </a>
+                            <p class="text-[20px] xl:text-[25px] lg:text-[20px] md:text-[20px] sm:text-[30px]">Fisica
+                            </p>
+                        </div>
+                        <div class="bg-white/10 backdrop-blur-sm p-4 rounded-lg text-center transition-transform card-back flex flex-col items-center justify-center absolute inset-0" style="transform: rotateY(180deg);">
+                            <p class="text-[20px] xl:text-[25px] lg:text-[20px] md:text-[20px] sm:text-[30px]">Explicacion Fisica</p>
+                        </div>
+                    </div>
                 </div>
-                <div
-                    class="bg-white/10 backdrop-blur-sm p-4 rounded-lg text-center hover:scale-105 transition-transform">
-                    <a href="#">
-                        <img src="<?= BASE_URL ?>public/img/programming2.png" class="w-32 h-40 mx-auto mb-2"
-                            alt="Programación Práctica">
-                    </a>
-                    <p class="text-[20px] xl:text-[25px] lg:text-[20px] md:text-[20px]">Programación Práctica</p>
+                <div class="card-container w-full h-60 sm:h-62 md:h-70 xl:h-80">
+                    <div class="card-inner relative" >
+                        <div
+                            class="bg-white/10 backdrop-blur-sm p-4 rounded-lg text-center  transition-transform card-front flex flex-col items-center justify-center absolute inset-0">
+                            <a href="#">
+                                <img src="<?= BASE_URL ?>public/img/programming2.png" class="w-32 h-40 mx-auto mb-2"
+                                    alt="Bases de Datos">
+                            </a>
+                            <p class="text-[20px] xl:text-[25px] lg:text-[20px] md:text-[20px] sm:text-[30px]">Teoria
+                            </p>
+                        </div>
+                        <div class="bg-white/10 backdrop-blur-sm p-4 rounded-lg text-center transition-transform card-back flex flex-col items-center justify-center absolute inset-0" style="transform: rotateY(180deg);">
+                            <p class="text-[20px] xl:text-[25px] lg:text-[20px] md:text-[20px] sm:text-[30px]">Explicacion de Teoria</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-container w-full h-60 sm:h-62 md:h-70 xl:h-80">
+                    <div class="card-inner relative" >
+                        <div
+                            class="bg-white/10 backdrop-blur-sm p-4 rounded-lg text-center  transition-transform card-front flex flex-col items-center justify-center absolute inset-0">
+                            <a href="#">
+                                <img src="<?= BASE_URL ?>public/img/programming2.png" class="w-32 h-40 mx-auto mb-2"
+                                    alt="Bases de Datos">
+                            </a>
+                            <p class="text-[20px] xl:text-[25px] lg:text-[20px] md:text-[20px] sm:text-[30px]">Teoria
+                            </p>
+                        </div>
+                        <div class="bg-white/10 backdrop-blur-sm p-4 rounded-lg text-center transition-transform card-back flex flex-col items-center justify-center absolute inset-0" style="transform: rotateY(180deg);">
+                            <p class="text-[20px] xl:text-[25px] lg:text-[20px] md:text-[20px] sm:text-[30px]">Explicacion de Teoria</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-container w-full h-60 sm:h-62 md:h-70 xl:h-80">
+                    <div class="card-inner relative" >
+                        <div
+                            class="bg-white/10 backdrop-blur-sm p-4 rounded-lg text-center  transition-transform card-front flex flex-col items-center justify-center absolute inset-0">
+                            <a href="#">
+                                <img src="<?= BASE_URL ?>public/img/programming2.png" class="w-32 h-40 mx-auto mb-2"
+                                    alt="Bases de Datos">
+                            </a>
+                            <p class="text-[20px] xl:text-[25px] lg:text-[20px] md:text-[20px] sm:text-[30px]">Teoria
+                            </p>
+                        </div>
+                        <div class="bg-white/10 backdrop-blur-sm p-4 rounded-lg text-center transition-transform card-back flex flex-col items-center justify-center absolute inset-0" style="transform: rotateY(180deg);">
+                            <p class="text-[20px] xl:text-[25px] lg:text-[20px] md:text-[20px] sm:text-[30px]">Explicacion de Teoria</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </main>
     </div>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="<?= BASE_URL ?>public/js/flip.js"></script>
 </body>
 
 </html>

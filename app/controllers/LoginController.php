@@ -30,6 +30,7 @@ class LoginController
                     session_start();
                     $_SESSION['usuario'] = $estudiante;
                     $_SESSION['rol'] = 'estudiante';
+                    error_log('Usuario ' . $estudiante->getNombre() . ' ha iniciado sesión correctamente.');
                     header('Location: ' . BASE_URL . 'index.php?url=RouteController/student');
                     exit;
                 } else {
@@ -65,6 +66,14 @@ class LoginController
             header('Location: ' . BASE_URL . 'index.php?url=RouteController/login');
             exit;
         }
+    }
+    public function logout()
+    {
+        session_start();
+        session_unset();
+        session_destroy();
+        header('Location: ' . BASE_URL . 'index.php?url=RouteController/home');
+        exit;
     }
 }
 ?>
