@@ -132,33 +132,51 @@ class TutorDAO {
         }
     }
 
-    // Validar login de tutor 
-    public function validarLogin($correo, $contrasena) {
-        try {
-            $sql = "SELECT * FROM tutor WHERE correo = ? AND cod_estado = 1";
-            $stmt = $this->conn->prepare($sql);
-            $stmt->bind_param('s', $correo);
-            $stmt->execute();
-            $result = $stmt->get_result();
-            if ($row = $result->fetch_assoc()) {
-                if (password_verify($contrasena, $row['contrasena'])) {
-                    return new TutorDTO(
-                        $row['codigo'],
-                        $row['nombre'],
-                        $row['correo'],
-                        $row['contrasena'],
-                        $row['calificacion_general'],
-                        $row['respuesta_preg'],
-                        $row['cod_estado']
-                    );
-                }
-            }
-            return null;
-        } catch (Exception $e) {
-            error_log('Error en validarLogin TutorDAO: ' . $e->getMessage());
-            return null;
+    
+    public function verificarEstado($email) {
+    try {
+        $sql = "SELECT cod_estado FROM tutor t 
+                JOIN estado es ON t.cod_estado = es.codigo
+                WHERE es.tipo_estado = 'Verificado' AND t.correo = ?";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param('s', $email);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        if ($row = $result->fetch_assoc()) {
+            return $row['cod_estado'] == 2; 
         }
+        return false;
+    } catch (Exception $e) {
+        error_log('Error en verificarEstado TutorDAO: ' . $e->getMessage());
+        return false;
     }
+}
+    // Validar login de tutor
+    public function validarLogin($correo) {
+    try {
+        $sql = "SELECT * FROM tutor WHERE correo = ?";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param('s', $correo);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        if ($row = $result->fetch_assoc()) {
+            return new TutorDTO(
+                $row['codigo'],
+                $row['nombre'],
+                $row['correo'],
+                $row['contrasena'],
+                $row['respuesta_preg'],
+                $row['calificacion_general'],
+                $row['cod_estado']
+            );
+        }
+        return null;
+    } catch (Exception $e) {
+        error_log('Error en validarLogin TutorDAO: ' . $e->getMessage());
+        return null;
+    }
+}
+
     // Registrar relacion tutor-areas
      public function insertarRelacion($codTutor, $codArea) {
         $sql = "INSERT INTO area_tutor (cod_tutor, cod_area) VALUES (?, ?)";
