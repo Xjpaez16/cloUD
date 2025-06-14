@@ -14,7 +14,7 @@ class RegisterController
     /** @var TutorDTO */
     private $tutorDTO;
 
-    /** @var CarrerDAO */
+    /** @var CarreraDAO */
     private $carrerDAO;
 
     /** @var AreaDAO */
@@ -97,7 +97,7 @@ class RegisterController
                 $this->estudianteDTO->setCodigo($code);
                 $this->estudianteDTO->setNombre($name);
                 $this->estudianteDTO->setCorreo($email);
-                $this->estudianteDTO->setRespuesta_preg($question1 . " " . $question2);
+                $this->estudianteDTO->setRespuesta_preg($question1 . "" . $question2);
                 $this->estudianteDTO->setContrasena(password_hash($password, PASSWORD_DEFAULT));
                 $this->estudianteDTO->setCod_estado(2); // 2 = activo
                 $response = $this->estudianteDAO->create($this->estudianteDTO);

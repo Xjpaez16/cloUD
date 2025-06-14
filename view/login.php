@@ -124,7 +124,7 @@
     </script>
     <?php }else if (isset($_GET['error']) && $_GET['error'] == 2){?>
     <script>
-            const notyf = new Notyf({
+            notyf = new Notyf({
             duration: 3000,
             position: {
             x: 'center',
@@ -162,7 +162,7 @@
     </script>?>
     <?php }else if(isset($_GET['error']) && $_GET['error'] == 3){ ?>
         <script>
-            const notyf = new Notyf({
+            notyf = new Notyf({
             duration: 3000,
             position: {
             x: 'center',
