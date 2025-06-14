@@ -5,7 +5,7 @@ class AreaDTO
     private $codigo;
     private $nombre;
 
-    public function __construct($codigo, $nombre)
+    public function __construct($codigo = null, $nombre = null)
     {
         $this->codigo = $codigo;
         $this->nombre = $nombre;

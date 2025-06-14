@@ -1,6 +1,7 @@
 <?php
-require_once(__DIR__ . '/../DTO/AreaDTO.php');
-class AreaDAO
+
+require_once(__DIR__ . '/../DTO/CarreraDTO.php');
+class CarreraDAO
 {
     private $conn;
 
@@ -11,24 +12,23 @@ class AreaDAO
         $this->conn = $conexion->getConexion();
     }
 
-    //Traer todas las áreas
-    public function listarea()
+    public function listcarrers()
     {
         try {
-            $sql = "SELECT * FROM area";
+            $sql = "SELECT * FROM carrera";
             $result = $this->conn->query($sql);
-            $areas = [];
+            $carreras = [];
 
             while ($row = $result->fetch_assoc()) {
-                $dto = new AreaDTO();
+                $dto = new CarreraDTO();
                 $dto->setCodigo($row['codigo']);
-                $dto->setNombre($row['nombre_area']);
-                $areas[] = $dto;
+                $dto->setNom_carrera($row['nombre_carrera']);
+                $carreras[] = $dto;
             }
 
-            return $areas;
+            return $carreras;
         } catch (Exception $e) {
-            error_log('Error en listar areas: ' . $e->getMessage());
+            error_log('Error en listar carreras: ' . $e->getMessage());
             return [];
         }
     }

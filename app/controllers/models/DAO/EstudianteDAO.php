@@ -14,7 +14,7 @@ class EstudianteDAO {
     // Crear estudiante
     public function create(EstudianteDTO $estudiante) {
         try {
-            $sql = "INSERT INTO estudiante (codigo, nombre, correo, contraseña, respuesta_preg, cod_carrera, cod_estado) VALUES (?, ?, ?, ?, ?, ?, ?)";
+            $sql = "INSERT INTO estudiante (codigo, nombre, correo, contrasena, respuesta_preg, cod_carrera, cod_estado) VALUES (?, ?, ?, ?, ?, ?, ?)";
             $stmt = $this->conn->prepare($sql);
             $codigo = $estudiante->getCodigo();
             $nombre = $estudiante->getNombre();
@@ -24,7 +24,7 @@ class EstudianteDAO {
             $cod_carrera = $estudiante->getCod_carrera();
             $cod_estado = $estudiante->getCod_estado();
             $stmt->bind_param(
-                'ssssiii',
+                'issssii',
                 $codigo,
                 $nombre,
                 $correo,
@@ -93,7 +93,7 @@ class EstudianteDAO {
     // Actualizar estudiante
     public function update($codigo, EstudianteDTO $estudiante) {
         try {
-            $sql = "UPDATE estudiante SET nombre = ?, correo = ?, contraseña = ?, respuesta_preg = ?, cod_carrera = ?, cod_estado = ? WHERE codigo = ?";
+            $sql = "UPDATE estudiante SET nombre = ?, correo = ?, contrasena = ?, respuesta_preg = ?, cod_carrera = ?, cod_estado = ? WHERE codigo = ?";
             $stmt = $this->conn->prepare($sql);
             $nombre = $estudiante->getNombre();
             $correo = $estudiante->getCorreo();
@@ -164,7 +164,7 @@ class EstudianteDAO {
                     $row['codigo'],
                     $row['nombre'],
                     $row['correo'],
-                    $row['contraseña'],
+                    $row['contrasena'],
                     $row['respuesta_preg'],
                     $row['cod_carrera'],
                     $row['cod_estado']
@@ -209,7 +209,7 @@ class EstudianteDAO {
     //cambiar contraseña
     public function cambiarContrasena($correo, $nuevaContrasena) {
         try {
-            $sql = "UPDATE estudiante SET contraseña = ? WHERE correo = ?";
+            $sql = "UPDATE estudiante SET contrasena = ? WHERE correo = ?";
             $stmt = $this->conn->prepare($sql);
             $stmt->bind_param('ss', $nuevaContrasena, $correo);
             return $stmt->execute();
@@ -218,7 +218,6 @@ class EstudianteDAO {
             return false;
         }
     }
-
    
 }
 ?>

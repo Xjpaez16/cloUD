@@ -14,7 +14,7 @@
     style="background-image: url('<?= BASE_URL ?>public/img/sabio.png');">
 
     <section>
-        <div class="flex flex-col items-end justify-end mt-10 mb-10  pl-5">
+        <div class="flex flex-col items-end justify-end mt-0 mb-10  pl-5">
 
             <div class="xl:pr-56 lg:pr-14 md:pr-7">
                 <a href="<?= BASE_URL ?>RouteController/index" class="flex justify-center items-center"><img
@@ -26,10 +26,8 @@
                         class="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-black">
                         Registro De Tutor
                     </h1>
-                    <form class="space-y-4 md:space-y-6" action="#">
-                        <div>
-                            
-                        </div>
+                    <form class="space-y-4 md:space-y-6" method="POST"
+                        action="<?= BASE_URL ?>RegisterController/registertutor">
                         <div>
                             <label for="email"
                                 class="block mb-2 text-sm font-medium text-gray-900 dark:text-black">Codigo</label>
@@ -51,10 +49,27 @@
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                 placeholder="ejemplo@udistrital.edu.co" required="">
                         </div>
+                        <label for="areas" class="block text-sm font-medium text-gray-900 dark:text-black">Escoge
+                            las areas
+                            que dominas</label>
+                        <div class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg
+                            focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700
+                            dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500
+                            dark:focus:border-blue-500">
+                            <ul>
+                                <?php /** @var AreaDTO $area */
+                                foreach ($areas as $area) : ?>
+                                    <li> <input type="checkbox" name="area[]" value="<?= $area->getCodigo() ?>" />
+                                        <?= $area->getNombre() ?> </li>
+                                <?php endforeach; ?>
+                            </ul>
+
+                        </div>
                         <div>
                             <label for="email"
-                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-black">¿Cual es el nombre de tu primera mascota?</label>
-                            <input type="text" name="question1" id="question1"
+                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-black">¿Cual es el nombre
+                                de tu primera mascota?</label>
+                            <input type="text" name="response1" id="response1"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                 placeholder="Observación: Escribir ninguno en caso que no aplique" required="">
                             <label class="block mb-2 pt-2 text-sm font-light text-gray-900 dark:text-black">Escribe
@@ -62,8 +77,9 @@
                         </div>
                         <div>
                             <label for="email"
-                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-black">¿Cual es el nombre de tu abuela?</label>
-                            <input type="text" name="question2" id="question2"
+                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-black">¿Cual es el nombre
+                                de tu abuela?</label>
+                            <input type="text" name="response2" id="response2"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                 placeholder="Ejemplo: Margarita" required="">
                             <label class="block mb-2 pt-2 text-sm font-light text-gray-900 dark:text-black">Escribe

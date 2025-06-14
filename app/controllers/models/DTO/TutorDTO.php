@@ -8,7 +8,7 @@ class TutorDTO extends UsuarioDTO
     private $cod_estado;
     private $areas = [];
 
-    public function __construct($codigo, $nombre, $correo, $contrasena, $respuesta_preg, $calificacion_general, $cod_estado)
+    public function __construct($codigo = null, $nombre = null, $correo = null, $contrasena = null, $respuesta_preg = null, $calificacion_general = null, $cod_estado = null)
     {
         parent::__construct($codigo, $nombre, $correo, $contrasena, $respuesta_preg);
         $this->calificacion_general = $calificacion_general;

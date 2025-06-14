@@ -7,7 +7,7 @@ class EstudianteDTO extends UsuarioDTO
     private $cod_carrera;
     private $cod_estado;
 
-    public function __construct($codigo, $nombre, $correo, $contrasena, $respuesta_preg, $cod_carrera, $cod_estado)
+    public function __construct($codigo = null, $nombre = null, $correo = null, $contrasena = null, $respuesta_preg = null, $cod_carrera = null, $cod_estado = null)
     {
         parent::__construct($codigo, $nombre, $correo, $contrasena, $respuesta_preg);
         $this->cod_carrera = $cod_carrera;

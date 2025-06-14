@@ -26,13 +26,23 @@
                         class="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-black">
                         Registro De Estudiante
                     </h1>
-                    <form class="space-y-4 md:space-y-6" action="#">
-                        <div>
-                            <label for="email"
+                    <form class="space-y-4 md:space-y-6" method="POST"
+                        action="<?= BASE_URL ?>RegisterController/registerstudent">
+                        <div class="mb-4">
+                            <label for="carrera"
                                 class="block mb-2 text-sm font-medium text-gray-900 dark:text-black">Carrera</label>
-                            <input type="text" name="carrer" id="carrer"
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                placeholder="tu carrera" required="">
+                            <select name="carrer" id="carrer" class=" bg-gray-50 border border-gray-300 text-gray-900
+                                text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5
+                                dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white
+                                dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                <?php /** @var CarreraDTO $carrera */
+                                ?>
+                                <?php foreach ($carrers as $carrera): ?>
+                                    <option value="<?= $carrera->getCodigo() ?>">
+                                        <?= $carrera->getCodigo() . " - " . $carrera->getNom_carrera() ?>
+                                    </option>
+                                <?php endforeach; ?>
+                            </select>
                         </div>
                         <div>
                             <label for="email"
@@ -57,8 +67,9 @@
                         </div>
                         <div>
                             <label for="email"
-                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-black">¿Cual es el nombre de tu primera mascota?</label>
-                            <input type="text" name="question1" id="question1"
+                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-black">¿Cual es el nombre
+                                de tu primera mascota?</label>
+                            <input type="text" name="response1" id="response1"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                 placeholder="Observación: Escribir ninguno en caso que no aplique" required="">
                             <label class="block mb-2 pt-2 text-sm font-light text-gray-900 dark:text-black">Escribe
@@ -66,8 +77,9 @@
                         </div>
                         <div>
                             <label for="email"
-                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-black">¿Cual es el nombre de tu abuela?</label>
-                            <input type="text" name="question2" id="question2"
+                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-black">¿Cual es el nombre
+                                de tu abuela?</label>
+                            <input type="text" name="response2" id="response2"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                 placeholder="Ejemplo: Margarita" required="">
                             <label class="block mb-2 pt-2 text-sm font-light text-gray-900 dark:text-black">Escribe

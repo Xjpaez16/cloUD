@@ -26,15 +26,16 @@ class LoginController
                     exit;
                 }
                 $estudiante = $this->estudianteDAO->validarLogin($email);
-                if ($password ==$estudiante->getContrasena()) {
+                if (password_verify($password, $estudiante->getContrasena())) {
                     session_start();
                     $_SESSION['usuario'] = $estudiante;
                     $_SESSION['rol'] = 'estudiante';
-                    error_log('Usuario ' . $estudiante->getNombre() . ' ha iniciado sesión correctamente.');
                     header('Location: ' . BASE_URL . 'index.php?url=RouteController/student');
                     exit;
                 } else {
                     header('Location: ' . BASE_URL . 'index.php?url=RouteController/login&error=1');
+                    error_log('Error de inicio de sesión: contraseña incorrecta para el correo ' . $estudiante->getContrasena());
+
                     exit;
                 }
             }
@@ -46,7 +47,8 @@ class LoginController
                     exit;
                 }
                 $tutor = $this->tutorDAO->validarLogin($email);
-                if ($password== $tutor->getContrasena()) {
+
+                if (password_verify($password, $tutor->getContrasena())) {
                     session_start();
                     $_SESSION['usuario'] = $tutor;
                     $_SESSION['rol'] = 'tutor';
@@ -54,6 +56,7 @@ class LoginController
                     exit;
                 } else {
                     header('Location: ' . BASE_URL . 'index.php?url=RouteController/login&error=1');
+                    error_log('Error de inicio de sesión: contraseña incorrecta para el correo ' . $tutor->getContrasena());
                     exit;
                 }
             }
@@ -76,4 +79,3 @@ class LoginController
         exit;
     }
 }
-?>

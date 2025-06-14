@@ -1,17 +1,20 @@
 <?php
 require_once(__DIR__ . '/../DTO/TutorDTO.php');
 
-class TutorDAO {
+class TutorDAO
+{
     private $conn;
 
-    public function __construct() {
+    public function __construct()
+    {
         require_once(__DIR__ . '/../../../../core/Conexion.php');
         $conexion = new Conexion();
         $this->conn = $conexion->getConexion();
     }
 
     // Crear tutor (la contraseña debe venir hasheada desde el controlador)
-    public function create(TutorDTO $tutor) {
+    public function create(TutorDTO $tutor)
+    {
         try {
             $sql = "INSERT INTO tutor (codigo, nombre, correo, contrasena, calificacion_general, respuesta_preg, cod_estado) VALUES (?, ?, ?, ?,?, ?, ?)";
             $stmt = $this->conn->prepare($sql);
@@ -23,7 +26,7 @@ class TutorDAO {
             $respuesta_preg = $tutor->getRespuesta_preg();
             $cod_estado = $tutor->getCod_estado();
             $stmt->bind_param(
-                'ssssdsi',
+                'isssisi',
                 $codigo,
                 $nombre,
                 $correo,
@@ -40,7 +43,8 @@ class TutorDAO {
     }
 
     // Obtener tutor por código
-    public function getid($codigo) {
+    public function getid($codigo)
+    {
         try {
             $sql = "SELECT * FROM tutor WHERE codigo = ?";
             $stmt = $this->conn->prepare($sql);
@@ -65,10 +69,11 @@ class TutorDAO {
         }
     }
 
-    
+
 
     // Obtener todos los tutores
-    public function todos() {
+    public function todos()
+    {
         try {
             $sql = "SELECT * FROM tutor";
             $result = $this->conn->query($sql);
@@ -92,7 +97,8 @@ class TutorDAO {
     }
 
     // Actualizar tutor
-    public function update($codigo, TutorDTO $tutor) {
+    public function update($codigo, TutorDTO $tutor)
+    {
         try {
             $sql = "UPDATE tutor SET nombre = ?, correo = ?, contrasena = ?, calificacion_general = ?, respuesta_preg = ?, cod_estado = ? WHERE codigo = ?";
             $stmt = $this->conn->prepare($sql);
@@ -120,7 +126,8 @@ class TutorDAO {
     }
 
     // Soft delete tutor (cambiar estado)
-    public function softDelete($codigo, $nuevoEstado) {
+    public function softDelete($codigo, $nuevoEstado)
+    {
         try {
             $sql = "UPDATE tutor SET cod_estado = ? WHERE codigo = ?";
             $stmt = $this->conn->prepare($sql);
@@ -132,53 +139,56 @@ class TutorDAO {
         }
     }
 
-    
-    public function verificarEstado($email) {
-    try {
-        $sql = "SELECT cod_estado FROM tutor t 
+
+    public function verificarEstado($email)
+    {
+        try {
+            $sql = "SELECT cod_estado FROM tutor t 
                 JOIN estado es ON t.cod_estado = es.codigo
                 WHERE es.tipo_estado = 'Verificado' AND t.correo = ?";
-        $stmt = $this->conn->prepare($sql);
-        $stmt->bind_param('s', $email);
-        $stmt->execute();
-        $result = $stmt->get_result();
-        if ($row = $result->fetch_assoc()) {
-            return $row['cod_estado'] == 2; 
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bind_param('s', $email);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            if ($row = $result->fetch_assoc()) {
+                return $row['cod_estado'] == 2;
+            }
+            return false;
+        } catch (Exception $e) {
+            error_log('Error en verificarEstado TutorDAO: ' . $e->getMessage());
+            return false;
         }
-        return false;
-    } catch (Exception $e) {
-        error_log('Error en verificarEstado TutorDAO: ' . $e->getMessage());
-        return false;
     }
-}
     // Validar login de tutor
-    public function validarLogin($correo) {
-    try {
-        $sql = "SELECT * FROM tutor WHERE correo = ?";
-        $stmt = $this->conn->prepare($sql);
-        $stmt->bind_param('s', $correo);
-        $stmt->execute();
-        $result = $stmt->get_result();
-        if ($row = $result->fetch_assoc()) {
-            return new TutorDTO(
-                $row['codigo'],
-                $row['nombre'],
-                $row['correo'],
-                $row['contrasena'],
-                $row['respuesta_preg'],
-                $row['calificacion_general'],
-                $row['cod_estado']
-            );
+    public function validarLogin($correo)
+    {
+        try {
+            $sql = "SELECT * FROM tutor WHERE correo = ?";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bind_param('s', $correo);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            if ($row = $result->fetch_assoc()) {
+                return new TutorDTO(
+                    $row['codigo'],
+                    $row['nombre'],
+                    $row['correo'],
+                    $row['contrasena'],
+                    $row['respuesta_preg'],
+                    $row['calificacion_general'],
+                    $row['cod_estado']
+                );
+            }
+            return null;
+        } catch (Exception $e) {
+            error_log('Error en validarLogin TutorDAO: ' . $e->getMessage());
+            return null;
         }
-        return null;
-    } catch (Exception $e) {
-        error_log('Error en validarLogin TutorDAO: ' . $e->getMessage());
-        return null;
     }
-}
 
     // Registrar relacion tutor-areas
-     public function insertarRelacion($codTutor, $codArea) {
+    public function insertarRelacion($codTutor, $codArea)
+    {
         $sql = "INSERT INTO area_tutor (cod_tutor, cod_area) VALUES (?, ?)";
         $stmt = $this->conn->prepare($sql);
         if (!$stmt) {
@@ -190,7 +200,8 @@ class TutorDAO {
     }
 
     //inserta cuantas veces areas sea necesario
-    public function insertarAreasDeTutor($tutorDTO) {
+    public function insertarAreasDeTutor($tutorDTO)
+    {
         $codTutor = $tutorDTO->getCodigo();
         $areas = $tutorDTO->getAreas();
 
@@ -200,7 +211,8 @@ class TutorDAO {
     }
 
     //comprobar correo
-    public function comprobarCorreo($correo) {
+    public function comprobarCorreo($correo)
+    {
         try {
             $sql = "SELECT * FROM tutor WHERE correo = ?";
             $stmt = $this->conn->prepare($sql);
@@ -215,7 +227,8 @@ class TutorDAO {
     }
 
     //comprobar rta_seguridad
-    public function comprobarRtaSeguridad($correo, $respuesta_preg) {
+    public function comprobarRtaSeguridad($correo, $respuesta_preg)
+    {
         try {
             $sql = "SELECT * FROM tutor WHERE correo = ? AND respuesta_preg = ?";
             $stmt = $this->conn->prepare($sql);
@@ -229,7 +242,8 @@ class TutorDAO {
         }
     }
     //cambiar contraseña
-    public function cambiarContrasena($correo, $nuevaContrasena) {
+    public function cambiarContrasena($correo, $nuevaContrasena)
+    {
         try {
             $sql = "UPDATE tutor SET contrasena = ? WHERE correo = ?";
             $stmt = $this->conn->prepare($sql);
@@ -241,4 +255,3 @@ class TutorDAO {
         }
     }
 }
-?>
