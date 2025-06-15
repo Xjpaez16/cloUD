@@ -36,7 +36,7 @@
         // Puedes redirigir o mostrar un error amigable aquí si lo deseas
         header('Location: ' . BASE_URL . 'index.php?url=RouteController/login');
         exit;
-    }
+        }
         $areas = $this->areaDAO->listarea();
         $checkedAreas = $this->tutorDAO->getAreasByTutor($tutor->getCodigo());
         error_log('Codigo del tutor: ' . $tutor->getCodigo());

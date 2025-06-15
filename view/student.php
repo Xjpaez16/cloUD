@@ -36,7 +36,7 @@
                         <img class="w-full h-full object-cover rounded-lg" src="<?= BASE_URL ?>public/img/search.png" alt="">
                     </div>
                     </a>
-                    <a href="#">
+                    <a href="<?= BASE_URL ?>index.php?url=RouteController/editStudent">
                     <div class="bg-[#5232a8] p-4 w-60 h-56 overflow-hidden rounded-lg border border-white hover:scale-90 transition-transform duration-300">
                         <img class="w-full h-full object-cover rounded-lg" src="<?= BASE_URL ?>public/img/edit.png" alt="">
                     </div>

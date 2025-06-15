@@ -117,7 +117,6 @@ class EstudianteDAO {
             return false;
         }
     }
-
    
     // Soft delete estudiante (cambiar estado)
     public function softDelete($codigo, $nuevoEstado) {
