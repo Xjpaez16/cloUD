@@ -88,15 +88,14 @@ class RegisterController
         $question1 = $_POST['response1'];
         $question2 = $_POST['response2'];
         $password = $_POST['password'];
-
-
+        $email = "e" . $email; // Agrega el prefijo 'e' para estudiantes
         if ($this->validation->validateEmail($email) && $this->validation->validatepassword($password)) {
 
             if ($this->estudianteDAO->comprobarCorreo($email) === false) {
                 $this->estudianteDTO->setCod_carrera($carrer);
                 $this->estudianteDTO->setCodigo($code);
                 $this->estudianteDTO->setNombre($name);
-                $this->estudianteDTO->setCorreo($email);
+                $this->estudianteDTO->setCorreo("e".$email);
                 $this->estudianteDTO->setRespuesta_preg($question1 . "" . $question2);
                 $this->estudianteDTO->setContrasena(password_hash($password, PASSWORD_DEFAULT));
                 $this->estudianteDTO->setCod_estado(2); // 2 = activo
@@ -124,6 +123,7 @@ class RegisterController
         $question2 = $_POST['response2'];
         $password = $_POST['password'];
         $areas = $_POST['area'];
+        $email ="t".$email;
         if (!empty($areas)) {
             if ($this->validation->validateEmail($email) && $this->validation->validatepassword($password)) {
 

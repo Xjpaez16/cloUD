@@ -54,6 +54,8 @@
         $nombre = $_POST['nombre'];
         $correo = $_POST['correo'];
         $carrera = $_POST['carrer'];
+        $correo = "e" . $correo; // Asegurarse de que el correo tenga el prefijo 'e' para estudiante
+        error_log("Carrera seleccionada: " . $carrera); 
         // Validar los datos
        
         if (!$this->validation->validateEmail($correo)) {

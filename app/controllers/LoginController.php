@@ -20,12 +20,12 @@ class LoginController
             $password = $_POST['password'];
 
             // Si es estudiante
-            if ($this->estudianteDAO->comprobarCorreo($email)) {
-                if (!$this->estudianteDAO->verificarEstado($email)) {
+            if ($this->estudianteDAO->comprobarCorreo("e".$email)) {
+                if (!$this->estudianteDAO->verificarEstado("e".$email)) {
                     header('Location: ' . BASE_URL . 'index.php?url=RouteController/login&error=2');
                     exit;
                 }
-                $estudiante = $this->estudianteDAO->validarLogin($email);
+                $estudiante = $this->estudianteDAO->validarLogin("e".$email);
                 if (password_verify($password, $estudiante->getContrasena())) {
                     session_start();
                     $_SESSION['usuario'] = $estudiante;
@@ -41,12 +41,12 @@ class LoginController
             }
 
             // Si es tutor
-            if ($this->tutorDAO->comprobarCorreo($email)) {
-                if (!$this->tutorDAO->verificarEstado($email)) {
+            if ($this->tutorDAO->comprobarCorreo("t".$email)) {
+                if (!$this->tutorDAO->verificarEstado("t".$email)) {
                     header('Location: ' . BASE_URL . 'index.php?url=RouteController/login&error=2');
                     exit;
                 }
-                $tutor = $this->tutorDAO->validarLogin($email);
+                $tutor = $this->tutorDAO->validarLogin("t".$email);
 
                 if (password_verify($password, $tutor->getContrasena())) {
                     session_start();

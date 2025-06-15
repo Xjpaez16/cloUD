@@ -71,7 +71,7 @@
 
         // Actualizar el tutor
         $tutor->setNombre($nombre);
-        $tutor->setCorreo($correo);
+        $tutor->setCorreo("t".$correo);
 
         if ($this->tutorDAO->update($tutor->getCodigo(),$tutor)) {
             // Actualizar las áreas del tutor

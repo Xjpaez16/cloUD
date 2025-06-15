@@ -37,8 +37,8 @@ require_once(__DIR__ . '/../app/controllers/models/DTO/EstudianteDTO.php');
                     </div>
                     <div class="mb-5">
                         <label for="correo" class="block font-semibold text-[#5D54A4]">Correo</label>
-                        <input id="correo" name="correo" type="email" 
-                                value="<?php echo $student->getCorreo(); ?>" 
+                        <input id="correo" name="correo" type="email"
+                                value="<?php echo $correoSinRol = substr($student->getCorreo(), 1) ;?>" 
                                 required
                                 class="w-full px-4 py-2 mt-2 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#5D54A4]" />
                     </div>
