@@ -24,6 +24,7 @@ class AreaDAO
                 $dto->setCodigo($row['codigo']);
                 $dto->setNombre($row['nombre_area']);
                 $areas[] = $dto;
+                error_log('Área obtenida: ' . $row['nombre_area']);
             }
 
             return $areas;
@@ -32,4 +33,5 @@ class AreaDAO
             return [];
         }
     }
+   
 }

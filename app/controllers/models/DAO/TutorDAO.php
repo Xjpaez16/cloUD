@@ -178,8 +178,9 @@ class TutorDAO
                     $row['calificacion_general'],
                     $row['cod_estado']
                 );
-            }
+            }else{
             return null;
+            }
         } catch (Exception $e) {
             error_log('Error en validarLogin TutorDAO: ' . $e->getMessage());
             return null;
@@ -251,6 +252,51 @@ class TutorDAO
             return $stmt->execute();
         } catch (Exception $e) {
             error_log('Error en cambiarContrasena TutorDAO: ' . $e->getMessage());
+            return false;
+        }
+    }
+    public function getAreasByTutor($codTutor)
+    {
+        try {
+            $sql = "SELECT a.codigo, a.nombre_area
+                    FROM area_tutor atu 
+                    JOIN area a ON atu.cod_area = a.codigo 
+                    WHERE atu.cod_tutor = ?";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bind_param('i', $codTutor);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            $areas = [];
+            while ($row = $result->fetch_assoc()) {
+                $areas[] = [
+                    'codigo' => $row['codigo'],
+                    
+                ];
+                error_log('Area: ' . $row['nombre_area']);
+            }
+            
+            return $areas;
+        } catch (Exception $e) {
+            error_log('Error en getAreasByTutor TutorDAO: ' . $e->getMessage());
+            return [];
+        }
+    }
+    public function updateAreasByTutor($codTutor, $areas)
+    {
+        try {
+            // Primero eliminamos las áreas existentes
+            $sqlDelete = "DELETE FROM area_tutor WHERE cod_tutor = ?";
+            $stmtDelete = $this->conn->prepare($sqlDelete);
+            $stmtDelete->bind_param('i', $codTutor);
+            $stmtDelete->execute();
+
+            // Luego insertamos las nuevas áreas
+            foreach ($areas as $codArea) {
+                $this->insertarRelacion($codTutor, $codArea);
+            }
+            return true;
+        } catch (Exception $e) {
+            error_log('Error en updateAreasByTutor TutorDAO: ' . $e->getMessage());
             return false;
         }
     }

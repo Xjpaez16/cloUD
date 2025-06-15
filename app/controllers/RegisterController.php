@@ -131,7 +131,7 @@ class RegisterController
                     $this->tutorDTO->setCodigo($code);
                     $this->tutorDTO->setNombre($name);
                     $this->tutorDTO->setCorreo($email);
-                    $this->tutorDTO->setRespuesta_preg($question1 . " " . $question2);
+                    $this->tutorDTO->setRespuesta_preg($question1 . "" . $question2);
                     $this->tutorDTO->setContrasena(password_hash($password, PASSWORD_DEFAULT));
                     $this->tutorDTO->setCod_estado(2); // 2 = activo
                     $this->tutorDTO->setCalificacion_general(5.0);
