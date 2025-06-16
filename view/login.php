@@ -7,12 +7,12 @@
     <title>Login</title>
     <!-- Tailwind CSS vía CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-   
+
 
     <!-- JS de Notyf y css -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
-    
+
 </head>
 
 <body class="relative min-h-screen bg-cover bg-bottom bg-no-repeat text-white font-sans "
@@ -60,7 +60,7 @@
                         <div class="flex flex-wrap items-center justify-between gap-4">
 
                             <div class="text-sm">
-                                <a href="jajvascript:void(0);"
+                                <a href="<?= BASE_URL ?>index.php?url=RouteController/resetpassword"
                                     class="text-purple-600 hover:underline font-semibold xl:text-[16.5px]">
                                     ¿Olvidaste tu contraseña?
                                 </a>
@@ -82,121 +82,115 @@
             </div>
         </div>
     </div>
-    
+
     <script src="<?= BASE_URL ?>public/js/eye.js"></script>
-    <?php if (isset($_GET['error']) && $_GET['error'] == 1){ ?>
+    <?php if (isset($_GET['error']) && $_GET['error'] == 1) { ?>
     <script>
-            const notyf = new Notyf({
-            duration: 3000,
-            position: {
+    const notyf = new Notyf({
+        duration: 3000,
+        position: {
             x: 'center',
             y: 'top'
+        },
+        ripple: false,
+        dismissible: true,
+        dismissAction: {
+            icon: {
+                className: 'material-icons text-white',
+                tagName: 'i',
+                text: 'close'
             },
-            ripple: false,
-            dismissible: true,
-            dismissAction: {
-                icon: {
-                    className: 'material-icons text-white',
-                    tagName: 'i',
-                    text: 'close'
-                },
-                action: (notyf) => notyf.close()
-            },
-            types: [
-            {
-                type: 'error',
-                background: '#e53e3e',
-                className: 'rounded-lg bg-red-400 text-white text-[11px] sm:text-sm md:text-base px-2 sm:px-4 py-1.5 sm:py-2 shadow-md font-sans font-semibold max-w-[95vw] w-fit min-w-[120px] min-h-[36px] sm:min-h-[44px]',
-                icon: {
+            action: (notyf) => notyf.close()
+        },
+        types: [{
+            type: 'error',
+            background: '#e53e3e',
+            className: 'rounded-lg bg-red-400 text-white text-[11px] sm:text-sm md:text-base px-2 sm:px-4 py-1.5 sm:py-2 shadow-md font-sans font-semibold max-w-[95vw] w-fit min-w-[120px] min-h-[36px] sm:min-h-[44px]',
+            icon: {
                 className: 'material-icons',
                 tagName: 'i',
                 text: 'error'
-                }
             }
-            ]
-        });
+        }]
+    });
 
-        
-        notyf.open({
-            type: 'error',
-            message: 'Correo o contraseña incorrectos'
-        });
+
+    notyf.open({
+        type: 'error',
+        message: 'Correo o contraseña incorrectos'
+    });
     </script>
-    <?php }else if (isset($_GET['error']) && $_GET['error'] == 2){?>
+    <?php } else if (isset($_GET['error']) && $_GET['error'] == 2) { ?>
     <script>
-            notyf = new Notyf({
-            duration: 3000,
-            position: {
+    notyf = new Notyf({
+        duration: 3000,
+        position: {
             x: 'center',
             y: 'top'
+        },
+        ripple: false,
+        dismissible: true,
+        dismissAction: {
+            icon: {
+                className: 'material-icons text-white',
+                tagName: 'i',
+                text: 'close'
             },
-            ripple: false,
-            dismissible: true,
-            dismissAction: {
-                icon: {
-                    className: 'material-icons text-white',
-                    tagName: 'i',
-                    text: 'close'
-                },
-                action: (notyf) => notyf.close()
-            },
-            types: [
-            {
-                type: 'error',
-                background: '#e53e3e',
-                className: 'rounded-lg bg-red-400 text-white text-[11px] sm:text-sm md:text-base px-2 sm:px-4 py-1.5 sm:py-2 shadow-md font-sans font-semibold max-w-[95vw] w-fit min-w-[120px] min-h-[36px] sm:min-h-[44px]',
-                icon: {
+            action: (notyf) => notyf.close()
+        },
+        types: [{
+            type: 'error',
+            background: '#e53e3e',
+            className: 'rounded-lg bg-red-400 text-white text-[11px] sm:text-sm md:text-base px-2 sm:px-4 py-1.5 sm:py-2 shadow-md font-sans font-semibold max-w-[95vw] w-fit min-w-[120px] min-h-[36px] sm:min-h-[44px]',
+            icon: {
                 className: 'material-icons',
                 tagName: 'i',
-                
-                }
-            }
-            ]
-        });
 
-        
-        notyf.open({
-            type: 'error',
-            message: 'Usuario inactivo, por favor contacta al administrador'
-        });
+            }
+        }]
+    });
+
+
+    notyf.open({
+        type: 'error',
+        message: 'Usuario inactivo, por favor contacta al administrador'
+    });
     </script>?>
-    <?php }else if(isset($_GET['error']) && $_GET['error'] == 3){ ?>
-        <script>
-            notyf = new Notyf({
-            duration: 3000,
-            position: {
+    <?php } else if (isset($_GET['error']) && $_GET['error'] == 3) { ?>
+    <script>
+    notyf = new Notyf({
+        duration: 3000,
+        position: {
             x: 'center',
             y: 'top'
+        },
+        ripple: false,
+        dismissible: true,
+        dismissAction: {
+            icon: {
+                className: 'material-icons text-white',
+                tagName: 'i',
+                text: 'close'
             },
-            ripple: false,
-            dismissible: true,
-            dismissAction: {
-                icon: {
-                    className: 'material-icons text-white',
-                    tagName: 'i',
-                    text: 'close'
-                },
-                action: (notyf) => notyf.close()
-            },
-            types: [
-            {
-                type: 'error',
-                background: '#e53e3e',
-                className: 'rounded-lg bg-red-400 text-white text-[11px] sm:text-sm md:text-base px-2 sm:px-4 py-1.5 sm:py-2 shadow-md font-sans font-semibold max-w-[95vw] w-fit min-w-[120px] min-h-[36px] sm:min-h-[44px]',
-                icon: {
+            action: (notyf) => notyf.close()
+        },
+        types: [{
+            type: 'error',
+            background: '#e53e3e',
+            className: 'rounded-lg bg-red-400 text-white text-[11px] sm:text-sm md:text-base px-2 sm:px-4 py-1.5 sm:py-2 shadow-md font-sans font-semibold max-w-[95vw] w-fit min-w-[120px] min-h-[36px] sm:min-h-[44px]',
+            icon: {
                 className: 'material-icons',
                 tagName: 'i',
-                
-                }
-            }
-            ]
-        });
 
-        
-        notyf.open({
-            type: 'error',
-            message: 'Usuario no registrado, por favor registrate'
-         });
+            }
+        }]
+    });
+
+
+    notyf.open({
+        type: 'error',
+        message: 'Usuario no registrado, por favor registrate'
+    });
     </script>
     <?php } ?>
 </body>
