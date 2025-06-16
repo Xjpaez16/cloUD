@@ -45,6 +45,11 @@ class RouteController extends Controller
         $this->view('tutor'); // muestra la vista student.php
     }
 
+    public function admin()
+    {
+        $this->view('admin'); // muestra la vista student.php
+    }
+
     public function editTutor()
     {
         require_once(__DIR__ . '/TutorController.php'); // muestra la vista editTutor.php
