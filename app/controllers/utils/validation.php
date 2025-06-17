@@ -18,7 +18,7 @@ class validation
             preg_match("/[A-Z]/", $password) &&
             preg_match("/[0-9]/", $password) &&
             preg_match("/[@$!%*?&#.]/", $password) &&
-            strlen($password) > 8
+            strlen($password) >= 8
         ) {
             return true;
         } else return false;

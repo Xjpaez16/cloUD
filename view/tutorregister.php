@@ -7,6 +7,9 @@
     <title>Login</title>
     <!-- Tailwind CSS vía CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- JS de Notyf y css -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
 </head>
 
 <body
@@ -101,6 +104,23 @@
             </div>
         </div>
     </section>
+     <script src="<?= BASE_URL ?>public/js/notyf.js"></script>
+<?php  
+    if (isset($_GET['error'])) {
+    $errorMessages = [
+        1 => 'El tutor no se ha registrado correctamente, por favor intenta de nuevo',
+        2 => 'El tutor que intenta registrarse<br> ya existe,por favor intenta con otro<br> correo',
+        3 => 'La contraseña debe tener al menos 8 caracteres,<br> una mayúscula, una minúscula, un número y <br>un carácter especial',
+        4 => 'El correo ingresado no es válido',
+        5 => 'Debes seleccionar al menos un area de tu conocimiento',
+       
+    ];
+    $msg = $errorMessages[$_GET['error']] ?? $errorMessages[1];
+    ?>
+   <script>
+  showErrorRegister(`<?= $msg ?>`, { x: 'right', y: 'top' });
+</script>
+<?php } ?>
 </body>
 
 </html>

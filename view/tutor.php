@@ -1,3 +1,18 @@
+<?php
+require_once(__DIR__ . '/../app/controllers/models/DTO/TutorDTO.php');
+session_start();
+header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+header("Cache-Control: post-check=0, pre-check=0", false);
+header("Pragma: no-cache");
+
+if (!isset($_SESSION['usuario']) || $_SESSION['rol'] !== 'tutor') {
+    header('Location: ' . BASE_URL . 'index.php?url=RouteController/login&error=4');
+    exit();
+}
+require_once __DIR__ . '/layouts/nav.php'; 
+?>
+
+
 <!DOCTYPE html>
 <html lang="es">
 
@@ -8,6 +23,11 @@
     <!-- Tailwind CSS vía CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="<?= BASE_URL ?>public/css/home.css">
+    <!-- notyf vía CDN -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
+    <link rel="stylesheet" href="<?= BASE_URL ?>public/css/notyf.css">
+    
 </head>
 
 
@@ -54,7 +74,46 @@
             <p class="font-bold text-right p-9 ">FAQ</p>
         </div>
     </div>
+     <?php if (isset($_GET['session']) && $_GET['session'] === 'success') { ?>
+        <script>
+            const notyf = new Notyf({
+            duration: 1000,
+            position: {
+                x: 'right',
+                y: 'top',
+            },
+            types: [
+                {
+                type: 'sucess',
+                background: '#76dd77',
+                icon: {
+                    className: 'material-icons',
+                    tagName: 'i',
+                    text: 'w'
+                }
+                },
+                {
+                type: 'success',
+                background: '#76dd77',
+                duration: 2000,
+                dismissible: true
+                }
+            ]
+            });
 
+                notyf.open({
+                    type: 'success',
+                    message: '¡Bienvenido al panel de Tutor!'
+                });
+        </script>
+    <?php }?>
+     <script>
+        window.addEventListener('pageshow', function(event) {
+        if (event.persisted) {
+            window.location.reload();
+        }
+        });
+    </script>
 </body>
 
 </html>

@@ -30,7 +30,7 @@ class LoginController
                     session_start();
                     $_SESSION['usuario'] = $estudiante;
                     $_SESSION['rol'] = 'estudiante';
-                    header('Location: ' . BASE_URL . 'index.php?url=RouteController/student');
+                    header('Location: ' . BASE_URL . 'index.php?url=RouteController/student&session=success');
                     exit;
                 } else {
                     header('Location: ' . BASE_URL . 'index.php?url=RouteController/login&error=1');
@@ -52,7 +52,7 @@ class LoginController
                     session_start();
                     $_SESSION['usuario'] = $tutor;
                     $_SESSION['rol'] = 'tutor';
-                    header('Location: ' . BASE_URL . 'index.php?url=RouteController/tutor');
+                    header('Location: ' . BASE_URL . 'index.php?url=RouteController/tutor&session=success');
                     exit;
                 } else {
                     header('Location: ' . BASE_URL . 'index.php?url=RouteController/login&error=1');

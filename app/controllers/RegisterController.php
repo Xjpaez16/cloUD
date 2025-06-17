@@ -89,28 +89,31 @@ class RegisterController
         $question2 = $_POST['response2'];
         $password = $_POST['password'];
 
-        if ($this->validation->validateEmail($email) && $this->validation->validatepassword($password)) {
-
-            if ($this->estudianteDAO->comprobarCorreo($email) === false) {
-                $this->estudianteDTO->setCod_carrera($carrer);
-                $this->estudianteDTO->setCodigo($code);
-                $this->estudianteDTO->setNombre($name);
-                $this->estudianteDTO->setCorreo($email);
-                $this->estudianteDTO->setRespuesta_preg($question1 . "" . $question2);
-                $this->estudianteDTO->setContrasena(password_hash($password, PASSWORD_DEFAULT));
-                $this->estudianteDTO->setCod_estado(2); // 2 = activo
-                $response = $this->estudianteDAO->create($this->estudianteDTO);
-                if ($response) {
-                    echo "Estudiante registrado exitosamente";
+        if ($this->validation->validateEmail($email)){
+                if( $this->validation->validatepassword($password)){
+                    if ($this->estudianteDAO->comprobarCorreo($email) === false) {
+                        $this->estudianteDTO->setCod_carrera($carrer);
+                        $this->estudianteDTO->setCodigo($code);
+                        $this->estudianteDTO->setNombre($name);
+                        $this->estudianteDTO->setCorreo($email);
+                        $this->estudianteDTO->setRespuesta_preg($question1 . "" . $question2);
+                        $this->estudianteDTO->setContrasena(password_hash($password, PASSWORD_DEFAULT));
+                        $this->estudianteDTO->setCod_estado(2); // 2 = activo
+                        $response = $this->estudianteDAO->create($this->estudianteDTO);
+                        if ($response) {
+                            header('Location: ' . BASE_URL . 'index.php?url=RouteController/login&success=1');
+                        } else {
+                            header('Location: ' . BASE_URL . 'index.php?url=RouteController/studentregister&error=1');
+                        }
+                    } else {
+                         header('Location: ' . BASE_URL . 'index.php?url=RouteController/studentregister&error=2');
+                    }
                 } else {
-                    echo "Error al registrar el estudiante";
-                }
-            } else {
-                echo "El estudiante ya existe";
+                header('Location: ' . BASE_URL . 'index.php?url=RouteController/studentregister&error=3');
             }
-        } else {
-            echo "Correo o contraseña invalida";
-        }
+        }else {
+                header('Location: ' . BASE_URL . 'index.php?url=RouteController/studentregister&error=4');
+            }   
     }
 
     public function registertutor()
@@ -125,32 +128,35 @@ class RegisterController
         $areas = $_POST['area'];
 
         if (!empty($areas)) {
-            if ($this->validation->validateEmail($email) && $this->validation->validatepassword($password)) {
-
-                if ($this->tutorDAO->comprobarCorreo($email) === false) {
-                    $this->tutorDTO->setCodigo($code);
-                    $this->tutorDTO->setNombre($name);
-                    $this->tutorDTO->setCorreo($email);
-                    $this->tutorDTO->setRespuesta_preg($question1 . "" . $question2);
-                    $this->tutorDTO->setContrasena(password_hash($password, PASSWORD_DEFAULT));
-                    $this->tutorDTO->setCod_estado(2); // 2 = activo
-                    $this->tutorDTO->setCalificacion_general(5.0);
-                    $this->tutorDTO->setAreas($areas);
-                    $response = $this->tutorDAO->create($this->tutorDTO);
-                    $this->tutorDAO->insertarAreasDeTutor($this->tutorDTO);
-                    if ($response) {
-                        echo "Tutor registrado exitosamente";
+            if ($this->validation->validateEmail($email)) {
+                    if ($this->validation->validatepassword($password)) {      
+                        if ($this->tutorDAO->comprobarCorreo($email) === false) {
+                            $this->tutorDTO->setCodigo($code);
+                            $this->tutorDTO->setNombre($name);
+                            $this->tutorDTO->setCorreo($email);
+                            $this->tutorDTO->setRespuesta_preg($question1 . "" . $question2);
+                            $this->tutorDTO->setContrasena(password_hash($password, PASSWORD_DEFAULT));
+                            $this->tutorDTO->setCod_estado(2); // 2 = activo
+                            $this->tutorDTO->setCalificacion_general(5.0);
+                            $this->tutorDTO->setAreas($areas);
+                            $response = $this->tutorDAO->create($this->tutorDTO);
+                            $this->tutorDAO->insertarAreasDeTutor($this->tutorDTO);
+                            if ($response) {
+                                header('Location: ' . BASE_URL . 'index.php?url=RouteController/login&success=2');
+                            } else {
+                                header('Location: ' . BASE_URL . 'index.php?url=RouteController/tutorregister&error=1');
+                            }
+                        } else {
+                            header('Location: ' . BASE_URL . 'index.php?url=RouteController/tutorregister&error=2');
+                        }
                     } else {
-                        echo "Error al registrar el tutor";
+                        header('Location: ' . BASE_URL . 'index.php?url=RouteController/tutorregister&error=3');
                     }
-                } else {
-                    echo "El tutor ya existe";
-                }
-            } else {
-                echo "Correo o contraseña invalida";
-            }
         } else {
-            echo "Debe seleccionar al menos un area de conocimiento";
+           header('Location: ' . BASE_URL . 'index.php?url=RouteController/tutorregister&error=4');
         }
-    }
+    }else {
+            header('Location: ' . BASE_URL . 'index.php?url=RouteController/tutorregister&error=5');
+        }
+}
 }

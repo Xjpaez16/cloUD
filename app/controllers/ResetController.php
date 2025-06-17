@@ -57,10 +57,10 @@ class ResetController
                     $rta = $this->estudianteDAO->comprobarRtaSeguridad($email, $responseconcatenated);
                     if ($rta) {
                         $error = $this->estudianteDAO->cambiarContrasena($email, $password);
-                        header('Location: ' . BASE_URL . 'index.php?url=RouteController/login');
+                        header('Location: ' . BASE_URL . 'index.php?url=RouteController/login&success=3');
                         exit;
                     } else {
-                        echo "<script>alert('Respuesta de seguridad 1 incorrecta');</script>";
+                        header('Location: ' . BASE_URL . 'index.php?url=RouteController/resetPassword&error=1');
                     }
                 } else if ($rol == "tutor") {
                     $rta = $this->tutorDAO->comprobarRtaSeguridad($email, $responseconcatenated);
@@ -69,14 +69,14 @@ class ResetController
                         header('Location: ' . BASE_URL . 'index.php?url=RouteController/login');
                         exit;
                     } else {
-                        echo "<script>alert('Respuesta de seguridad 2 incorrecta');</script>";
+                       header('Location: ' . BASE_URL . 'index.php?url=RouteController/resetPassword&error=1');
                     }
                 }
             } else {
-                echo "<script>alert('La contraseña debe tener al menos 8 caracteres, una mayúscula, una minúscula, un número y un carácter especial');</script>";
+                header('Location: ' . BASE_URL . 'index.php?url=RouteController/resetPassword&error=2');
             }
         } else {
-            echo "<script>alert('Correo no valido');</script>";
+            header('Location: ' . BASE_URL . 'index.php?url=RouteController/resetPassword&error=3');
         }
     }
 
@@ -96,13 +96,13 @@ class ResetController
                 $rta = $this->estudianteDAO->comprobarRtaSeguridad($email, $responseconcatenated);
                 if ($rta) {
                     $error = $this->estudianteDAO->cambiarContrasena($email, $password);
-
+                    
                     $this->logout();
                 } else {
-                    echo "<script>alert('Respuesta de seguridad incorrecta');</script>";
+                    header('Location: ' . BASE_URL . 'index.php?url=RouteController/changePassword&error=1');
                 }
             } else {
-                echo "<script>alert('La contraseña debe tener al menos 8 caracteres, una mayúscula, una minúscula, un número y un carácter especial');</script>";
+                 header('Location: ' . BASE_URL . 'index.php?url=RouteController/changePassword&error=2');
             }
         } else if ($rol == "tutor") {
             $email = $usuario->getCorreo();
@@ -112,13 +112,13 @@ class ResetController
                 $rta = $this->tutorDAO->comprobarRtaSeguridad($email, $responseconcatenated);
                 if ($rta) {
                     $error = $this->tutorDAO->cambiarContrasena($email, $password);
-                    echo "<script>alert('Contraseña Cambiada');</script>";
+                    
                     $this->logout(); // Cerrar sesión después de cambiar la contraseña
                 } else {
-                    echo "<script>alert('Respuesta de seguridad incorrecta');</script>";
+                     header('Location: ' . BASE_URL . 'index.php?url=RouteController/changePassword&error=1');
                 }
             } else {
-                echo "<script>alert('La contraseña debe tener al menos 8 caracteres, una mayúscula, una minúscula, un número y un carácter especial');</script>";
+                 header('Location: ' . BASE_URL . 'index.php?url=RouteController/changePassword&error=2');
             }
         }
     }
@@ -128,7 +128,7 @@ class ResetController
         session_start();
         session_unset();
         session_destroy();
-        header('Location: ' . BASE_URL . 'index.php?url=RouteController/login');
+        header('Location: ' . BASE_URL . 'index.php?url=RouteController/login&success=3');
         exit;
     }
 }

@@ -1,3 +1,6 @@
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -12,7 +15,7 @@
     <!-- JS de Notyf y css -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
-
+    
 </head>
 
 <body class="relative min-h-screen bg-cover bg-bottom bg-no-repeat text-white font-sans "
@@ -84,115 +87,32 @@
     </div>
 
     <script src="<?= BASE_URL ?>public/js/eye.js"></script>
-    <?php if (isset($_GET['error']) && $_GET['error'] == 1) { ?>
+    <script src="<?= BASE_URL ?>public/js/notyf.js"></script>
+    <?php
+if (isset($_GET['error'])) {
+    $errorMessages = [
+        1 => 'Correo o contraseña incorrectos',
+        2 => 'Usuario inactivo, por favor contacta al administrador',
+        3 => 'Usuario no registrado, por favor registrate',
+        4 => 'Para poder acceder a la plataforma debes iniciar sesion'
+    ];
+    $msg = $errorMessages[$_GET['error']] ?? $errorMessages[1];
+    ?>
     <script>
-    const notyf = new Notyf({
-        duration: 3000,
-        position: {
-            x: 'center',
-            y: 'top'
-        },
-        ripple: false,
-        dismissible: true,
-        dismissAction: {
-            icon: {
-                className: 'material-icons text-white',
-                tagName: 'i',
-                text: 'close'
-            },
-            action: (notyf) => notyf.close()
-        },
-        types: [{
-            type: 'error',
-            background: '#e53e3e',
-            className: 'rounded-lg bg-red-400 text-white text-[11px] sm:text-sm md:text-base px-2 sm:px-4 py-1.5 sm:py-2 shadow-md font-sans font-semibold max-w-[95vw] w-fit min-w-[120px] min-h-[36px] sm:min-h-[44px]',
-            icon: {
-                className: 'material-icons',
-                tagName: 'i',
-                text: 'error'
-            }
-        }]
-    });
-
-
-    notyf.open({
-        type: 'error',
-        message: 'Correo o contraseña incorrectos'
-    });
+      showError('<?= $msg ?>');
     </script>
-    <?php } else if (isset($_GET['error']) && $_GET['error'] == 2) { ?>
+<?php }elseif(isset($_GET['success'])) { 
+    $successMessages = [
+        1 => 'Estudiante registrado con éxito ¡Puedes iniciar sesión!',
+        2 => 'Tutor registrado con éxito ¡Puedes iniciar sesión!',
+        3 => 'Contraseña cambiada con éxito, por favor inicia sesión nuevamente',
+    ];
+    $msg = $successMessages[$_GET['success']] ?? $successMessages[1];
+?>
     <script>
-    notyf = new Notyf({
-        duration: 3000,
-        position: {
-            x: 'center',
-            y: 'top'
-        },
-        ripple: false,
-        dismissible: true,
-        dismissAction: {
-            icon: {
-                className: 'material-icons text-white',
-                tagName: 'i',
-                text: 'close'
-            },
-            action: (notyf) => notyf.close()
-        },
-        types: [{
-            type: 'error',
-            background: '#e53e3e',
-            className: 'rounded-lg bg-red-400 text-white text-[11px] sm:text-sm md:text-base px-2 sm:px-4 py-1.5 sm:py-2 shadow-md font-sans font-semibold max-w-[95vw] w-fit min-w-[120px] min-h-[36px] sm:min-h-[44px]',
-            icon: {
-                className: 'material-icons',
-                tagName: 'i',
-
-            }
-        }]
-    });
-
-
-    notyf.open({
-        type: 'error',
-        message: 'Usuario inactivo, por favor contacta al administrador'
-    });
-    </script>?>
-    <?php } else if (isset($_GET['error']) && $_GET['error'] == 3) { ?>
-    <script>
-    notyf = new Notyf({
-        duration: 3000,
-        position: {
-            x: 'center',
-            y: 'top'
-        },
-        ripple: false,
-        dismissible: true,
-        dismissAction: {
-            icon: {
-                className: 'material-icons text-white',
-                tagName: 'i',
-                text: 'close'
-            },
-            action: (notyf) => notyf.close()
-        },
-        types: [{
-            type: 'error',
-            background: '#e53e3e',
-            className: 'rounded-lg bg-red-400 text-white text-[11px] sm:text-sm md:text-base px-2 sm:px-4 py-1.5 sm:py-2 shadow-md font-sans font-semibold max-w-[95vw] w-fit min-w-[120px] min-h-[36px] sm:min-h-[44px]',
-            icon: {
-                className: 'material-icons',
-                tagName: 'i',
-
-            }
-        }]
-    });
-
-
-    notyf.open({
-        type: 'error',
-        message: 'Usuario no registrado, por favor registrate'
-    });
+      showSuccess('<?= $msg ?>');
     </script>
-    <?php } ?>
+<?php } ?>  
 </body>
 
 </html>

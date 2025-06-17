@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -85,115 +87,21 @@
     </div>
 
     <script src="<?= BASE_URL ?>public/js/eye.js"></script>
-    <?php if (isset($_GET['error']) && $_GET['error'] == 1) { ?>
-        <script>
-            const notyf = new Notyf({
-                duration: 3000,
-                position: {
-                    x: 'center',
-                    y: 'top'
-                },
-                ripple: false,
-                dismissible: true,
-                dismissAction: {
-                    icon: {
-                        className: 'material-icons text-white',
-                        tagName: 'i',
-                        text: 'close'
-                    },
-                    action: (notyf) => notyf.close()
-                },
-                types: [{
-                    type: 'error',
-                    background: '#e53e3e',
-                    className: 'rounded-lg bg-red-400 text-white text-[11px] sm:text-sm md:text-base px-2 sm:px-4 py-1.5 sm:py-2 shadow-md font-sans font-semibold max-w-[95vw] w-fit min-w-[120px] min-h-[36px] sm:min-h-[44px]',
-                    icon: {
-                        className: 'material-icons',
-                        tagName: 'i',
-                        text: 'error'
-                    }
-                }]
-            });
-
-
-            notyf.open({
-                type: 'error',
-                message: 'Correo o contraseña incorrectos'
-            });
-        </script>
-    <?php } else if (isset($_GET['error']) && $_GET['error'] == 2) { ?>
-        <script>
-            notyf = new Notyf({
-                duration: 3000,
-                position: {
-                    x: 'center',
-                    y: 'top'
-                },
-                ripple: false,
-                dismissible: true,
-                dismissAction: {
-                    icon: {
-                        className: 'material-icons text-white',
-                        tagName: 'i',
-                        text: 'close'
-                    },
-                    action: (notyf) => notyf.close()
-                },
-                types: [{
-                    type: 'error',
-                    background: '#e53e3e',
-                    className: 'rounded-lg bg-red-400 text-white text-[11px] sm:text-sm md:text-base px-2 sm:px-4 py-1.5 sm:py-2 shadow-md font-sans font-semibold max-w-[95vw] w-fit min-w-[120px] min-h-[36px] sm:min-h-[44px]',
-                    icon: {
-                        className: 'material-icons',
-                        tagName: 'i',
-
-                    }
-                }]
-            });
-
-
-            notyf.open({
-                type: 'error',
-                message: 'Usuario inactivo, por favor contacta al administrador'
-            });
-        </script>?>
-    <?php } else if (isset($_GET['error']) && $_GET['error'] == 3) { ?>
-        <script>
-            notyf = new Notyf({
-                duration: 3000,
-                position: {
-                    x: 'center',
-                    y: 'top'
-                },
-                ripple: false,
-                dismissible: true,
-                dismissAction: {
-                    icon: {
-                        className: 'material-icons text-white',
-                        tagName: 'i',
-                        text: 'close'
-                    },
-                    action: (notyf) => notyf.close()
-                },
-                types: [{
-                    type: 'error',
-                    background: '#e53e3e',
-                    className: 'rounded-lg bg-red-400 text-white text-[11px] sm:text-sm md:text-base px-2 sm:px-4 py-1.5 sm:py-2 shadow-md font-sans font-semibold max-w-[95vw] w-fit min-w-[120px] min-h-[36px] sm:min-h-[44px]',
-                    icon: {
-                        className: 'material-icons',
-                        tagName: 'i',
-
-                    }
-                }]
-            });
-
-
-            notyf.open({
-                type: 'error',
-                message: 'Usuario no registrado, por favor registrate'
-            });
-        </script>
-    <?php } ?>
+   <script src="<?= BASE_URL ?>public/js/notyf.js"></script>
+    <?php
+if (isset($_GET['error'])) {
+    $errorMessages = [
+        1 => 'Respuestas de seguridad incorrectas',
+        2 => 'La contraseña debe tener al menos 8 caracteres,<br> una mayúscula, una minúscula, un número y <br>un carácter especial',
+        3 => 'Usuario no registrado, por favor registrate',
+        4 => 'Para poder acceder a la plataforma debes iniciar sesion'
+    ];
+    $msg = $errorMessages[$_GET['error']] ?? $errorMessages[1];
+    ?>
+    <script>
+      showError('<?= $msg ?>');
+    </script>
+<?php } ?>
 </body>
 
 </html>

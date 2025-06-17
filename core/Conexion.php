@@ -3,7 +3,7 @@ class Conexion {
     private $host = 'localhost';
     private $db = 'cloud';
     private $user = 'root';
-    private $pass = '';
+    private $pass = '123456';
     private $conn;
 
     public function __construct() {

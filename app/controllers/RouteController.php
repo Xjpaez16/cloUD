@@ -37,6 +37,7 @@ class RouteController extends Controller
 
     public function student()
     {
+        
         $this->view('student'); // muestra la vista student.php
     }
 
