@@ -62,18 +62,17 @@ if(session_status() == PHP_SESSION_NONE) {
 <?php }else if($role =="estudiante" && $usuario){
 ?>
 
-<a href="<?= BASE_URL ?>index.php?url=RouteController/student" class="flex items-center space-x-3 rtl:space-x-reverse">
+<a href="<?= BASE_URL ?>index.php?url=RouteController/home" class="flex items-center space-x-3 rtl:space-x-reverse">
             <img src="<?= BASE_URL ?>public/img/logo.png" class="h-14 xl:h-24 lg:h-16" alt="cloud Logo" />
         </a>
         <div class="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
-            <a href="<?= BASE_URL ?>index.php?url=RouteController/login">
+            <a href="<?= BASE_URL ?>index.php?url=RouteController/student">
                 <i class="fi fi-rr-user"></i>
                 <span>
                     <?php
                     
                     error_log("Usuario: " . $usuario->getNombre());
                     echo "Estudiante :" . $usuario->getNombre();
-                    
                     ?>
                 </span>
             </a>
@@ -110,11 +109,11 @@ if(session_status() == PHP_SESSION_NONE) {
         </div>
 
 <?php }else if($role =="tutor" && $usuario){?>
-    <a href="<?= BASE_URL ?>index.php?url=RouteController/tutor" class="flex items-center space-x-3 rtl:space-x-reverse">
+    <a href="<?= BASE_URL ?>index.php?url=RouteController/home" class="flex items-center space-x-3 rtl:space-x-reverse">
             <img src="<?= BASE_URL ?>public/img/logo.png" class="h-14 xl:h-24 lg:h-16" alt="cloud Logo" />
         </a>
         <div class="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
-            <a href="<?= BASE_URL ?>index.php?url=RouteController/login">
+            <a href="<?= BASE_URL ?>index.php?url=RouteController/tutor">
                 <i class="fi fi-rr-user"></i>
                 <span>
                     <?php

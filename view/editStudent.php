@@ -10,6 +10,10 @@ require_once(__DIR__ . '/../app/controllers/models/DTO/EstudianteDTO.php');
     <meta charset="UTF-8">
     <title>Editar Perfil - Estudiante</title>
     <script src="https://cdn.tailwindcss.com"></script>
+       <!-- notyf vía CDN -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
+    
 </head>
 
 <body style="background-image: url('<?= BASE_URL ?>public/img/cloudfondo.jpg'); background-size: cover;"
@@ -89,7 +93,29 @@ require_once(__DIR__ . '/../app/controllers/models/DTO/EstudianteDTO.php');
         <div class="p-5 text-gray-50 font-semibold text-right">
             <a href="#" class="">FAQ</a>
         </div>
-        </div><!-- .flex-col -->
+        </div>
+    <script src="<?= BASE_URL ?>public/js/notyf.js"></script><!-- .flex-col -->
+    <?php if (isset($_GET['error'])) {
+    $errorMessages = [
+        1 => 'La informacion no ha podido ser editada',
+       
+    ];
+    $msg = $errorMessages[$_GET['error']] ?? $errorMessages[1];
+    ?>
+    <script>
+      showError('<?= $msg ?>');
+    </script>?>
+    <?php }elseif(isset($_GET['success'])) { 
+    $successMessages = [
+        1 => 'Su informacion ha sido cambiada',
+        
+    ];
+    $msg = $successMessages[$_GET['success']] ?? $successMessages[1];
+?>
+    <script>
+      showSuccess('<?= $msg ?>');
+    </script>
+<?php } ?>  ?>
 </body>
 
 </html>

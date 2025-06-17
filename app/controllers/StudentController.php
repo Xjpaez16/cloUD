@@ -31,7 +31,7 @@ class StudentController
         if (!$estudiante) {
             error_log('No hay sesión activa de estudiante.');
             // Puedes redirigir o mostrar un error amigable aquí si lo deseas
-            header('Location: ' . BASE_URL . 'index.php?url=RouteController/login');
+            header('Location: ' . BASE_URL . 'index.php?url=RouteController/login&error=4');
             exit;
         }
 
@@ -48,7 +48,7 @@ class StudentController
         $student = isset($_SESSION['usuario']) ? $_SESSION['usuario'] : null;
         if (!$student) {
             error_log('No hay sesión activa de estudiante.');
-            header('Location: ' . BASE_URL . 'index.php?url=RouteController/login');
+            header('Location: ' . BASE_URL . 'index.php?url=RouteController/login&error=4');
             exit;
         }
 
@@ -71,11 +71,11 @@ class StudentController
 
         if ($this->studentDAO->update($student->getCodigo(), $student)) {
             $_SESSION['usuario'] = $student; // Actualizar la sesión
-            header('Location: ' . BASE_URL . 'index.php?url=RouteController/student');
+            header('Location: ' . BASE_URL . 'index.php?url=RouteController/editStudent&success=1');
             exit;
         } else {
             error_log('Error al actualizar el perfil del estudiante.');
-            header('Location: ' . BASE_URL . 'index.php?url=RouteController/editStudent&error=3');
+            header('Location: ' . BASE_URL . 'index.php?url=RouteController/editStudent&error=1');
             exit;
         }
     }

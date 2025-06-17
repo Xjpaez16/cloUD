@@ -34,8 +34,7 @@ class TutorController
         if (!$tutor) {
             error_log('No hay sesión activa de tutor.');
             // Puedes redirigir o mostrar un error amigable aquí si lo deseas
-            header('Location: ' . BASE_URL . 'index.php?url=RouteController/login');
-            exit;
+            header('Location: ' . BASE_URL . 'index.php?url=RouteController/login&error=4');
         }
         $areas = $this->areaDAO->listarea();
         $checkedAreas = $this->tutorDAO->getAreasByTutor($tutor->getCodigo());
@@ -77,11 +76,11 @@ class TutorController
             // Actualizar las áreas del tutor
             $this->tutorDAO->updateAreasByTutor($tutor->getCodigo(), $areas);
             $_SESSION['usuario'] = $tutor; // Actualizar la sesión
-            header('Location: ' . BASE_URL . 'index.php?url=RouteController/tutor');
+             header('Location: ' . BASE_URL . 'index.php?url=RouteController/editTutor&success=1');
             exit;
         } else {
             error_log('Error al actualizar el perfil del tutor.');
-            header('Location: ' . BASE_URL . 'index.php?url=RouteController/editTutor&error=3');
+                        header('Location: ' . BASE_URL . 'index.php?url=RouteController/editTutor&error=1');
             exit;
         }
     }

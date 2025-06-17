@@ -131,7 +131,7 @@
                         <div
                             class="bg-white/10 backdrop-blur-sm p-4 rounded-lg text-center  transition-transform card-front flex flex-col items-center justify-center absolute inset-0">
                             <a href="#">
-                                <img src="<?= BASE_URL ?>public/img/programming2.png" class="w-32 h-40 mx-auto mb-2"
+                                <img src="<?= BASE_URL ?>public/img/Teory.png" class="w-32 h-40 mx-auto mb-2"
                                     alt="Bases de Datos">
                             </a>
                             <p class="text-[20px] xl:text-[25px] lg:text-[20px] md:text-[20px] sm:text-[30px]">Teoria
@@ -147,7 +147,7 @@
                         <div
                             class="bg-white/10 backdrop-blur-sm p-4 rounded-lg text-center  transition-transform card-front flex flex-col items-center justify-center absolute inset-0">
                             <a href="#">
-                                <img src="<?= BASE_URL ?>public/img/programming2.png" class="w-32 h-40 mx-auto mb-2"
+                                <img src="<?= BASE_URL ?>public/img/architecture.png" class="w-32 h-40 mx-auto mb-2"
                                     alt="Bases de Datos">
                             </a>
                             <p class="text-[20px] xl:text-[25px] lg:text-[20px] md:text-[20px] sm:text-[30px]">Teoria
@@ -163,7 +163,7 @@
                         <div
                             class="bg-white/10 backdrop-blur-sm p-4 rounded-lg text-center  transition-transform card-front flex flex-col items-center justify-center absolute inset-0">
                             <a href="#">
-                                <img src="<?= BASE_URL ?>public/img/programming2.png" class="w-32 h-40 mx-auto mb-2"
+                                <img src="<?= BASE_URL ?>public/img/Red.png" class="w-32 h-40 mx-auto mb-2"
                                     alt="Bases de Datos">
                             </a>
                             <p class="text-[20px] xl:text-[25px] lg:text-[20px] md:text-[20px] sm:text-[30px]">Teoria
