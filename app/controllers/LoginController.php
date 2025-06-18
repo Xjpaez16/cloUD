@@ -4,13 +4,17 @@ class LoginController
 {
     private $estudianteDAO;
     private $tutorDAO;
+    private $administradorDAO;
 
     public function __construct()
     {
         require_once(__DIR__ . '/models/DAO/EstudianteDAO.php');
         require_once(__DIR__ . '/models/DAO/TutorDAO.php');
+        require_once(__DIR__ . '/models/DAO/AdministradorDAO.php');
+
         $this->estudianteDAO = new EstudianteDAO();
         $this->tutorDAO = new TutorDAO();
+        $this->administradorDAO = new AdministradorDAO();
     }
 
     public function login()
@@ -26,7 +30,7 @@ class LoginController
                     exit;
                 }
                 $estudiante = $this->estudianteDAO->validarLogin($email);
-                if (password_verify($password, $estudiante->getContrasena())) {
+                if ($estudiante && password_verify($password, $estudiante->getContrasena())) { // Se agregó $estudiante &&
                     session_start();
                     $_SESSION['usuario'] = $estudiante;
                     $_SESSION['rol'] = 'estudiante';
@@ -34,8 +38,7 @@ class LoginController
                     exit;
                 } else {
                     header('Location: ' . BASE_URL . 'index.php?url=RouteController/login&error=1');
-                    error_log('Error de inicio de sesión: contraseña incorrecta para el correo ' . $estudiante->getContrasena());
-
+                    error_log('Error de inicio de sesión: contraseña incorrecta para el correo ' . $email); // Mensaje corregido
                     exit;
                 }
             }
@@ -48,7 +51,7 @@ class LoginController
                 }
                 $tutor = $this->tutorDAO->validarLogin($email);
 
-                if (password_verify($password, $tutor->getContrasena())) {
+                if ($tutor && password_verify($password, $tutor->getContrasena())) {
                     session_start();
                     $_SESSION['usuario'] = $tutor;
                     $_SESSION['rol'] = 'tutor';
@@ -56,20 +59,36 @@ class LoginController
                     exit;
                 } else {
                     header('Location: ' . BASE_URL . 'index.php?url=RouteController/login&error=1');
-                    error_log('Error de inicio de sesión: contraseña incorrecta para el correo ' . $tutor->getContrasena());
+                    error_log('Error de inicio de sesión: contraseña incorrecta para el correo ' . $email);
                     exit;
                 }
             }
 
-            // Si no existe el correo en ninguna tabla
+            // Si es administrador
+            if ($this->administradorDAO->comprobarCorreo($email)) {
+                $administrador = $this->administradorDAO->validarLogin($email);
+                if ($administrador && password_verify($password, $administrador->getContrasena())) {
+                    session_start();
+                    $_SESSION['usuario'] = $administrador;
+                    $_SESSION['rol'] = 'administrador';
+                    header('Location: ' . BASE_URL . 'index.php?url=RouteController/admin&session=success');
+                    exit;
+                }
+                 else {
+                    header('Location: ' . BASE_URL . 'index.php?url=RouteController/login&error=1');
+                    error_log('Error de inicio de sesión: contraseña incorrecta para el correo ' . $email);
+                    exit;
+                }
+            }
+
             header('Location: ' . BASE_URL . 'index.php?url=RouteController/login&error=3');
             exit;
         } else {
-            // Si no es una solicitud POST, redirige al login
             header('Location: ' . BASE_URL . 'index.php?url=RouteController/login');
             exit;
         }
     }
+
     public function logout()
     {
         session_start();
