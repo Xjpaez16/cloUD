@@ -50,9 +50,10 @@ class ResetController
             $response1 = $_POST['response1'];
             $response2 = $_POST['response2'];
             $password = $_POST['password'];
-            $password = password_hash($password, PASSWORD_DEFAULT);
+            
             if ($this->validation->validatepassword($password)) {
                 $responseconcatenated = $response1 . $response2;
+                $password = password_hash($password, PASSWORD_DEFAULT);
                 if ($rol == "estudiante") {
                     $rta = $this->estudianteDAO->comprobarRtaSeguridad($email, $responseconcatenated);
                     if ($rta) {
