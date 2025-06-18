@@ -2,24 +2,22 @@
     <script src="https://unpkg.com/flowbite@latest/dist/flowbite.min.js"></script>
     <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/uicons-regular-rounded/css/uicons-regular-rounded.css">
     <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
-<?php
+<?php 
 require_once(__DIR__ . '/../../app/controllers/models/DTO/EstudianteDTO.php');
 require_once(__DIR__ . '/../../app/controllers/models/DTO/TutorDTO.php');
-require_once(__DIR__ . '/../../app/controllers/models/DTO/UsuarioDTO.php'); // <-- AÑADE O REVISA ESTA LÍNEA
-require_once(__DIR__ . '/../../app/controllers/models/DTO/AdministradorDTO.php'); // Incluir el DTO del administrador
-
 if(session_status() == PHP_SESSION_NONE) {
     session_start();
-}
-
-$role = isset($_SESSION["rol"]) ? $_SESSION["rol"] : null;
-$usuario = isset($_SESSION["usuario"]) ? $_SESSION["usuario"] : null;
-
-if(!$role){
-     error_log("Mostrando nav pública");
+    
+    }
+    
+    $role = isset($_SESSION["rol"]) ? $_SESSION["rol"] : null;
+    $usuario = isset($_SESSION["usuario"]) ? $_SESSION["usuario"] : null;
+    
+    if(!$role){
+         error_log("Mostrando nav pública");
 ?>
 
-        <a href="<?= BASE_URL ?>index.php?url=RouteController/index" class="flex items-center space-x-3 rtl:space-x-reverse">
+        <a href="<?= BASE_URL ?>index.php?url=RouteController/home" class="flex items-center space-x-3 rtl:space-x-reverse">
             <img src="<?= BASE_URL ?>public/img/logo.png" class="h-14 xl:h-24 lg:h-16" alt="cloud Logo" />
         </a>
         <div class="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
@@ -60,7 +58,7 @@ if(!$role){
                 </li>
             </ul>
         </div>
-
+    
 <?php }else if($role =="estudiante" && $usuario){
 ?>
 
@@ -72,8 +70,9 @@ if(!$role){
                 <i class="fi fi-rr-user"></i>
                 <span>
                     <?php
+                    
                     error_log("Usuario: " . $usuario->getNombre());
-                    echo "Estudiante :" . htmlspecialchars($usuario->getNombre());
+                    echo "Estudiante :" . $usuario->getNombre();
                     ?>
                 </span>
             </a>
@@ -104,8 +103,8 @@ if(!$role){
                     <a href="#"
                         class="block py-2 px-3 md:p-0  rounded-sm  custom-underline dark:border-gray-700 text-[15px] lg:text-[20px] xl:text-[25px] text-center custom-underline">Tutorías</a>
                 </li>
-
-
+                
+                
             </ul>
         </div>
 
@@ -118,9 +117,10 @@ if(!$role){
                 <i class="fi fi-rr-user"></i>
                 <span>
                     <?php
+                    
                     error_log("Usuario: " . $usuario->getNombre());
-                    echo "Tutor : ". htmlspecialchars($usuario->getNombre());
-
+                    echo "Tutor : ". $usuario->getNombre();
+                    
                     ?>
                 </span>
             </a>
@@ -151,8 +151,8 @@ if(!$role){
                     <a href="#"
                         class="block py-2 px-3 md:p-0  rounded-sm  custom-underline dark:border-gray-700 text-[15px] lg:text-[20px] xl:text-[25px] text-center custom-underline">Tutorías</a>
                 </li>
-
-
+                
+                
             </ul>
         </div>
 <?php }else if($role =="administrador" && $usuario){?>
@@ -160,11 +160,12 @@ if(!$role){
         <img src="<?= BASE_URL ?>public/img/logo.png" class="h-14 xl:h-24 lg:h-16" alt="cloud Logo" />
     </a>
     <div class="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
-        <a href="<?= BASE_URL ?>index.php?url=RouteController/admin"> <i class="fi fi-rr-user"></i>
+        <a href="<?= BASE_URL ?>index.php?url=RouteController/login">
+            <i class="fi fi-rr-user"></i>
             <span>
                 <?php
                 error_log("Usuario: " . $usuario->getNombre());
-                echo "Administrador : ". htmlspecialchars($usuario->getNombre());
+                echo "Administrador : ". $usuario->getNombre();
                 ?>
             </span>
         </a>
@@ -183,16 +184,12 @@ if(!$role){
         <ul
             class="flex flex-col font-medium p-4 md:p-0 mt-4  rounded-lg  md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0  text-[15px] lg:text-[20px] xl:text-[25px] text-center ">
             <li>
-                <a href="<?= BASE_URL ?>index.php?url=RouteController/manageAdmins"
-                    class="block py-2 px-3 md:p-0  rounded-sm  custom-underline dark:border-gray-700 text-[15px] lg:text-[20px] xl:text-[25px] text-center custom-underline">Gestionar Administradores</a>
-            </li>
-            <li>
                 <a href="#"
                     class="block py-2 px-3 md:p-0  rounded-sm  custom-underline dark:border-gray-700 text-[15px] lg:text-[20px] xl:text-[25px] text-center custom-underline">Gestionar Tutores</a>
             </li>
             <li>
                 <a href="#"
-                    class="block py-2 px-3 md:p-0  rounded-sm  custom-underline dark:border-gray-700 text-[15px] lg:text-[20px] xl:text-[25px] text-center custom-underline">Gestionar Estudiantes</a>
+                    class="block py-2 px-3 md:p-0  rounded-sm  custom-underline dark:border-gray-700 text-[15px] lg:text-[20px] xl:text-[25px] text-center custom-underline">Gestionar Usuarios</a>
             </li>
             <li>
                 <a href="#"

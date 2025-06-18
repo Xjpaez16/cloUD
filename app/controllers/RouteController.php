@@ -37,82 +37,19 @@ class RouteController extends Controller
 
     public function student()
     {
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
-        // Verifica si el usuario está logueado y es estudiante
-        if (!isset($_SESSION['usuario']) || $_SESSION['rol'] !== 'estudiante') {
-            header('Location: ' . BASE_URL . 'index.php?url=RouteController/login&error=4');
-            exit();
-        }
+        
         $this->view('student'); // muestra la vista student.php
     }
 
     public function tutor()
     {
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
-        // Verifica si el usuario está logueado y es tutor
-        if (!isset($_SESSION['usuario']) || $_SESSION['rol'] !== 'tutor') {
-            header('Location: ' . BASE_URL . 'index.php?url=RouteController/login&error=4');
-            exit();
-        }
         $this->view('tutor'); // muestra la vista student.php
     }
 
     public function admin()
     {
-        // Se asegura que la sesión se inicie antes de usar $_SESSION
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
-        // Verifica si el usuario está logueado y es administrador
-        if (!isset($_SESSION['usuario']) || $_SESSION['rol'] !== 'administrador') {
-            header('Location: ' . BASE_URL . 'index.php?url=RouteController/login&error=4');
-            exit();
-        }
-        $this->view('admin');
+        $this->view('admin'); // muestra la vista student.php
     }
-
-    public function manageAdmins()
-    {
-        // Se asegura que la sesión se inicie antes de usar $_SESSION
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
-        // Verifica si el usuario está logueado y es administrador
-        if (!isset($_SESSION['usuario']) || $_SESSION['rol'] !== 'administrador') {
-            header('Location: ' . BASE_URL . 'index.php?url=RouteController/login&error=4');
-            exit();
-        }
-        require_once(__DIR__ . '/AdminController.php'); // Incluimos el nuevo controlador
-        $adminController = new AdminController();
-        $adminController->manageAdmins(); // Llama al método para gestionar administradores (CRUD)
-    }
-
-    // Rutas para las operaciones CRUD de administradores (POST requests)
-    public function addAdmin()
-    {
-        require_once(__DIR__ . '/AdminController.php');
-        $adminController = new AdminController();
-        $adminController->addAdmin();
-    }
-
-    public function editAdmin()
-    {
-        require_once(__DIR__ . '/AdminController.php');
-        $adminController = new AdminController();
-        $adminController->editAdmin();
-    }
-
-    public function deleteAdmin()
-    {
-        require_once(__DIR__ . '/AdminController.php');
-        $adminController = new AdminController();
-        $adminController->deleteAdmin();
-    }
-
 
     public function editTutor()
     {
