@@ -1,4 +1,4 @@
-<nav class="bg-[#803cb9] font-semibold font-sans">
+<nav class="bg-[#803cb9] text-white font-semibold font-sans">
     <script src="https://unpkg.com/flowbite@latest/dist/flowbite.min.js"></script>
     <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/uicons-regular-rounded/css/uicons-regular-rounded.css">
     <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
