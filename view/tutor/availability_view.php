@@ -63,29 +63,8 @@ require_once __DIR__ . '/../layouts/nav.php';
             </a>
         </div>
 
-        <!-- Notificación -->
-        <?php if (isset($_GET['success'])): ?>
-        <div id="notification" class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-6 rounded">
-            <div class="flex justify-between items-center">
-                <div class="flex items-center">
-                    <i class="fas fa-check-circle mr-2"></i>
-                    <p>
-                        <?php 
-                        $messages = [
-                            1 => 'Disponibilidad registrada exitosamente!',
-                            2 => 'Disponibilidad actualizada correctamente',
-                            3 => 'Horario eliminado con éxito'
-                        ];
-                        echo $messages[$_GET['success']] ?? 'Operación realizada con éxito';
-                        ?>
-                    </p>
-                </div>
-                <button onclick="document.getElementById('notification').remove()" class="text-green-700">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-        </div>
-        <?php endif; ?>
+       
+       
 
         <!-- Tabla de disponibilidad -->
         <div class="availability-card overflow-hidden">
@@ -222,43 +201,18 @@ require_once __DIR__ . '/../layouts/nav.php';
     </div>
 
     <!-- Script para notificaciones -->
-    <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Mostrar notificación de éxito si existe
-        <?php if (isset($_GET['success'])): ?>
-            const notyf = new Notyf({
-                position: { x: 'right', y: 'top' },
-                types: [
-                    {
-                        type: 'success',
-                        background: '#10b981',
-                        icon: {
-                            className: 'fas fa-check-circle',
-                            tagName: 'span',
-                            color: '#fff'
-                        },
-                        dismissible: true
-                    }
-                ]
-            });
-            
-            notyf.success('<?= 
-                isset($messages) ? $messages[$_GET['success']] : "Operación realizada con éxito" 
-            ?>');
-        <?php endif; ?>
-        
-        // Confirmación para eliminar
-        document.querySelectorAll('a[href*="eliminar"]').forEach(link => {
-            link.addEventListener('click', function(e) {
-                e.preventDefault();
-                if (confirm('¿Estás seguro de que deseas eliminar este horario?')) {
-                    // Aquí iría la llamada AJAX o redirección para eliminar
-                    window.location.href = '<?= BASE_URL ?>index.php?url=TutorController/deleteAvailability&id=' + 
-                                          this.closest('tr').dataset.id;
-                }
-            });
-        });
-    });
-    </script>
+    <script src="<?= BASE_URL ?>public/js/notyf.js"></script>
+    <?php if (isset($_GET['success'])){
+                        $messages = [
+                            1 => 'Disponibilidad registrada exitosamente!',
+                            2 => 'Disponibilidad actualizada correctamente',
+                            3 => 'Horario eliminado con éxito'
+                        ];
+                        $msg = $messages[$_GET['success']] ?? $messages[1];
+                        ?>
+                        <script>
+                            showSuccessPosition('<?= $msg ?>', { x: 'right', y: 'top' });
+                        </script> 
+    <?php }?>                           
 </body>
 </html>

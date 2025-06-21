@@ -115,7 +115,7 @@ require_once(__DIR__ . '/../app/controllers/models/DTO/EstudianteDTO.php');
     <script>
       showSuccess('<?= $msg ?>');
     </script>
-<?php } ?>  ?>
+<?php } ?>  
 </body>
 
 </html>

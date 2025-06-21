@@ -1,5 +1,5 @@
 const notyf = new Notyf({
-  duration: 3000,
+  duration: 7000,
   position: { x: 'center', y: 'top' },
   ripple: false,
   dismissible: true,
@@ -56,6 +56,13 @@ function showSuccess(message) {
 function showErrorRegister(message, position = { x: 'center', y: 'top' }) {
      notyf.open({
     type: 'error',
+    message: message , 
+    position: position
+  });
+}    
+function showSuccessPosition(message, position = { x: 'center', y: 'top' }) {
+     notyf.open({
+    type: 'success',
     message: message , 
     position: position
   });
