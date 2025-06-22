@@ -225,7 +225,7 @@ class TutorController
             $inicio->format('H:i:s'),
             $fin->format('H:i:s'),
             $horarioId,
-            1 // Estado disponible
+            7 // Estado disponible
             );
     }
 }

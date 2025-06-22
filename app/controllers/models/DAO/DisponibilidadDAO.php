@@ -52,11 +52,13 @@ class DisponibilidadDAO {
     
     public function getByTutor($cod_tutor) {
         try {
-            $sql = "SELECT d.*, e.tipo_estado
-                    FROM disponibilidad d
-                    JOIN estado e ON d.cod_estado = e.codigo
-                    WHERE d.cod_tutor = ?
-                    ORDER BY d.hora_i";
+            $sql = "SELECT d.*, e.tipo_estado, dia.dia as nombre_dia
+                FROM disponibilidad d
+                JOIN estado e ON d.cod_estado = e.codigo
+                JOIN horario h ON d.id_horario = h.id
+                JOIN dia ON h.id_dia = dia.id
+                WHERE d.cod_tutor = ?
+                ORDER BY h.id_dia, d.hora_i";
             $stmt = $this->conn->prepare($sql);
             $stmt->bind_param('i', $cod_tutor);
             $stmt->execute();
@@ -67,7 +69,8 @@ class DisponibilidadDAO {
                 $disponibilidades[] = [
                     'hora_i' => $row['hora_i'],
                     'hora_fn' => $row['hora_fn'],
-                    'estado' => $row['tipo_estado']
+                    'estado' => $row['tipo_estado'],
+                    'dia' => $row['nombre_dia'] 
                 ];
             }
             return $disponibilidades;

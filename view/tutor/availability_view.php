@@ -123,10 +123,10 @@ require_once __DIR__ . '/../layouts/nav.php';
                             <?php foreach ($disponibilidad as $disp): ?>
                             <tr class="hover:bg-gray-50">
                                 <td class="px-6 py-4 whitespace-nowrap day-name">
-                                    <div class="text-sm text-gray-900 font-semibold">
-                                        <?= $disp['dia'] ?? 'No especificado' ?>
-                                    </div>
-                                </td>
+    <div class="text-sm text-gray-900 font-semibold">
+        <?= $disp['dia'] ?? 'No especificado' ?>
+    </div>
+</td>
                                 
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     <div class="text-sm text-gray-900">
