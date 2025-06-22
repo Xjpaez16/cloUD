@@ -1,8 +1,10 @@
-<nav class="bg-[#803cb9] font-semibold font-sans">
+<nav class="bg-[#803cb9] text-white font-semibold font-sans">
     <script src="https://unpkg.com/flowbite@latest/dist/flowbite.min.js"></script>
     <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/uicons-regular-rounded/css/uicons-regular-rounded.css">
     <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
 <?php 
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
 require_once(__DIR__ . '/../../app/controllers/models/DTO/EstudianteDTO.php');
 require_once(__DIR__ . '/../../app/controllers/models/DTO/TutorDTO.php');
 if(session_status() == PHP_SESSION_NONE) {

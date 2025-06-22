@@ -74,4 +74,32 @@ class RouteController extends Controller
     {
         $this->view('changepassword'); // muestra la vista changepassword.php
     }
+
+    public function registerAvailability()
+    {
+            require_once(__DIR__ . '/TutorController.php');
+            $tutorController = new TutorController();
+            $tutorController->showAvailabilityForm();
+        
+    }
+    
+    public function viewAvailability()
+    {
+        require_once(__DIR__ . '/TutorController.php');
+        $tutorController = new TutorController();
+        $tutorController->viewAvailability();
+    }
+
+    public function showAvailabilityForm() {
+        require_once(__DIR__ . '/TutorController.php');
+        $tutorController = new TutorController();
+        $tutorController->showAvailabilityForm();
+    }
+    
+    public function processAvailability() {
+        require_once(__DIR__ . '/TutorController.php');
+        $tutorController = new TutorController();
+        $tutorController->registerAvailability();
+    }
 }
+?>
