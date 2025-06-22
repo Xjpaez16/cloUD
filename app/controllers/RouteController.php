@@ -37,7 +37,7 @@ class RouteController extends Controller
 
     public function student()
     {
-        
+
         $this->view('student'); // muestra la vista student.php
     }
 
@@ -77,12 +77,11 @@ class RouteController extends Controller
 
     public function registerAvailability()
     {
-            require_once(__DIR__ . '/TutorController.php');
-            $tutorController = new TutorController();
-            $tutorController->showAvailabilityForm();
-        
+        require_once(__DIR__ . '/TutorController.php');
+        $tutorController = new TutorController();
+        $tutorController->showAvailabilityForm();
     }
-    
+
     public function viewAvailability()
     {
         require_once(__DIR__ . '/TutorController.php');
@@ -90,13 +89,15 @@ class RouteController extends Controller
         $tutorController->viewAvailability();
     }
 
-    public function showAvailabilityForm() {
+    public function showAvailabilityForm()
+    {
         require_once(__DIR__ . '/TutorController.php');
         $tutorController = new TutorController();
         $tutorController->showAvailabilityForm();
     }
-    
-    public function processAvailability() {
+
+    public function processAvailability()
+    {
         require_once(__DIR__ . '/TutorController.php');
         $tutorController = new TutorController();
         $tutorController->registerAvailability();
@@ -108,15 +109,14 @@ class RouteController extends Controller
     public function uploadfiles()
     {
         require_once(__DIR__ . '/FilesController.php');
-       
+
         $FilesController = new FilesController();
 
         $profesores = $FilesController->viewteachers(); // retorna array
         $areas = $FilesController->viewareas();
         $materias = $FilesController->viewmaterias();
-        
+
 
         require_once(__DIR__ . '../../../view/uploadfiles.php'); // muestra la vista de uploadfiles.php
     }
 }
-?>
