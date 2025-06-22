@@ -135,7 +135,7 @@ require_once __DIR__ . '/../layouts/nav.php';
                                 </td>
                                 
                                 <td class="px-6 py-4 whitespace-nowrap">
-                                    <span class="status-badge bg-<?= $disp['estado'] == 'Disponible' ? 'green' : 'gray' ?>-100 text-<?= $disp['estado'] == 'Disponible' ? 'green' : 'gray' ?>-800">
+                                    <span class="status-badge bg-<?= $disp['estado'] == 'Disponible' ? 'green' : 'red' ?>-100 text-<?= $disp['estado'] == 'Disponible' ? 'green' : 'red' ?>-800">
                                         <?= $disp['estado'] ?>
                                     </span>
                                 </td>
@@ -176,44 +176,7 @@ require_once __DIR__ . '/../layouts/nav.php';
         </div>
     </div>
 
-    <!-- Script para notificaciones -->
-    <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Mostrar notificación de éxito si existe
-        <?php if (isset($_GET['success'])): ?>
-            const notyf = new Notyf({
-                position: { x: 'right', y: 'top' },
-                types: [
-                    {
-                        type: 'success',
-                        background: '#10b981',
-                        icon: {
-                            className: 'fas fa-check-circle',
-                            tagName: 'span',
-                            color: '#fff'
-                        },
-                        dismissible: true
-                    }
-                ]
-            });
-            
-            notyf.success('<?= 
-                isset($messages) ? $messages[$_GET['success']] : "Operación realizada con éxito" 
-            ?>');
-        <?php endif; ?>
-        
-        // Confirmación para eliminar
-        document.querySelectorAll('a[href*="eliminar"]').forEach(link => {
-            link.addEventListener('click', function(e) {
-                e.preventDefault();
-                if (confirm('¿Estás seguro de que deseas eliminar este horario?')) {
-                    // Aquí iría la llamada AJAX o redirección para eliminar
-                    window.location.href = '<?= BASE_URL ?>index.php?url=TutorController/deleteAvailability&id=' + 
-                                          this.closest('tr').dataset.id;
-                }
-            });
-        });
-    });
-    </script>
+   
+    
 </body>
 </html>
