@@ -77,16 +77,10 @@ class RouteController extends Controller
 
     public function registerAvailability()
     {
-        require_once(__DIR__ . '/TutorController.php');
-        $tutorController = new TutorController();
-        
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            // Procesar POST - delegar al TutorController
-            $tutorController->processAvailability();
-        } else {
-            // Mostrar GET - delegar al TutorController
+            require_once(__DIR__ . '/TutorController.php');
+            $tutorController = new TutorController();
             $tutorController->showAvailabilityForm();
-        }
+        
     }
     
     public function viewAvailability()

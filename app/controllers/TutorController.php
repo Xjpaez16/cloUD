@@ -105,8 +105,8 @@ class TutorController
     public function registerAvailability()
     {
         $this->validateTutorSession();
-        $this->validatePostMethod();
         
+        if(!$this->validatePostMethod()){
         error_log("Datos recibidos: " . print_r($_POST, true));
         
         $cod_tutor = $_SESSION['usuario']->getCodigo();
@@ -121,6 +121,7 @@ class TutorController
         
         header('Location: ' . BASE_URL . 'index.php?url=RouteController/viewAvailability&success=1');
         exit;
+        }
     }
     
     public function viewAvailability()
