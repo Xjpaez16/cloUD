@@ -30,6 +30,7 @@ class TutorController
         $this->disponibilidadDAO = new DisponibilidadDAO();
     }
     
+    // Métodos existentes para gestión de perfil
     public function viewAreasChecked()
     {
         if (session_status() === PHP_SESSION_NONE) {
@@ -86,16 +87,10 @@ class TutorController
         }
     }
     
+    // Métodos para gestión de disponibilidad (mejorados pero manteniendo funcionalidad)
     public function showAvailabilityForm()
     {
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
-        
-        if (!isset($_SESSION['usuario']) || $_SESSION['rol'] !== 'tutor') {
-            header('Location: ' . BASE_URL . 'index.php?url=RouteController/login&error=4');
-            exit;
-        }
+        $this->validateTutorSession();
         
         // Limpiar parámetros de error si existen
         if (isset($_GET['error'])) {
@@ -109,19 +104,8 @@ class TutorController
     
     public function registerAvailability()
     {
-        if (session_status() === PHP_SESSION_NONE) session_start();
-        
-        if (!isset($_SESSION['usuario']) || $_SESSION['rol'] !== 'tutor') {
-            error_log("Acceso no autorizado");
-            header('Location: ' . BASE_URL . 'index.php?url=RouteController/login&error=4');
-            exit;
-        }
-        
-        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            error_log("Método incorrecto: " . $_SERVER['REQUEST_METHOD']);
-            header("HTTP/1.1 405 Method Not Allowed");
-            exit;
-        }
+        $this->validateTutorSession();
+        $this->validatePostMethod();
         
         error_log("Datos recibidos: " . print_r($_POST, true));
         
@@ -130,44 +114,71 @@ class TutorController
         $hora_inicio = $_POST['hora_inicio'] ?? null;
         $hora_fin = $_POST['hora_fin'] ?? null;
         
-        // Validación mejorada con mensajes específicos
-        if (empty($id_dia) || empty($hora_inicio) || empty($hora_fin)) {
-            header('Location: ' . BASE_URL . 'index.php?url=RouteController/registerAvailability&error=3'); // Campos vacíos
-            exit;
-        }
+        $this->validateAvailabilityData($id_dia, $hora_inicio, $hora_fin);
         
-        if (!$this->validateTimeInterval($hora_inicio, $hora_fin)) {
-            header('Location: ' . BASE_URL . 'index.php?url=RouteController/registerAvailability&error=1'); // Intervalo inválido
-            exit;
-        }
+        $horarioId = $this->createHorario($cod_tutor, $id_dia, $hora_inicio, $hora_fin);
+        $this->registerTimeSlots($cod_tutor, $hora_inicio, $hora_fin, $horarioId);
         
-        $horarioDTO = new HorarioDTO(null, $id_dia, $cod_tutor, $hora_inicio, $hora_fin);
-        $horarioId = $this->horarioDAO->create($horarioDTO);
-        
-        if (!$horarioId) {
-            header('Location: ' . BASE_URL . 'index.php?url=RouteController/registerAvailability&error=2'); // Error BD
-            exit;
-        }
-        
-        $this->registerTimeSlots($cod_tutor, $id_dia, $hora_inicio, $hora_fin, $horarioId);
         header('Location: ' . BASE_URL . 'index.php?url=RouteController/viewAvailability&success=1');
         exit;
     }
     
     public function viewAvailability()
     {
+        $this->validateTutorSession();
+        
+        $tutor = $_SESSION['usuario'];
+        $disponibilidad = $this->disponibilidadDAO->getByTutor($tutor->getCodigo());
+        include __DIR__ . '/../../view/tutor/availability_view.php';
+    }
+    
+    // Métodos auxiliares privados (mejor organizados)
+    private function validateTutorSession()
+    {
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
         }
         
-        $tutor = isset($_SESSION['usuario']) ? $_SESSION['usuario'] : null;
-        if (!$tutor) {
+        if (!isset($_SESSION['usuario']) || $_SESSION['rol'] !== 'tutor') {
+            error_log("Acceso no autorizado");
             header('Location: ' . BASE_URL . 'index.php?url=RouteController/login&error=4');
             exit;
         }
+    }
+    
+    private function validatePostMethod()
+    {
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            error_log("Método incorrecto: " . $_SERVER['REQUEST_METHOD']);
+            header("HTTP/1.1 405 Method Not Allowed");
+            exit;
+        }
+    }
+    
+    private function validateAvailabilityData($id_dia, $hora_inicio, $hora_fin)
+    {
+        if (empty($id_dia) || empty($hora_inicio) || empty($hora_fin)) {
+            header('Location: ' . BASE_URL . 'index.php?url=RouteController/registerAvailability&error=3');
+            exit;
+        }
         
-        $disponibilidad = $this->disponibilidadDAO->getByTutor($tutor->getCodigo());
-        include __DIR__ . '/../../view/tutor/availability_view.php';
+        if (!$this->validateTimeInterval($hora_inicio, $hora_fin)) {
+            header('Location: ' . BASE_URL . 'index.php?url=RouteController/registerAvailability&error=1');
+            exit;
+        }
+    }
+    
+    private function createHorario($cod_tutor, $id_dia, $hora_inicio, $hora_fin)
+    {
+        $horarioDTO = new HorarioDTO(null, $id_dia, $cod_tutor, $hora_inicio, $hora_fin);
+        $horarioId = $this->horarioDAO->create($horarioDTO);
+        
+        if (!$horarioId) {
+            header('Location: ' . BASE_URL . 'index.php?url=RouteController/registerAvailability&error=2');
+            exit;
+        }
+        
+        return $horarioId;
     }
     
     private function validateTimeInterval($hora_inicio, $hora_fin)
@@ -175,91 +186,47 @@ class TutorController
         $inicio = new DateTime($hora_inicio);
         $fin = new DateTime($hora_fin);
         
-        // Validar que la hora final sea mayor que la inicial
         if ($fin <= $inicio) {
             return false;
         }
         
-        // Validar que el intervalo sea al menos 1 hora
         $diff = $fin->diff($inicio);
         return ($diff->h >= 1 || $diff->days > 0);
     }
     
-    private function registerTimeSlots($cod_tutor, $id_dia, $hora_inicio, $hora_fin, $horarioId)
+    private function registerTimeSlots($cod_tutor, $hora_inicio, $hora_fin, $horarioId)
     {
         $inicio = new DateTime($hora_inicio);
         $fin = new DateTime($hora_fin);
         
-        // Validar que el intervalo sea mínimo 1 hora
         if ($inicio->diff($fin)->h < 1 && $inicio->diff($fin)->i == 0) {
             throw new Exception("El intervalo mínimo debe ser de 1 hora");
         }
         
-        // Calcular todas las fechas futuras para este día de la semana
-        $fechas = $this->calculateFutureDatesForDay($id_dia, 4); // 4 semanas adelante
+        $currentStart = clone $inicio;
+        $currentEnd = clone $currentStart;
+        $currentEnd->add(new DateInterval('PT1H'));
         
-        foreach ($fechas as $fecha) {
-            $currentStart = clone $inicio;
-            $currentEnd = clone $currentStart;
-            $currentEnd->add(new DateInterval('PT1H')); // Añadir 1 hora
-            
-            while ($currentEnd <= $fin) {
-                $this->disponibilidadDAO->create(
-                    $cod_tutor,
-                    $currentStart->format('H:i:s'),
-                    $currentEnd->format('H:i:s'),
-                    $fecha,
-                    $horarioId,
-                    1 // Estado disponible
-                    );
-                
-                // Mover al siguiente bloque
-                $currentStart = clone $currentEnd;
-                $currentEnd->add(new DateInterval('PT1H'));
-            }
-            
-            // Registrar el último bloque si queda tiempo restante
-            if ($currentStart < $fin) {
-                $this->disponibilidadDAO->create(
-                    $cod_tutor,
-                    $currentStart->format('H:i:s'),
-                    $fin->format('H:i:s'),
-                    $fecha,
-                    $horarioId,
-                    1
-                    );
-            }
+        while ($currentEnd <= $fin) {
+            $this->createDisponibilidad($cod_tutor, $currentStart, $currentEnd, $horarioId);
+            $currentStart = clone $currentEnd;
+            $currentEnd->add(new DateInterval('PT1H'));
+        }
+        
+        if ($currentStart < $fin) {
+            $this->createDisponibilidad($cod_tutor, $currentStart, $fin, $horarioId);
         }
     }
     
-    private function calculateDateForDay($id_dia)
+    private function createDisponibilidad($cod_tutor, $inicio, $fin, $horarioId)
     {
-        $diasSemana = [
-            1 => 'Monday', 2 => 'Tuesday', 3 => 'Wednesday',
-            4 => 'Thursday', 5 => 'Friday', 6 => 'Saturday', 7 => 'Sunday'
-        ];
-        
-        $fecha = new DateTime('next ' . ($diasSemana[$id_dia] ?? 'Monday'));
-        return $fecha->format('Y-m-d');
-    }
-    
-    private function calculateFutureDatesForDay($id_dia, $weeksAhead = 4)
-    {
-        $diasSemana = [
-            1 => 'Monday', 2 => 'Tuesday', 3 => 'Wednesday',
-            4 => 'Thursday', 5 => 'Friday', 6 => 'Saturday', 7 => 'Sunday'
-        ];
-        
-        $dayName = $diasSemana[$id_dia] ?? 'Monday';
-        $dates = [];
-        $today = new DateTime();
-        
-        for ($i = 0; $i < $weeksAhead; $i++) {
-            $date = new DateTime("next $dayName +$i weeks");
-            $dates[] = $date->format('Y-m-d');
-        }
-        
-        return $dates;
+        $this->disponibilidadDAO->create(
+            $cod_tutor,
+            $inicio->format('H:i:s'),
+            $fin->format('H:i:s'),
+            $horarioId,
+            1 // Estado disponible
+            );
     }
 }
 ?>

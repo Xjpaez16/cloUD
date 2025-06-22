@@ -79,49 +79,23 @@ class RouteController extends Controller
     {
         require_once(__DIR__ . '/TutorController.php');
         $tutorController = new TutorController();
-        $tutorController->showAvailabilityForm();
         
-        try {
-            $cod_tutor = $_SESSION['usuario']->getCodigo();
-            $id_dia = $_POST['dia'] ?? null;
-            $hora_inicio = $_POST['hora_inicio'] ?? null;
-            $hora_fin = $_POST['hora_fin'] ?? null;
-            
-            // Validaciones básicas
-            if (empty($id_dia) || empty($hora_inicio) || empty($hora_fin)) {
-                throw new Exception("Todos los campos son requeridos", 3);
-            }
-            
-            if (!$this->validateTimeInterval($hora_inicio, $hora_fin)) {
-                throw new Exception("El intervalo de tiempo debe ser de al menos 1 hora", 1);
-            }
-            
-            // Crear el horario base
-            $horarioDTO = new HorarioDTO(null, $id_dia, $cod_tutor, $hora_inicio, $hora_fin);
-            $horarioId = $this->horarioDAO->create($horarioDTO);
-            
-            if (!$horarioId) {
-                throw new Exception("Error al registrar el horario", 2);
-            }
-            
-            // Registrar los bloques de disponibilidad
-            $this->registerTimeSlots($cod_tutor, $id_dia, $hora_inicio, $hora_fin, $horarioId);
-            
-            header('Location: ' . BASE_URL . 'index.php?url=RouteController/viewAvailability&success=1');
-            exit;
-        } catch (Exception $e) {
-            error_log('Error en registerAvailability: ' . $e->getMessage());
-            exit;
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            // Procesar POST - delegar al TutorController
+            $tutorController->processAvailability();
+        } else {
+            // Mostrar GET - delegar al TutorController
+            $tutorController->showAvailabilityForm();
         }
     }
     
-    public function viewAvailability() {
+    public function viewAvailability()
+    {
         require_once(__DIR__ . '/TutorController.php');
         $tutorController = new TutorController();
         $tutorController->viewAvailability();
     }
-    
-    // RouteController.php
+
     public function showAvailabilityForm() {
         require_once(__DIR__ . '/TutorController.php');
         $tutorController = new TutorController();

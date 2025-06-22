@@ -1,7 +1,7 @@
 <?php
 require_once(__DIR__ . '/../../app/controllers/models/DTO/TutorDTO.php');
 require_once(__DIR__ . '/../../app/controllers/models/DTO/DiaDTO.php');
-require_once __DIR__ . '/../layouts/nav.php'; 
+require_once __DIR__ . '/../layouts/nav.php';
 ?>
 
 <!DOCTYPE html>
@@ -24,7 +24,6 @@ require_once __DIR__ . '/../layouts/nav.php';
 <body style="background-image: url('<?= BASE_URL ?>public/img/cloudfondo.jpg'); background-size: cover;"
     class="bg-gray-100 bg-cover bg-bottom bg-no-repeat">
 
-    
     <div class="flex flex-col min-h-screen w-auto">
         <div class="flex-grow flex-col flex items-center justify-center px-4 mt-20 xl:mr-0 mr-48 w-full">
             <!-- Encabezado morado -->
@@ -45,18 +44,6 @@ require_once __DIR__ . '/../layouts/nav.php';
                             <?php foreach ($dias as $dia): ?>
                                 <option value="<?= $dia->getId() ?>"><?= $dia->getDia() ?></option>
                             <?php endforeach; ?>
-                        </select>
-                    </div>
-
-                    <!-- Duración de la disponibilidad -->
-                    <div class="mb-5">
-                        <label for="semanas" class="block font-semibold text-[#5D54A4]">¿Para cuántas semanas?</label>
-                        <select id="semanas" name="semanas" required
-                            class="w-full px-4 py-2 mt-2 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#5D54A4]">
-                            <option value="1">1 semana</option>
-                            <option value="2" selected>2 semanas</option>
-                            <option value="3">3 semanas</option>
-                            <option value="4">4 semanas</option>
                         </select>
                     </div>
 

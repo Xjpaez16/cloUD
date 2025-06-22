@@ -48,7 +48,6 @@ require_once __DIR__ . '/../layouts/nav.php';
 <body style="background-image: url('<?= BASE_URL ?>public/img/cloudfondo.jpg'); background-size: cover; background-attachment: fixed;"
     class="bg-gray-100 bg-cover bg-fixed bg-no-repeat min-h-screen">
 
-	
     <div class="container mx-auto px-4 py-8 max-w-6xl">
         <!-- Header -->
         <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
@@ -63,8 +62,29 @@ require_once __DIR__ . '/../layouts/nav.php';
             </a>
         </div>
 
-       
-       
+        <!-- Notificación -->
+        <?php if (isset($_GET['success'])): ?>
+        <div id="notification" class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-6 rounded">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center">
+                    <i class="fas fa-check-circle mr-2"></i>
+                    <p>
+                        <?php 
+                        $messages = [
+                            1 => 'Disponibilidad registrada exitosamente!',
+                            2 => 'Disponibilidad actualizada correctamente',
+                            3 => 'Horario eliminado con éxito'
+                        ];
+                        echo $messages[$_GET['success']] ?? 'Operación realizada con éxito';
+                        ?>
+                    </p>
+                </div>
+                <button onclick="document.getElementById('notification').remove()" class="text-green-700">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        </div>
+        <?php endif; ?>
 
         <!-- Tabla de disponibilidad -->
         <div class="availability-card overflow-hidden">
@@ -86,9 +106,6 @@ require_once __DIR__ . '/../layouts/nav.php';
                         <thead class="bg-purple-600 text-white">
                             <tr>
                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
-                                    Fecha
-                                </th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
                                     Día
                                 </th>
                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
@@ -103,48 +120,13 @@ require_once __DIR__ . '/../layouts/nav.php';
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
-                            <?php 
-                            // Agrupar por fecha para mejor visualización
-                            $groupedAvailability = [];
-                            foreach ($disponibilidad as $disp) {
-                                $date = $disp['fecha'];
-                                if (!isset($groupedAvailability[$date])) {
-                                    $groupedAvailability[$date] = [];
-                                }
-                                $groupedAvailability[$date][] = $disp;
-                            }
-                            
-                            // Mostrar agrupado por fecha
-                            foreach ($groupedAvailability as $fecha => $horarios): 
-                                $fechaObj = new DateTime($fecha);
-                                $dayName = [
-                                    'Monday' => 'Lunes',
-                                    'Tuesday' => 'Martes',
-                                    'Wednesday' => 'Miércoles',
-                                    'Thursday' => 'Jueves',
-                                    'Friday' => 'Viernes',
-                                    'Saturday' => 'Sábado',
-                                    'Sunday' => 'Domingo'
-                                ][$fechaObj->format('l')];
-                                
-                                $firstRow = true;
-                                $rowCount = count($horarios);
-                                
-                                foreach ($horarios as $index => $disp): 
-                            ?>
+                            <?php foreach ($disponibilidad as $disp): ?>
                             <tr class="hover:bg-gray-50">
-                                <?php if ($firstRow): ?>
-                                    <td class="px-6 py-4 whitespace-nowrap align-top" rowspan="<?= $rowCount ?>">
-                                        <div class="text-sm font-medium text-gray-900">
-                                            <?= $fechaObj->format('d/m/Y') ?>
-                                        </div>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap align-top day-name" rowspan="<?= $rowCount ?>">
-                                        <div class="text-sm text-gray-900 font-semibold">
-                                            <?= $dayName ?>
-                                        </div>
-                                    </td>
-                                <?php endif; ?>
+                                <td class="px-6 py-4 whitespace-nowrap day-name">
+                                    <div class="text-sm text-gray-900 font-semibold">
+                                        <?= $disp['dia'] ?? 'No especificado' ?>
+                                    </div>
+                                </td>
                                 
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     <div class="text-sm text-gray-900">
@@ -158,23 +140,17 @@ require_once __DIR__ . '/../layouts/nav.php';
                                     </span>
                                 </td>
                                 
-                                <?php if ($firstRow): ?>
-                                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium align-top" rowspan="<?= $rowCount ?>">
-                                        <div class="flex flex-col md:flex-row gap-2 justify-end">
-                                            <a href="#" class="text-purple-600 hover:text-purple-900">
-                                                <i class="fas fa-edit"></i> Editar
-                                            </a>
-                                            <a href="#" class="text-red-600 hover:text-red-900">
-                                                <i class="fas fa-trash-alt"></i> Eliminar
-                                            </a>
-                                        </div>
-                                    </td>
-                                <?php 
-                                    $firstRow = false;
-                                endif; 
-                                ?>
+                                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                    <div class="flex flex-col md:flex-row gap-2 justify-end">
+                                        <a href="#" class="text-purple-600 hover:text-purple-900">
+                                            <i class="fas fa-edit"></i> Editar
+                                        </a>
+                                        <a href="#" class="text-red-600 hover:text-red-900">
+                                            <i class="fas fa-trash-alt"></i> Eliminar
+                                        </a>
+                                    </div>
+                                </td>
                             </tr>
-                            <?php endforeach; ?>
                             <?php endforeach; ?>
                         </tbody>
                     </table>
@@ -201,18 +177,43 @@ require_once __DIR__ . '/../layouts/nav.php';
     </div>
 
     <!-- Script para notificaciones -->
-    <script src="<?= BASE_URL ?>public/js/notyf.js"></script>
-    <?php if (isset($_GET['success'])){
-                        $messages = [
-                            1 => 'Disponibilidad registrada exitosamente!',
-                            2 => 'Disponibilidad actualizada correctamente',
-                            3 => 'Horario eliminado con éxito'
-                        ];
-                        $msg = $messages[$_GET['success']] ?? $messages[1];
-                        ?>
-                        <script>
-                            showSuccessPosition('<?= $msg ?>', { x: 'right', y: 'top' });
-                        </script> 
-    <?php }?>                           
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Mostrar notificación de éxito si existe
+        <?php if (isset($_GET['success'])): ?>
+            const notyf = new Notyf({
+                position: { x: 'right', y: 'top' },
+                types: [
+                    {
+                        type: 'success',
+                        background: '#10b981',
+                        icon: {
+                            className: 'fas fa-check-circle',
+                            tagName: 'span',
+                            color: '#fff'
+                        },
+                        dismissible: true
+                    }
+                ]
+            });
+            
+            notyf.success('<?= 
+                isset($messages) ? $messages[$_GET['success']] : "Operación realizada con éxito" 
+            ?>');
+        <?php endif; ?>
+        
+        // Confirmación para eliminar
+        document.querySelectorAll('a[href*="eliminar"]').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                if (confirm('¿Estás seguro de que deseas eliminar este horario?')) {
+                    // Aquí iría la llamada AJAX o redirección para eliminar
+                    window.location.href = '<?= BASE_URL ?>index.php?url=TutorController/deleteAvailability&id=' + 
+                                          this.closest('tr').dataset.id;
+                }
+            });
+        });
+    });
+    </script>
 </body>
 </html>

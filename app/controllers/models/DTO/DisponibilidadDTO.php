@@ -5,16 +5,14 @@ class DisponibilidadDTO
     private $cod_tutor;
     private $hora_inicio;
     private $hora_fin;
-    private $fecha;
     private $id_horario;
     private $cod_estado;
 
-    public function __construct($cod_tutor, $hora_inicio, $hora_fin, $fecha, $id_horario, $cod_estado)
+    public function __construct($cod_tutor, $hora_inicio, $hora_fin, $id_horario, $cod_estado)
     {
         $this->cod_tutor = $cod_tutor;
         $this->hora_inicio = $hora_inicio;
         $this->hora_fin = $hora_fin;
-        $this->fecha = $fecha;
         $this->id_horario = $id_horario;
         $this->cod_estado = $cod_estado;
     }
@@ -49,17 +47,6 @@ class DisponibilidadDTO
     public function setHora_fin($hora_fin)
     {
         $this->hora_fin = $hora_fin;
-        return $this;
-    }
-
-    public function getFecha()
-    {
-        return $this->fecha;
-    }
-
-    public function setFecha($fecha)
-    {
-        $this->fecha = $fecha;
         return $this;
     }
 
