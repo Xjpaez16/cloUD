@@ -109,7 +109,7 @@ CREATE TABLE IF NOT EXISTS disponibilidad (
   hora_fn TIME NOT NULL,
   id_horario INT NOT NULL,
   cod_estado INT NOT NULL,
-  PRIMARY KEY (cod_tutor, hora_i, hora_fn, fecha, id_horario),
+  PRIMARY KEY (cod_tutor, hora_i, hora_fn, id_horario),
   FOREIGN KEY (cod_tutor) REFERENCES tutor (codigo),
   FOREIGN KEY (id_horario) REFERENCES horario (id),
   FOREIGN KEY (cod_estado) REFERENCES estado (codigo)
