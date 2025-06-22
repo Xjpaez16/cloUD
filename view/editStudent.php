@@ -38,7 +38,8 @@ require_once(__DIR__ . '/../app/controllers/models/DTO/EstudianteDTO.php');
                     <form action="<?= BASE_URL ?>index.php?url=StudentController/updateProfile" method="POST">
                         <div class="mb-5">
                             <label for="nombre" class="block font-semibold text-[#5D54A4]">Nombre</label>
-                            <input id="nombre" name="nombre" type="text" value="<?php echo $student->getNombre(); ?>"
+                            <input id="nombre" name="nombre" type="text" value="<?= htmlspecialchars($student->getNombre(), ENT_QUOTES, 'UTF-8'); ?>"
+
                                 required
                                 class="w-full px-4 py-2 mt-2 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#5D54A4]" />
                         </div>
