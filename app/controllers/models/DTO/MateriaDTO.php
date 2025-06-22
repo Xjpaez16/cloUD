@@ -5,7 +5,7 @@ class MateriaDTO
     private $id;
     private $nom_materia;
 
-    public function __construct($id, $nom_materia)
+    public function __construct($id = null, $nom_materia = null)
     {
         $this->id = $id;
         $this->nom_materia = $nom_materia;

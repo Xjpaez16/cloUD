@@ -101,5 +101,22 @@ class RouteController extends Controller
         $tutorController = new TutorController();
         $tutorController->registerAvailability();
     }
+    public function dashboardfiles()
+    {
+        $this->view('dashboardfiles');
+    }
+    public function uploadfiles()
+    {
+        require_once(__DIR__ . '/FilesController.php');
+       
+        $FilesController = new FilesController();
+
+        $profesores = $FilesController->viewteachers(); // retorna array
+        $areas = $FilesController->viewareas();
+        $materias = $FilesController->viewmaterias();
+        
+
+        require_once(__DIR__ . '../../../view/uploadfiles.php'); // muestra la vista de uploadfiles.php
+    }
 }
 ?>

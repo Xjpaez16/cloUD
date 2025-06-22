@@ -5,12 +5,13 @@ class ProfesorDTO
     private $cod;
     private $nom;
 
-    public function __construct($cod, $nom)
+   
+    public function __construct($cod = null, $nom = null)
     {
         $this->cod = $cod;
         $this->nom = $nom;
     }
-
+    
     public function getCod()
     {
         return $this->cod;
