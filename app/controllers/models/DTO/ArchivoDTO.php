@@ -13,20 +13,7 @@ class ArchivoDTO
     private $id_materia;
     private $cod_tutor;
 
-    public function __construct($id, $ruta, $tamano, $cod_profesor, $cod_area, $cod_estudiante, $cod_estado, $id_tipo, $id_materia, $cod_tutor)
-    {
-        $this->id = $id;
-        $this->ruta = $ruta;
-        $this->tamano = $tamano;
-        $this->cod_profesor = $cod_profesor;
-        $this->cod_area = $cod_area;
-        $this->cod_estudiante = $cod_estudiante;
-        $this->cod_estado = $cod_estado;
-        $this->id_tipo = $id_tipo;
-        $this->id_materia = $id_materia;
-        $this->cod_tutor = $cod_tutor;
-    }
-
+    
     public function getId()
     {
         return $this->id;

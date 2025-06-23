@@ -53,7 +53,7 @@ require_once __DIR__ . '/layouts/nav.php';
                         <img class="w-full h-full object-cover rounded-lg" src="<?= BASE_URL ?>public/img/viewfiles.png" alt="">
                     </div>
                     </a>
-                    <a href="#">
+                    <a href="<?=BASE_URL?>index.php?url=RouteController/viewallfiles">
                     <div class="bg-[#5232a8] p-4 w-26 h-[250px] xl:w-60 xl:h-56 overflow-hidden rounded-lg border border-white hover:scale-90 transition-transform duration-300">
                         <img class="w-full h-full object-cover rounded-lg" src="<?= BASE_URL ?>public/img/viewallfiles.png" alt="">
                     </div>
@@ -66,7 +66,19 @@ require_once __DIR__ . '/layouts/nav.php';
             <p class="font-bold text-right p-9 ">FAQ</p>
         </div>
     </div>
-    
+     <script src="<?= BASE_URL ?>public/js/notyf.js"></script>
+     <?php  
+    if (isset($_GET['success'])){
+    $Messages = [
+        1 => 'Archivo subido correctamente',
+
+    ];
+    $msg = $Messages[$_GET['success']] ?? $Messages[1];
+    ?>
+   <script>
+    showSuccessPosition(`<?= $msg ?>`, { x: 'right', y: 'top' });
+    </script>
+<?php } ?>            
 </body>
 
 </html>

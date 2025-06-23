@@ -119,4 +119,9 @@ class RouteController extends Controller
 
         require_once(__DIR__ . '../../../view/uploadfiles.php'); // muestra la vista de uploadfiles.php
     }
+    public function viewallfiles(){
+        require_once(__DIR__ . '/FilesController.php');
+        $filesController = new FilesController();
+        $filesController->viewfiles(); // muestra la vista de viewfiles.php
+    }
 }
