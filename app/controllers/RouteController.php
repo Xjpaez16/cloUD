@@ -101,5 +101,18 @@ class RouteController extends Controller
         $tutorController = new TutorController();
         $tutorController->registerAvailability();
     }
+    
+    public function showTutorSearch()
+    {
+        require_once(__DIR__ . '/StudentController.php');
+        $studentController = new StudentController();
+        $studentController->displayTutorSearch();
+    }
+    
+    public function processTutorRequest() {
+        require_once(__DIR__ . '/StudentController.php');
+        $studentController = new StudentController();
+        $studentController->handleTutorRequest();
+    }   
 }
 ?>
