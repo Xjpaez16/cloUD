@@ -56,6 +56,86 @@ require_once __DIR__ . '/../DTO/ArchivoDTO.php';
                 return false;
             }
         }
+        public function obtenertipo($id_tipo){
+            try{
+                $sql = "SELECT nombre_tipo FROM tipo_archivo WHERE id = ?";
+                $stm = $this->conn->prepare($sql);
+                $stm->bind_param('i',$id_tipo);
+                $stm->execute();
+                $stm->bind_result($nombreTipo);
+                if ($stm->fetch()) {
+                    return $nombreTipo; 
+                } else {
+                    return null; 
+                }
+               
+                
+            }catch(Exception $e){
+                error_log('Error en verificar tipo ArchivoDAO: ' . $e->getMessage());
+                return false;
+            }
+        }
+        public function obtenerarea($cod_area){
+            try{
+                $sql = "SELECT a.nombre_area FROM archivo ar 
+                JOIN area a ON ar.cod_area = a.codigo WHERE ar.cod_area = ?";
+                $stm = $this->conn->prepare($sql);
+                $stm->bind_param('i',$cod_area);
+                $stm->execute();
+                $stm->bind_result($nombreArea);
+                if ($stm->fetch()) {
+                    return $nombreArea; 
+                } else {
+                    return null; 
+                }
+               
+                
+            }catch(Exception $e){
+                error_log('Error en verificar tipo ArchivoDAO: ' . $e->getMessage());
+                return false;
+            }
+        }
+        public function obtenerprofesor($codigo){
+            try{
+                $sql = "SELECT p.nombre FROM archivo ar 
+                JOIN profesor p ON ar.cod_profesor = p.codigo WHERE ar.cod_profesor = ?";
+                $stm = $this->conn->prepare($sql);
+                $stm->bind_param('i',$codigo);
+                $stm->execute();
+                $stm->bind_result($nombreProfesor);
+                if ($stm->fetch()) {
+                    return $nombreProfesor; 
+                } else {
+                    return null; 
+                }
+               
+                
+            }catch(Exception $e){
+                error_log('Error en verificar tipo ArchivoDAO: ' . $e->getMessage());
+                return false;
+            }
+        }
+         public function obtenermateria($cod_materia){
+            try{
+                $sql = "SELECT m.nombre_materia FROM archivo ar 
+                JOIN materia m ON ar.id_materia = m.id WHERE ar.id_materia = ?";
+                $stm = $this->conn->prepare($sql);
+                $stm->bind_param('i',$cod_materia);
+                $stm->execute();
+                $stm->bind_result($nombreProfesor);
+                if ($stm->fetch()) {
+                    return $nombreProfesor; 
+                } else {
+                    return null; 
+                }
+               
+                
+            }catch(Exception $e){
+                error_log('Error en verificar tipo ArchivoDAO: ' . $e->getMessage());
+                return false;
+            }
+        }
+
         public function allfiles($archivosS3){
             try{
                 $sql = "SELECT * FROM archivo WHERE cod_estado = 7 AND ruta = ?";
@@ -87,21 +167,7 @@ require_once __DIR__ . '/../DTO/ArchivoDTO.php';
                     $stm->close();
                 }
                  return $archivos;
-                 if ($archivos === false) {
-    error_log( "❌ Error al consultar la base de datos.");
-} elseif (empty($archivos)) {
-    error_log("⚠️ La consulta no devolvió resultados.");
-} else {
-    error_log( "✅ Archivos encontrados: " . count($archivos) . "<br><br>");
-
-    foreach ($archivos as $archivo) {
-        error_log( "Nombre: " . $archivo->getRuta() . "<br>");
-        error_log( "Área: " . $archivo->getCod_area() . "<br>");
-        error_log( "Profesor: " . $archivo->getCod_profesor() . "<br>");
-        error_log( "Materia: " . $archivo->getId_materia() . "<br>");
-        error_log("--------------------------<br>");
-    }
-}
+                 
             }catch(Exception $e){
                 error_log('Error en obtener archivos ArchivoDAO: ' . $e->getMessage());
                 return false;

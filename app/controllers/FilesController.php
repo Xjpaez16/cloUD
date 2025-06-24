@@ -40,9 +40,9 @@
                 return $materias;
         }
         public function viewfiles(){
-            
+            $archivoDAO= new ArchivoDAO();
             $archivosS3  = $this->s3->viewfiles();
-            $this->archivoDAO->allfiles($archivosS3);
+            $archivos = $this->archivoDAO->allfiles($archivosS3);
             require_once(__DIR__ . '../../../view/viewallfiles.php'); 
         }
         public function uploadfiles () {

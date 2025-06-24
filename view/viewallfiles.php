@@ -1,6 +1,7 @@
 <?php
 require_once __DIR__ . '/../app/controllers/models/DTO/S3DTO.php';
 require_once __DIR__ . '/../app/controllers/models/DTO/ArchivoDTO.php';
+require_once __DIR__ . '/../app/controllers/models/DAO/ArchivoDAO.php';
 require_once __DIR__ . '/layouts/nav.php';
 ?>
 <!DOCTYPE html>
@@ -14,7 +15,7 @@ require_once __DIR__ . '/layouts/nav.php';
     style="background-image: url('<?= BASE_URL ?>public/img/cloudfondo.jpg');">
 
     <div class="max-w-6xl mx-auto">
-        <h1 class="text-3xl font-bold mb-6 text-center text-white pt-8">📂 Archivos Subidos al Repositorio de cloUD</h1>
+        <h1 class="text-3xl font-bold mb-6 text-center text-white pt-8 pb-8">📂 Archivos Subidos al Repositorio de cloUD</h1>
 
         <?php if (!empty($error)): ?>
             <p class="text-red-600 text-center">❌ <?= $error ?></p>
@@ -24,9 +25,11 @@ require_once __DIR__ . '/layouts/nav.php';
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
                 <?php foreach ($archivos as $archivo): ?>
                     <?php
-                        $ext = $archivo->getId_tipo();
+                        $ext =strtolower($archivoDAO->obtenertipo($archivo->getId_tipo()));
+                        error_log("extension : " . $ext);
+                        $archivo->getId_tipo();
                         $url = $archivo->getRuta();
-                        $nombre = $archivo->getNombre();
+                        $nombre =basename($url);
                     ?>
                     <div class="bg-white text-black p-4 rounded-lg shadow-md hover:shadow-lg transition">
                         <?php if (in_array($ext, ['jpg', 'jpeg', 'png', 'gif'])): ?>
@@ -50,9 +53,9 @@ require_once __DIR__ . '/layouts/nav.php';
 
                         <!-- Datos opcionales de BD -->
                         <div class="mt-2 text-xs text-gray-500">
-                            Área: <?= $archivo->getCod_area() ?><br>
-                            Profesor: <?= $archivo->getCod_profesor() ?><br>
-                            Materia: <?= $archivo->getId_materia() ?>
+                            Área: <?=$archivoDAO->obtenerarea( $archivo->getCod_area() )?><br>
+                            Profesor: <?= $archivoDAO->obtenerprofesor( $archivo->getCod_profesor()) ?><br>
+                            Materia: <?= $archivoDAO->obtenermateria( $archivo->getId_materia()) ?>
                         </div>
                     </div>
                 <?php endforeach; ?>
