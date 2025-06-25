@@ -137,7 +137,7 @@ class RegisterController
                             $this->tutorDTO->setRespuesta_preg($question1 . "" . $question2);
                             $this->tutorDTO->setContrasena(password_hash($password, PASSWORD_DEFAULT));
                             $this->tutorDTO->setCod_estado(2); // 2 = activo
-                            $this->tutorDTO->setCalificacion_general(5.0);
+                            $this->tutorDTO->setCalificacion_general(null);
                             $this->tutorDTO->setAreas($areas);
                             $response = $this->tutorDAO->create($this->tutorDTO);
                             $this->tutorDAO->insertarAreasDeTutor($this->tutorDTO);
