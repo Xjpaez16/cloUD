@@ -98,7 +98,7 @@ if(session_status() == PHP_SESSION_NONE) {
                         class="block py-2 px-3 md:p-0  rounded-sm  custom-underline dark:border-gray-700 text-[15px] lg:text-[20px] xl:text-[25px] text-center custom-underline">Recursos</a>
                 </li>
                 <li>
-                    <a href="#"
+                    <a href="<?= BASE_URL ?>index.php?url=RouteController/viewProfileStudent"
                         class="block py-2 px-3 md:p-0  rounded-sm  custom-underline dark:border-gray-700 text-[15px] lg:text-[20px] xl:text-[25px] text-center custom-underline">Usuario</a>
                 </li>
                 <li>
@@ -146,7 +146,7 @@ if(session_status() == PHP_SESSION_NONE) {
                         class="block py-2 px-3 md:p-0  rounded-sm  custom-underline dark:border-gray-700 text-[15px] lg:text-[20px] xl:text-[25px] text-center custom-underline">Recursos</a>
                 </li>
                 <li>
-                    <a href="#"
+                    <a href="<?= BASE_URL ?>index.php?url=RouteController/viewProfileTutor"
                         class="block py-2 px-3 md:p-0  rounded-sm  custom-underline dark:border-gray-700 text-[15px] lg:text-[20px] xl:text-[25px] text-center custom-underline">Usuario</a>
                 </li>
                 <li>

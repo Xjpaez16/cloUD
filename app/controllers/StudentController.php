@@ -182,5 +182,30 @@ class StudentController
             );
     }
     
+    public function viewProfile() {
+        session_start();
+        
+        if (!isset($_SESSION['usuario']) || $_SESSION['rol'] !== 'estudiante') {
+            header('Location: ' . BASE_URL . 'index.php?url=RouteController/login&error=4');
+            exit();
+        }
+        
+        $codigoEstudiante = $_SESSION['usuario']->getCodigo(); 
+        
+        $dao = new EstudianteDAO();
+        $studentProfile = $dao->getStudentProfileById($codigoEstudiante);
+        
+        if (!$studentProfile) {
+            error_log("Error: Perfil no encontrado para el estudiante con código $codigoEstudiante");
+            $_SESSION['error'] = "No se pudo cargar tu perfil.";
+            header('Location: ' . BASE_URL . 'index.php?url=RouteController/home');
+            exit();
+        }
+        
+        require __DIR__ . '/../../view/student/viewProfileStudent.php';
+        
+    }
+    
+    
 }
 ?>

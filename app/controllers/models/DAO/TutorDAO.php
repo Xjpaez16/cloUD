@@ -300,5 +300,25 @@ class TutorDAO
             return false;
         }
     }
+    
+    public function getTutorProfileById($codigo) {
+        try {
+            $sql = "SELECT t.codigo, t.nombre, t.correo, t.calificacion_general,
+                       e.tipo_estado
+                FROM tutor t
+                JOIN estado e ON t.cod_estado = e.codigo
+                WHERE t.codigo = ?";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bind_param("i", $codigo);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            return $result->fetch_assoc();
+            
+        } catch (Exception $e) {
+            error_log("Error al obtener perfil del tutor: " . $e->getMessage());
+            return null;
+        }
+    }
+    
 }
 ?>

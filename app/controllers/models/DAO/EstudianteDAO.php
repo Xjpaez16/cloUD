@@ -217,6 +217,35 @@ class EstudianteDAO {
             return false;
         }
     }
+    
+    public function getStudentProfileById($codigo) {
+        try {
+            $sql = "SELECT
+                    e.codigo,
+                    e.nombre,
+                    e.correo,
+                    e.cod_carrera,
+                    c.nombre_carrera,
+                    e.cod_estado,
+                    es.tipo_estado
+                FROM estudiante e
+                JOIN carrera c ON e.cod_carrera = c.codigo
+                JOIN estado es ON e.cod_estado = es.codigo
+                WHERE e.codigo = ?";
+            
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bind_param("i", $codigo);
+            $stmt->execute();
+            
+            $result = $stmt->get_result();
+            return $result->fetch_assoc(); // Retorna array asociativo con los datos
+            
+        } catch (Exception $e) {
+            error_log("Error al obtener perfil del estudiante: " . $e->getMessage());
+            return null;
+        }
+    }
+    
    
 }
 ?>

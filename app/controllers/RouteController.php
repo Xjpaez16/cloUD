@@ -114,5 +114,18 @@ class RouteController extends Controller
         $studentController = new StudentController();
         $studentController->handleTutorRequest();
     }   
+    
+    public function viewProfileStudent() {
+        require_once __DIR__ . '/StudentController.php';
+        $controller = new StudentController();
+        $controller->viewProfile();
+    }
+    
+    public function viewProfileTutor() {
+        require_once __DIR__ . '/TutorController.php';
+        $controller = new TutorController();
+        $controller->viewProfile();
+    }
+    
 }
 ?>

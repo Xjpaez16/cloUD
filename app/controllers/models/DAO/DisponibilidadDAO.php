@@ -90,6 +90,7 @@ class DisponibilidadDAO {
             h.id_dia AS day_id,
             TIME_FORMAT(h.hora_inicio, '%h:%i %p') AS start_time,
             TIME_FORMAT(h.hora_fin, '%h:%i %p') AS end_time
+            t.calificacion_general AS rating
         FROM tutor t
         JOIN disponibilidad d ON t.codigo = d.cod_tutor
         JOIN estado e1 ON t.cod_estado = e1.codigo
