@@ -86,28 +86,29 @@ class StudentController
     }
     
     public function displayTutorSearch() {
-        $this->checkStudentSession();
-        
         error_log("Iniciando búsqueda de tutores...");
         
-        if (!$this->disponibilidadDAO) {
-            error_log("Error: DisponibilidadDAO no inicializado");
-            throw new Exception("DisponibilidadDAO no está inicializado");
+        // Validar si DAO está inicializado correctamente
+        if (!isset($this->disponibilidadDAO) || !is_object($this->disponibilidadDAO)) {
+            error_log("Error: DisponibilidadDAO no inicializado o no es objeto");
+            throw new Exception("DisponibilidadDAO no está inicializado correctamente");
         }
         
+        // Obtener tutores disponibles
         $tutorsAvailable = $this->disponibilidadDAO->getAvailableTutors();
         
-        // Debug detallado
-        error_log("Tutores recibidos en Controller: ".count($tutorsAvailable));
-        error_log("Datos recibidos: ".print_r($tutorsAvailable, true));
+        // Verificar y loguear resultados
+        $countTutors = is_array($tutorsAvailable) ? count($tutorsAvailable) : 0;
+        error_log("Tutores recibidos en Controller: $countTutors");
         
-        // Verificar estructura de datos
-        if (!empty($tutorsAvailable)) {
+        if ($countTutors > 0) {
             error_log("Estructura del primer tutor:");
             error_log(print_r($tutorsAvailable[0], true));
+        } else {
+            error_log("No se encontraron tutores disponibles.");
         }
         
-        // Helper para nombres de días
+        // Función para convertir ID de día a nombre (aunque ya recibes `day_name`, por si acaso)
         $diaHelper = function($idDia) {
             $dias = [
                 1 => 'Lunes',
@@ -121,8 +122,10 @@ class StudentController
             return $dias[$idDia] ?? 'Día no especificado';
         };
         
+        // Renderizar vista
         require __DIR__ . '/../../view/student/search_tutors.php';
     }
+    
     
     private function checkStudentSession()
     {

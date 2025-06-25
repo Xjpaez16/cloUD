@@ -81,40 +81,38 @@ class DisponibilidadDAO {
     }
     public function getAvailableTutors() {
         try {
-            $sql = "
-            SELECT
-                t.codigo AS code,
-                t.nombre AS name,
-                a.nombre_area AS subject,
-                dia.dia AS day_name,
-                h.id_dia AS day_id,
-                TIME_FORMAT(h.hora_inicio, '%h:%i %p') AS start_time,
-                TIME_FORMAT(h.hora_fin, '%h:%i %p') AS end_time,
-                IFNULL(AVG(cal.valoracion), 0) AS rating
-            FROM disponibilidad d
-            JOIN estado e ON d.cod_estado = e.codigo
-            JOIN horario h ON d.id_horario = h.id
-            JOIN dia ON h.id_dia = dia.id
-            JOIN tutor t ON d.cod_tutor = t.codigo
-            LEFT JOIN area_tutor at ON t.codigo = at.cod_tutor
-            LEFT JOIN area a ON at.cod_area = a.codigo
-            LEFT JOIN calificacion cal ON t.codigo = cal.cod_tutor
-            WHERE d.cod_estado = 7
-              AND t.cod_estado = 2
-            GROUP BY t.codigo, h.id_dia, h.hora_inicio, h.hora_fin
-            ORDER BY h.id_dia, h.hora_inicio
-        ";
+            // Consulta corregida sin la tabla calificacion
+            $sql = "SELECT
+            t.codigo AS code,
+            t.nombre AS name,
+            GROUP_CONCAT(DISTINCT a.nombre_area SEPARATOR ', ') AS subjects,
+            dia.dia AS day_name,
+            h.id_dia AS day_id,
+            TIME_FORMAT(h.hora_inicio, '%h:%i %p') AS start_time,
+            TIME_FORMAT(h.hora_fin, '%h:%i %p') AS end_time
+        FROM tutor t
+        JOIN disponibilidad d ON t.codigo = d.cod_tutor
+        JOIN estado e1 ON t.cod_estado = e1.codigo
+        JOIN estado e2 ON d.cod_estado = e2.codigo
+        JOIN horario h ON d.id_horario = h.id
+        JOIN dia ON h.id_dia = dia.id
+        LEFT JOIN area_tutor at ON t.codigo = at.cod_tutor
+        LEFT JOIN area a ON at.cod_area = a.codigo
+        WHERE t.cod_estado = 2  -- Tutor Verificado
+          AND d.cod_estado = 7  -- Disponibilidad Activa
+        GROUP BY t.codigo, t.nombre, dia.dia, h.id_dia, h.hora_inicio, h.hora_fin
+        ORDER BY h.id_dia, h.hora_inicio";
             
-            error_log("Ejecutando consulta corregida: ".$sql);
+            error_log("Consulta de tutores disponibles ejecutada");
             
             $stmt = $this->conn->prepare($sql);
             if (!$stmt) {
-                error_log("Error al preparar consulta: " . $this->conn->error);
+                error_log("Error en preparación: " . $this->conn->error);
                 return [];
             }
             
             if (!$stmt->execute()) {
-                error_log("Error al ejecutar consulta: " . $stmt->error);
+                error_log("Error en ejecución: " . $stmt->error);
                 return [];
             }
             
@@ -123,11 +121,13 @@ class DisponibilidadDAO {
             
             error_log("Tutores encontrados: " . count($tutors));
             return $tutors;
+            
         } catch (Exception $e) {
-            error_log('Error crítico en getAvailableTutors: ' . $e->getMessage());
+            error_log('Error en getAvailableTutors: ' . $e->getMessage());
             return [];
         }
     }
+    
     
     
     public function checkAvailability($tutorCode, $date, $startTime, $endTime) {
