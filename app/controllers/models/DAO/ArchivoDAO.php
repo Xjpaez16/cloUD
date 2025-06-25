@@ -45,11 +45,19 @@ require_once __DIR__ . '/../DTO/ArchivoDTO.php';
             }
         }
         public  function verificartipo($tipo){
+            $id_tipo = null;
             try{
                 $sql = "SELECT id FROM tipo_archivo WHERE nombre_tipo = ?";
-                $sql = $this->conn->prepare($sql);
-                $sql->bind_param('s',$tipo);
-                return $sql->execute();
+                $stm = $this->conn->prepare($sql);
+                $stm->bind_param('s',$tipo);
+                $stm->execute();
+                $stm->bind_result($id_tipo);
+                if ($stm->fetch()) {
+                    return $id_tipo; 
+                } else {
+                    return null; 
+                }
+               
                 
             }catch(Exception $e){
                 error_log('Error en verificar tipo ArchivoDAO: ' . $e->getMessage());
@@ -57,6 +65,7 @@ require_once __DIR__ . '/../DTO/ArchivoDTO.php';
             }
         }
         public function obtenertipo($id_tipo){
+            $nombreTipo = null;
             try{
                 $sql = "SELECT nombre_tipo FROM tipo_archivo WHERE id = ?";
                 $stm = $this->conn->prepare($sql);
@@ -76,6 +85,7 @@ require_once __DIR__ . '/../DTO/ArchivoDTO.php';
             }
         }
         public function obtenerarea($cod_area){
+            $nombreArea = null;
             try{
                 $sql = "SELECT a.nombre_area FROM archivo ar 
                 JOIN area a ON ar.cod_area = a.codigo WHERE ar.cod_area = ?";
@@ -96,6 +106,7 @@ require_once __DIR__ . '/../DTO/ArchivoDTO.php';
             }
         }
         public function obtenerprofesor($codigo){
+            $nombreProfesor = null;
             try{
                 $sql = "SELECT p.nombre FROM archivo ar 
                 JOIN profesor p ON ar.cod_profesor = p.codigo WHERE ar.cod_profesor = ?";
@@ -116,15 +127,16 @@ require_once __DIR__ . '/../DTO/ArchivoDTO.php';
             }
         }
          public function obtenermateria($cod_materia){
+            $nombreMateria = null;
             try{
                 $sql = "SELECT m.nombre_materia FROM archivo ar 
                 JOIN materia m ON ar.id_materia = m.id WHERE ar.id_materia = ?";
                 $stm = $this->conn->prepare($sql);
                 $stm->bind_param('i',$cod_materia);
                 $stm->execute();
-                $stm->bind_result($nombreProfesor);
+                $stm->bind_result($nombreMateria);
                 if ($stm->fetch()) {
-                    return $nombreProfesor; 
+                    return $nombreMateria; 
                 } else {
                     return null; 
                 }

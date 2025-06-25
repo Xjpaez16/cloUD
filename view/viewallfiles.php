@@ -16,13 +16,63 @@ require_once __DIR__ . '/layouts/nav.php';
 
     <div class="max-w-6xl mx-auto">
         <h1 class="text-3xl font-bold mb-6 text-center text-white pt-8 pb-8">📂 Archivos Subidos al Repositorio de cloUD</h1>
+        <div class="flex flex-col items-center justify-center text-black pt-10">
+            <div class="grid grid-cols-1 md:grid-cols-3  lg:grid-cols-3 xl:grid-cols-3 gap-12">
+               <div class="mb-5">
+                        <label for="Profesor" class="block font-semibold text-white">Profesor : </label>
+                        <select name="profesor" id="profesor"
+                            class="w-full px-4 py-2 mt-2 rounded-full border border-gray-300 focus:outline-none focus:ring-2 font-semibold focus:ring-[#5D54A4] " required>
+                            <option value="">Ninguno</option>
+                            <?php /** @var ProfesorDTO $profesor */
+                                ?>
+                            <?php foreach ($profesores as $profesor): ?>
+                            <option value="<?= $profesor->getCod() ?>">
+                                <?= $profesor->getNom() ?>
+                            </option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
 
+                    <div class="mb-5">
+                        <label for="Areas" class="block font-semibold text-white">Areas : </label>
+                        <select name="area" id="area"
+                            class="w-full px-4 py-2 mt-2 rounded-full border border-gray-300 focus:outline-none focus:ring-2 font-semibold focus:ring-[#5D54A4] " required>
+                            <option value="" >Ninguno</option>
+                            <?php /** @var AreaDTO $area */
+                                ?>
+                            <?php foreach ($areas as $area): ?>
+                            
+                            <option value="<?= $area->getCodigo() ?>">
+                                <?= $area->getNombre() ?>
+                            </option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+
+                    <div class="mb-5">
+                        <label for="Materias" class="block font-semibold text-white">Materia : </label>
+                        <select name="materia" id="materia"
+                            class="w-full px-4 py-2 mt-2 rounded-full border border-gray-300 focus:outline-none focus:ring-2 font-semibold focus:ring-[#5D54A4] " required>
+                            <option value="">Ninguno</option>
+                            <?php /** @var MateriaDTO $materia */
+                                ?>
+                            <?php foreach ($materias as $materia): ?>
+                            
+                            <option value="<?= $materia->getId() ?>">
+                            
+                                <?= $materia->getNom_materia() ?>
+                            </option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                </div>
+        </div>
         <?php if (!empty($error)): ?>
             <p class="text-red-600 text-center">❌ <?= $error ?></p>
         <?php elseif (empty($archivos)): ?>
-            <p class="text-center text-gray-300">No hay archivos subidos aún.</p>
+            <p class="text-center text-gray-300 pt-8 font-sans font-bold">No hay archivos subidos aún.</p>
         <?php else: ?>
-            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 pt-8">
                 <?php foreach ($archivos as $archivo): ?>
                     <?php
                         $ext =strtolower($archivoDAO->obtenertipo($archivo->getId_tipo()));
@@ -30,8 +80,15 @@ require_once __DIR__ . '/layouts/nav.php';
                         $archivo->getId_tipo();
                         $url = $archivo->getRuta();
                         $nombre =basename($url);
+                        
                     ?>
-                    <div class="bg-white text-black p-4 rounded-lg shadow-md hover:shadow-lg transition">
+                    <div class="bg-white text-black p-4 rounded-lg shadow-md hover:shadow-lg transition archivo"
+                            data-area="<?=strtolower($archivoDAO->obtenerarea( $archivo->getCod_area() ))?>"
+                            data-profesor = "<?= strtolower($archivoDAO->obtenerprofesor( $archivo->getCod_profesor())) ?>"
+                            data-materia = "<?=strtolower( $archivoDAO->obtenermateria( $archivo->getId_materia()) )?>"
+                    
+                    
+                    >
                         <?php if (in_array($ext, ['jpg', 'jpeg', 'png', 'gif'])): ?>
                             <a href="<?= $url ?>" target="_blank">
                                 <img src="<?= $url ?>" alt="<?= $nombre ?>" class="w-full h-48 object-cover rounded mb-2 hover:opacity-90 transition">
@@ -62,5 +119,6 @@ require_once __DIR__ . '/layouts/nav.php';
             </div>
         <?php endif; ?>
     </div>
+    <script src="<?= BASE_URL ?>public/js/filterfiles.js"></script>
 </body>
 </html>

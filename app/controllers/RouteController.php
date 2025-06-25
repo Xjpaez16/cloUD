@@ -121,7 +121,14 @@ class RouteController extends Controller
     }
     public function viewallfiles(){
         require_once(__DIR__ . '/FilesController.php');
+        
         $filesController = new FilesController();
-        $filesController->viewfiles(); // muestra la vista de viewfiles.php
+        $profesores = $filesController->viewteachers(); // retorna array
+        $areas = $filesController->viewareas();
+        $materias = $filesController->viewmaterias();
+        $archivos = $filesController->viewfiles();
+        $archivoDAO= new ArchivoDAO();
+        require_once(__DIR__ . '../../../view/viewallfiles.php'); // muestra la vista de viewallfiles.php
+        
     }
 }

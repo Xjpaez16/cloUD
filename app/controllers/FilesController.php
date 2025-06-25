@@ -40,10 +40,10 @@
                 return $materias;
         }
         public function viewfiles(){
-            $archivoDAO= new ArchivoDAO();
+           
             $archivosS3  = $this->s3->viewfiles();
             $archivos = $this->archivoDAO->allfiles($archivosS3);
-            require_once(__DIR__ . '../../../view/viewallfiles.php'); 
+            return $archivos;
         }
         public function uploadfiles () {
             if(session_status()==PHP_SESSION_NONE){
@@ -59,6 +59,7 @@
                     $area = $_POST['area'];
                     $materia = $_POST['materia'];
                     $id_tipo = $this->archivoDAO->verificartipo($resultado->getTipo());
+                    error_log('verificando tipo = ' . $id_tipo);
                     $this->archivoDTO->setRuta($resultado->getUrl());
                     $this->archivoDTO->setTamano($resultado->getTamaño());
                     $this->archivoDTO->setCod_profesor($profesor);
@@ -68,7 +69,9 @@
                     $this->archivoDTO->setCod_Tutor(null);
                     $this->archivoDTO->setCod_estado(7);
                     if($id_tipo){
+                    
                         $this->archivoDTO->setId_tipo($id_tipo);
+                        error_log("Mostrando TIPO ARCHIVO :" .$this->archivoDTO->getId_tipo());
                     }else{
                         header('Location: ' . BASE_URL . 'index.php?url=RouteController/uploadfiles&error=1');
                     }
