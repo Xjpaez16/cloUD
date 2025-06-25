@@ -246,7 +246,7 @@ class TutorController
         if (!$tutorProfile) {
             error_log("Error: Perfil no encontrado para tutor $codigoTutor");
             $_SESSION['error'] = "No se pudo cargar tu perfil.";
-            header('Location: ' . BASE_URL . 'index.php?url=RouteController/dashboard');
+            header('Location: ' . BASE_URL . 'index.php?url=RouteController/home');
             exit();
         }
         

@@ -81,7 +81,6 @@ class DisponibilidadDAO {
     }
     public function getAvailableTutors() {
         try {
-            // Consulta corregida sin la tabla calificacion
             $sql = "SELECT
             t.codigo AS code,
             t.nombre AS name,
@@ -89,7 +88,7 @@ class DisponibilidadDAO {
             dia.dia AS day_name,
             h.id_dia AS day_id,
             TIME_FORMAT(h.hora_inicio, '%h:%i %p') AS start_time,
-            TIME_FORMAT(h.hora_fin, '%h:%i %p') AS end_time
+            TIME_FORMAT(h.hora_fin, '%h:%i %p') AS end_time,
             t.calificacion_general AS rating
         FROM tutor t
         JOIN disponibilidad d ON t.codigo = d.cod_tutor
@@ -101,7 +100,7 @@ class DisponibilidadDAO {
         LEFT JOIN area a ON at.cod_area = a.codigo
         WHERE t.cod_estado = 2  -- Tutor Verificado
           AND d.cod_estado = 7  -- Disponibilidad Activa
-        GROUP BY t.codigo, t.nombre, dia.dia, h.id_dia, h.hora_inicio, h.hora_fin
+        GROUP BY t.codigo, t.nombre, dia.dia, h.id_dia, h.hora_inicio, h.hora_fin, t.calificacion_general
         ORDER BY h.id_dia, h.hora_inicio";
             
             error_log("Consulta de tutores disponibles ejecutada");
@@ -128,6 +127,7 @@ class DisponibilidadDAO {
             return [];
         }
     }
+    
     
     
     
