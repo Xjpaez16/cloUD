@@ -127,5 +127,10 @@ class RouteController extends Controller
         $controller->viewProfile();
     }
     
+    public function viewSupport()
+    {
+        require __DIR__ . '/../../view/viewSupport.php';
+    }
+    
 }
 ?>
