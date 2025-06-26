@@ -55,7 +55,11 @@ if(session_status() == PHP_SESSION_NONE) {
                         class="block py-2 px-3 md:p-0  rounded-sm  custom-underline dark:border-gray-700 text-[15px] lg:text-[20px] xl:text-[25px] text-center custom-underline">Tutorías</a>
                 </li>
                 <li>
-                    <a href="#"
+                    <a href="<?= BASE_URL ?>index.php?url=RouteController/viewSupport"
+                        class="block py-2 px-3 md:p-0  rounded-sm  custom-underline dark:border-gray-700 text-[15px] lg:text-[20px] xl:text-[25px] text-center custom-underline">Soporte</a>
+                </li>
+                <li>
+                    <a href="<?= BASE_URL ?>index.php?url=RouteController/viewFAQ"
                         class="block py-2 px-3 md:p-0  rounded-sm  custom-underline dark:border-gray-700 text-[15px] lg:text-[20px] xl:text-[25px] text-center custom-underline">FAQ</a>
                 </li>
             </ul>
