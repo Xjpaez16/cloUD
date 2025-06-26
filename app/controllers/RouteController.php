@@ -101,5 +101,50 @@ class RouteController extends Controller
         $tutorController = new TutorController();
         $tutorController->registerAvailability();
     }
+    
+    public function showTutorSearch()
+    {
+        require_once(__DIR__ . '/StudentController.php');
+        $studentController = new StudentController();
+        $studentController->displayTutorSearch();
+    }
+    
+    public function processTutorRequest() {
+        require_once(__DIR__ . '/StudentController.php');
+        $studentController = new StudentController();
+        $studentController->handleTutorRequest();
+    }   
+    
+    public function viewProfileStudent() {
+        require_once __DIR__ . '/StudentController.php';
+        $controller = new StudentController();
+        $controller->viewProfile();
+    }
+    
+    public function viewProfileTutor() {
+        require_once __DIR__ . '/TutorController.php';
+        $controller = new TutorController();
+        $controller->viewProfile();
+    }
+    
+    public function viewSupport()
+    {
+        require_once(__DIR__ . '/adminController.php');
+        $adminController = new adminController();
+        $admin = $adminController->obtenerAdmin();
+        $adminNombre = $admin ? $admin->getNombre() : "Administrador";
+        $adminCorreo = $admin ? $admin->getCorreo() : "soporte@udistrital.edu.co";
+        require __DIR__ . '/../../view/viewSupport.php';
+    }
+    
+    public function viewFAQ()
+    {
+        require_once(__DIR__ . '/adminController.php');
+        $adminController = new adminController();
+        $admin = $adminController->obtenerAdmin();
+        $adminNombre = $admin ? $admin->getNombre() : "Administrador";
+        $adminCorreo = $admin ? $admin->getCorreo() : "soporte@udistrital.edu.co";
+        require __DIR__ . '/../../view/viewFAQ.php';
+    }
 }
 ?>

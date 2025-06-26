@@ -229,5 +229,29 @@ class TutorController
             7 // Estado disponible
             );
     }
+    
+    public function viewProfile() {
+        session_start();
+        
+        if (!isset($_SESSION['usuario']) || $_SESSION['rol'] !== 'tutor') {
+            header('Location: ' . BASE_URL . 'index.php?url=RouteController/login&error=4');
+            exit();
+        }
+        
+        $codigoTutor = $_SESSION['usuario']->getCodigo();
+        
+        $dao = new TutorDAO();
+        $tutorProfile = $dao->getTutorProfileById($codigoTutor);
+        
+        if (!$tutorProfile) {
+            error_log("Error: Perfil no encontrado para tutor $codigoTutor");
+            $_SESSION['error'] = "No se pudo cargar tu perfil.";
+            header('Location: ' . BASE_URL . 'index.php?url=RouteController/home');
+            exit();
+        }
+        
+        require __DIR__ . '/../../view/tutor/viewProfileTutor.php';
+    }
+    
 }
 ?>
