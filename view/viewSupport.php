@@ -29,15 +29,15 @@
             </ul>
         </div>
 
-        <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
-            <h2 class="text-lg font-semibold text-gray-800 mb-2">Correo de contacto</h2>
-            <p class="text-gray-700 mb-4">
-                Puedes escribir al administrador a través del siguiente enlace:
-            </p>
-            <a class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition">
-                cloud.soporte@uditrital.edu.co
-            </a>
-        </div>
+        <div class="bg-white rounded-lg shadow-lg p-6">
+    <h2 class="text-xl font-semibold text-gray-800 mb-4">Contactanos</h2>
+    <p class="text-gray-700 mb-2">
+        Si tienes problemas adicionales o necesitas asistencia, puedes contactar a <span class="font-semibold"><?= $adminNombre ?></span> al siguiente correo:
+    </p>
+    <a class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition"<?= $adminCorreo ?>">
+        <?= $adminCorreo ?>
+    </a>
+</div>
     </div>
 </body>
 </html>

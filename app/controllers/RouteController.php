@@ -129,8 +129,22 @@ class RouteController extends Controller
     
     public function viewSupport()
     {
+        require_once(__DIR__ . '/adminController.php');
+        $adminController = new adminController();
+        $admin = $adminController->obtenerAdmin();
+        $adminNombre = $admin ? $admin->getNombre() : "Administrador";
+        $adminCorreo = $admin ? $admin->getCorreo() : "soporte@udistrital.edu.co";
         require __DIR__ . '/../../view/viewSupport.php';
     }
     
+    public function viewFAQ()
+    {
+        require_once(__DIR__ . '/adminController.php');
+        $adminController = new adminController();
+        $admin = $adminController->obtenerAdmin();
+        $adminNombre = $admin ? $admin->getNombre() : "Administrador";
+        $adminCorreo = $admin ? $admin->getCorreo() : "soporte@udistrital.edu.co";
+        require __DIR__ . '/../../view/viewFAQ.php';
+    }
 }
 ?>
