@@ -43,15 +43,15 @@ if(session_status() == PHP_SESSION_NONE) {
                 class="flex flex-col font-medium p-4 md:p-0 mt-4  rounded-lg  md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0  text-[15px] lg:text-[20px] xl:text-[25px] text-center ">
 
                 <li>
-                    <a href="#"
+                    <a href="<?= BASE_URL ?>index.php?url=RouteController/login&error=4"
                         class="block py-2 px-3 md:p-0  rounded-sm  custom-underline dark:border-gray-700 text-[15px] lg:text-[20px] xl:text-[25px] text-center custom-underline">Recursos</a>
                 </li>
                 <li>
-                    <a href="#"
+                    <a href="<?= BASE_URL ?>index.php?url=RouteController/login&error=4"
                         class="block py-2 px-3 md:p-0  rounded-sm  custom-underline dark:border-gray-700 text-[15px] lg:text-[20px] xl:text-[25px] text-center custom-underline">Usuario</a>
                 </li>
                 <li>
-                    <a href="#"
+                    <a href="<?= BASE_URL ?>index.php?url=RouteController/login&error=4"
                         class="block py-2 px-3 md:p-0  rounded-sm  custom-underline dark:border-gray-700 text-[15px] lg:text-[20px] xl:text-[25px] text-center custom-underline">Tutorías</a>
                 </li>
                 <li>
