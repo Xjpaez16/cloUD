@@ -9,7 +9,7 @@ if (!isset($_SESSION['usuario']) || $_SESSION['rol'] !== 'estudiante') {
     header('Location: ' . BASE_URL . 'index.php?url=RouteController/login&error=4');
     exit();
 }
-require_once __DIR__ . '/layouts/nav.php'; 
+//require_once __DIR__ . '/layouts/nav.php'; 
 ?>
 
 <!DOCTYPE html>
