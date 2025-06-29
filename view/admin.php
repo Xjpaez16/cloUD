@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta charset="UTF-8">
     <title>cloUD - Panel Administrador</title>
@@ -8,61 +7,40 @@
     <!-- Tailwind CSS vía CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="<?= BASE_URL ?>public/css/home.css">
-    <!-- Flaticon UIcons -->
-    <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/uicons-regular-rounded/css/uicons-regular-rounded.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
+    <link rel="stylesheet" href="<?= BASE_URL ?>public/css/notyf.css">
 </head>
-
-<body class="relative min-h-screen bg-cover bg-bottom bg-no-repeat text-white font-sans"
-    style="background-image: url('<?= BASE_URL ?>public/img/cloudfondo.jpg');">
-
-    <!-- Contenido principal -->
-    <div class="relative z-10">
-        <?php require_once __DIR__ . '/layouts/nav.php'; ?>
-        <!-- Mensaje principal -->
-        <main class="text-center py-16 px-4">
-            <div class="flex flex-col">
-                <h1 class="text-4xl xl:text-5xl lg:text-4xl md:text-3xl font-bold mb-2">Panel de Administrador</h1>
-                <p class="text-lg xl:text-xl lg:text-lg md:text-base text-gray-300">Administra la plataforma</p>
-                <br>
-                <br>
-                <div class="grid grid-cols-2 gap-2 xl:w-[500px] lg:w-[500px] md:w-[500px] mx-auto">
-                    <a href="#">
-                        <div class="bg-[#5232a8] p-4 w-60 h-56 overflow-hidden rounded-lg border border-white hover:scale-90 transition-transform duration-300 flex flex-col items-center justify-center">
-                            <i class="fi fi-rr-users text-7xl mb-2 text-white"></i>
-                            <span class="mt-2 font-bold text-xl">Gestionar Tutores</span>
-                            <p class="text-gray-200 text-sm mt-1">Administra los tutores registrados en la plataforma.</p>
-                        </div>
-                    </a>
-                    <a href="#">
-                        <div class="bg-[#5232a8] p-4 w-60 h-56 overflow-hidden rounded-lg border border-white hover:scale-90 transition-transform duration-300 flex flex-col items-center justify-center">
-                            <i class="fi fi-rr-user text-7xl mb-2 text-white"></i>
-                            <span class="mt-2 font-bold text-xl">Gestionar Usuarios</span>
-                            <p class="text-gray-200 text-sm mt-1">Administra los usuarios de la plataforma.</p>
-                        </div>
-                    </a>
-                    <a href="#">
-                        <div class="bg-[#5232a8] p-4 w-60 h-56 overflow-hidden rounded-lg border border-white hover:scale-90 transition-transform duration-300 flex flex-col items-center justify-center">
-                            <i class="fi fi-rr-file-chart-line text-7xl mb-2 text-white"></i>
-                            <span class="mt-2 font-bold text-xl">Reportes</span>
-                            <p class="text-gray-200 text-sm mt-1">Visualiza y genera reportes de actividad.</p>
-                        </div>
-                    </a>
-                    <a href="<?= BASE_URL ?>LoginController/logout">
-                        <div class="bg-[#5232a8] p-4 w-60 h-56 overflow-hidden rounded-lg border border-white hover:scale-90 transition-transform duration-300 flex flex-col items-center justify-center">
-                            <i class="fi fi-rr-exit text-7xl mb-2 text-white"></i>
-                            <span class="mt-2 font-bold text-xl">Cerrar Sesión</span>
-                            <p class="text-gray-200 text-sm mt-1">Salir del panel de administrador.</p>
-                        </div>
-                    </a>
-                </div>
-            </div>
-        </main>
-        <br>
-        <div class="text-2xl">
-            <p class="font-bold text-right p-9 ">FAQ</p>
+<body class="min-h-screen bg-gradient-to-br from-[#5232a8] via-[#803cb9] to-[#b993d6] text-white font-sans flex flex-col items-center justify-center" style="background-image: url('<?= BASE_URL ?>public/img/cloudfondo.jpg'); background-size: cover; background-repeat: no-repeat;">
+    <div class="bg-white bg-opacity-90 rounded-2xl shadow-2xl p-10 max-w-xl w-full mt-16 mb-8">
+        <h1 class="text-4xl font-extrabold text-center text-[#5232a8] mb-2 drop-shadow">Panel de Administrador</h1>
+        <p class="text-lg text-center text-gray-700 mb-8">Gestiona los administradores</p>
+        <div class="flex flex-col md:flex-row gap-6 justify-center mb-8">
+            <a href="<?= BASE_URL ?>AdminController/index" class="flex-1">
+                <button class="w-full bg-gradient-to-r from-[#803cb9] to-[#5232a8] hover:from-[#5232a8] hover:to-[#803cb9] text-white font-bold py-6 px-4 rounded-xl shadow-lg text-xl transition-all duration-300 transform hover:scale-105">
+                    Ver Administradores
+                </button>
+            </a>
+            <a href="<?= BASE_URL ?>LoginController/logout" class="flex-1">
+                <button class="w-full bg-gradient-to-r from-red-500 to-red-700 hover:from-red-700 hover:to-red-500 text-white font-bold py-6 px-4 rounded-xl shadow-lg text-xl transition-all duration-300 transform hover:scale-105">
+                    <svg class="inline-block w-7 h-7 mr-2 -mt-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v1"/></svg>
+                    Cerrar sesión
+                </button>
+            </a>
+        </div>
+        <div class="flex justify-end">
+            <a href="<?= BASE_URL ?>RouteController/viewFAQ" class="text-[#803cb9] font-semibold hover:underline text-lg flex items-center">
+                <svg class="w-6 h-6 mr-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M8 10h.01M12 14v.01M12 10v2m0 4h.01M21 12c0 4.97-4.03 9-9 9s-9-4.03-9-9 4.03-9 9-9 9 4.03 9 9z"/></svg>
+                FAQ
+            </a>
         </div>
     </div>
-
+    <script>
+        window.addEventListener('pageshow', function(event) {
+            if (event.persisted) {
+                window.location.reload();
+            }
+        });
+    </script>
 </body>
-
 </html>

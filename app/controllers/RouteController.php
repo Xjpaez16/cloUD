@@ -48,7 +48,12 @@ class RouteController extends Controller
 
     public function admin()
     {
-        $this->view('admin'); // muestra la vista student.php
+        session_start();
+        if (!isset($_SESSION['usuario']) || $_SESSION['rol'] !== 'administrador') {
+            header('Location: ' . BASE_URL . 'index.php?url=RouteController/login&error=4');
+            exit;
+        }
+        require_once(__DIR__ . '/../../view/admin.php');
     }
 
     public function editTutor()
@@ -129,8 +134,8 @@ class RouteController extends Controller
     
     public function viewSupport()
     {
-        require_once(__DIR__ . '/adminController.php');
-        $adminController = new adminController();
+        require_once(__DIR__ . '/AdminController.php');
+        $adminController = new AdminController();
         $admin = $adminController->obtenerAdmin();
         $adminNombre = $admin ? $admin->getNombre() : "Administrador";
         $adminCorreo = $admin ? $admin->getCorreo() : "soporte@udistrital.edu.co";
@@ -139,8 +144,8 @@ class RouteController extends Controller
     
     public function viewFAQ()
     {
-        require_once(__DIR__ . '/adminController.php');
-        $adminController = new adminController();
+        require_once(__DIR__ . '/AdminController.php');
+        $adminController = new AdminController();
         $admin = $adminController->obtenerAdmin();
         $adminNombre = $admin ? $admin->getNombre() : "Administrador";
         $adminCorreo = $admin ? $admin->getCorreo() : "soporte@udistrital.edu.co";
