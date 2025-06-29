@@ -23,7 +23,7 @@ class MateriaDAO
                 $dto->setId($row['id']);
                 $dto->setNom_materia($row['nombre_materia']);
                 $materias[] = $dto;
-                error_log('Materias obtenidas: ' . $row['nombre_materia']);
+               
             }
             return $materias;
         } catch (Exception $e) {

@@ -30,11 +30,7 @@ require_once(__DIR__ . '/layouts/nav.php');
             <div
                 class="bg-gray-50 rounded-b-3xl shadow-md p-10 w-full max-w-xl transform hover:shadow-2xl transition ease-in-out duration-500 mt-0">
                 <?php
-                $rol = isset($_SESSION['rol']) ? $_SESSION['rol'] : null;
-                $usuario = isset($_SESSION['usuario']) ? $_SESSION['usuario'] : null;
-
-
-                if ($rol == "estudiante") { ?>
+                ?>
                 <form action="<?= BASE_URL ?>index.php?url=FilesController/uploadfiles" method="POST" enctype="multipart/form-data" >
                     <div class="flex items-center justify-center w-full">
                             <label for="dropzone-file"
@@ -103,7 +99,7 @@ require_once(__DIR__ . '/layouts/nav.php');
                             type="submit">
                             Subir Archvio
                         </button>
-                        <a href="<?= BASE_URL ?>index.php?ruta=RouteController/student"
+                        <a href="<?= BASE_URL ?>index.php?url=RouteController/student"
                             class="text-[#5D54A4] font-semibold hover:text-[#4A4192]">
                             Cancelar
                         </a>
@@ -112,7 +108,10 @@ require_once(__DIR__ . '/layouts/nav.php');
                 </form>
             </div>
         </div>
-        <?php } ?>
+      
+
+
+        
 
         <!-- FAQ opcional -->
         <div class="p-5 text-gray-50 font-semibold text-right">
@@ -124,7 +123,7 @@ require_once(__DIR__ . '/layouts/nav.php');
     if (isset($_GET['error'])){
     $Messages = [
         1 => 'Tipo de archivo no valido, comuniquese con soporte',
-
+        2 => 'Error al subir el archivo',
     ];
     $msg = $Messages[$_GET['error']] ?? $Messages[1];
     ?>

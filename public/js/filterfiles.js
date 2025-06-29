@@ -12,7 +12,7 @@ function aplicarFiltro(){
         const coincideProfesor = filtroProfesor === "ninguno" || profesor.includes(filtroProfesor);
         const coincideMateria = filtroMateria === "ninguno" || materia.includes(filtroMateria);
 
-       const visible = coincideArea || coincideProfesor || coincideMateria;
+       const visible = coincideArea && coincideProfesor && coincideMateria;
        el.style.display = visible ? 'block' : 'none';
 
     });

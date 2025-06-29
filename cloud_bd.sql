@@ -164,6 +164,7 @@ CREATE TABLE IF NOT EXISTS materia (
 -- Tabla archivo
 CREATE TABLE IF NOT EXISTS archivo (
   id INT AUTO_INCREMENT NOT NULL,
+  nombre VARCHAR(200) NOT NULL,
   ruta VARCHAR(200) NOT NULL,
   cod_profesor BIGINT NOT NULL,
   cod_estudiante BIGINT,
