@@ -111,35 +111,32 @@ class RouteController extends Controller
         require_once(__DIR__ . '/FilesController.php');
 
         $FilesController = new FilesController();
-
-        $profesores = $FilesController->viewteachers(); // retorna array
-        $areas = $FilesController->viewareas();
-        $materias = $FilesController->viewmaterias();
-
-
-        require_once(__DIR__ . '../../../view/uploadfiles.php'); // muestra la vista de uploadfiles.php
+        $profesores = $FilesController->viewteachers();
+        require_once(__DIR__ . '../../../view/uploadfiles.php');
     }
-    public function viewallfiles(){
+    public function viewallfiles()
+    {
         require_once(__DIR__ . '/FilesController.php');
-        
+
         $filesController = new FilesController();
         $profesores = $filesController->viewteachers(); // retorna array
         $areas = $filesController->viewareas();
         $materias = $filesController->viewmaterias();
         $archivos = $filesController->viewfiles();
-        $archivoDAO= new ArchivoDAO();
+        $archivoDAO = new ArchivoDAO();
         require_once(__DIR__ . '../../../view/viewallfiles.php'); // muestra la vista de viewallfiles.php
-        
+
     }
-    public function viewmyfilesStudent(){
+    public function viewmyfilesStudent()
+    {
         require_once(__DIR__ . '/FilesController.php');
-        
+
         $filesController = new FilesController();
         $profesores = $filesController->viewteachers(); // retorna array
         $areas = $filesController->viewareas();
         $materias = $filesController->viewmaterias();
         $archivosest = $filesController->myfiles();
-        $archivoDAO= new ArchivoDAO();
+        $archivoDAO = new ArchivoDAO();
         require_once(__DIR__ . '../../../view/viewMyFiles.php'); // muestra la vista de viewmyfiles.php
     }
 }

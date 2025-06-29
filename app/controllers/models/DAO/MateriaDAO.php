@@ -23,11 +23,38 @@ class MateriaDAO
                 $dto->setId($row['id']);
                 $dto->setNom_materia($row['nombre_materia']);
                 $materias[] = $dto;
-               
             }
             return $materias;
         } catch (Exception $e) {
             error_log('Error en listar materias: ' . $e->getMessage());
+            return [];
+        }
+    }
+
+    public function getMateriasByArea($areacodigo)
+    {
+        try {
+            $sql = "SELECT m.nombre_materia, m.id
+                    FROM area a
+                    JOIN area_profesor pa ON a.codigo = pa.cod_area 
+                    JOIN materia as m ON m.id = pa.cod_materia 
+                    WHERE pa.cod_area = ?";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bind_param("i", $areacodigo);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            $materias = [];
+
+            while ($row = $result->fetch_assoc()) {
+                $dto = new MateriaDTO();
+                $dto->setId($row['id']);
+                $dto->setNom_materia($row['nombre_materia']);
+                $materias[] = $dto;
+            }
+
+            return $materias;
+        } catch (Exception $e) {
+            error_log('Error al obtener materias por área: ' . $e->getMessage());
             return [];
         }
     }
