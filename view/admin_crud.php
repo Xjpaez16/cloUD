@@ -31,16 +31,15 @@
                 <tbody>
                     <?php foreach ($data['admins'] as $admin): ?>
                     <tr class="hover:bg-[#f3e8ff] transition">
-                        <td class="py-2 px-4 text-center text-[#5232a8]"><?= htmlspecialchars($admin->getId()) ?></td>
+                        <td class="py-2 px-4 text-center text-[#5232a8]"><?= htmlspecialchars($admin->getCodigo()) ?></td>
                         <td class="py-2 px-4 text-[#5232a8]"><?= htmlspecialchars($admin->getNombre()) ?></td>
                         <td class="py-2 px-4 text-[#5232a8]"><?= htmlspecialchars($admin->getCorreo()) ?></td>
                         <td class="py-2 px-4 flex gap-2 justify-center">
                             <form action="<?= BASE_URL ?>AdminController/delete" method="GET" onsubmit="return confirm('¿Seguro que deseas desactivar este administrador?');">
-                                <input type="hidden" name="codigo" value="<?= $admin->getId() ?>">
+                                <input type="hidden" name="codigo" value="<?= $admin->getCodigo() ?>">
                                 <button type="submit" class="w-28 bg-red-500 hover:bg-red-700 text-white font-semibold px-3 py-2 rounded shadow transition text-base">Desactivar</button>
                             </form>
-                            <button type="button" class="w-28 bg-blue-500 hover:bg-blue-700 text-white font-semibold px-3 py-2 rounded shadow transition text-base"
-                                onclick="showEdit(<?= $admin->getId() ?>, '<?= htmlspecialchars($admin->getNombre()) ?>', '<?= htmlspecialchars($admin->getCorreo()) ?>')">Editar</button>
+                            <button type="button" class="w-28 bg-blue-500 hover:bg-blue-700 text-white font-semibold px-3 py-2 rounded shadow transition text-base" onclick="showEdit(<?= $admin->getCodigo() ?>, '<?= htmlspecialchars($admin->getNombre()) ?>', '<?= htmlspecialchars($admin->getCorreo()) ?>')">Editar</button>
                         </td>
                     </tr>
                     <?php endforeach; ?>
@@ -64,7 +63,7 @@
             <button type="submit" class="bg-gradient-to-r from-[#803cb9] to-[#5232a8] hover:from-[#5232a8] hover:to-[#803cb9] text-white font-bold py-3 px-6 rounded-xl shadow-lg text-lg transition-all duration-300 transform hover:scale-105 w-full">Agregar Admin</button>
         </form>
         <!-- Modal para editar admin -->
-        <div id="editModal" class="fixed inset-0 bg-black bg-opacity-50 items-center justify-center z-50 hidden">
+        <div id="editModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
             <form id="editForm" action="<?= BASE_URL ?>AdminController/update" method="POST" class="bg-white p-8 rounded-2xl shadow-lg w-full max-w-md">
                 <input type="hidden" name="codigo" id="editCodigo">
                 <div class="mb-4">
@@ -86,14 +85,10 @@
                 document.getElementById('editCodigo').value = id;
                 document.getElementById('editNombre').value = nombre;
                 document.getElementById('editCorreo').value = correo;
-                const modal = document.getElementById('editModal');
-                modal.classList.remove('hidden');
-                modal.classList.add('flex');
+                document.getElementById('editModal').classList.remove('hidden');
             }
             function closeEdit() {
-                const modal = document.getElementById('editModal');
-                modal.classList.add('hidden');
-                modal.classList.remove('flex');
+                document.getElementById('editModal').classList.add('hidden');
             }
         </script>
     </div>
