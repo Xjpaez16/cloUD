@@ -114,16 +114,16 @@ class FilesController
                 } else {
                     header('Location: ' . BASE_URL . 'index.php?url=RouteController/uploadfiles&error=1');
                 }
-                error_log("Mostrando :" . $this->archivoDTO->getNombre());
-                error_log("Mostrando :" . $this->archivoDTO->getRuta());
-                error_log("Mostrando :" . $this->archivoDTO->getTamano());
-                error_log("Mostrando :" . $this->archivoDTO->getCod_profesor());
-                error_log("Mostrando :" . $this->archivoDTO->getCod_area());
-                error_log("Mostrando :" . $this->archivoDTO->getId_materia());
-                error_log("Mostrando :" . $this->archivoDTO->getCod_estudiante());
-                error_log("Mostrando :" . $this->archivoDTO->getCod_Tutor());
-                error_log("Mostrando :" . $this->archivoDTO->getCod_estado());
-                error_log("Mostrando :" . $this->archivoDTO->getId_tipo());
+                error_log("Mostrando Nombre :" . $this->archivoDTO->getNombre());
+                error_log("Mostrando ruta:" . $this->archivoDTO->getRuta());
+                error_log("Mostrando tamaño:" . $this->archivoDTO->getTamano());
+                error_log("Mostrando cod_profesor:" . $this->archivoDTO->getCod_profesor());
+                error_log("Mostrando cod_area:" . $this->archivoDTO->getCod_area());
+                error_log("Mostrando id_materia:" . $this->archivoDTO->getId_materia());
+                error_log("Mostrando estudiante:" . $this->archivoDTO->getCod_estudiante());
+                error_log("Mostrando tutor:" . $this->archivoDTO->getCod_Tutor());
+                error_log("Mostrando estado:" . $this->archivoDTO->getCod_estado());
+                error_log("Mostrando id_tipo:" . $this->archivoDTO->getId_tipo());
                 $upFile = $this->archivoDAO->create($this->archivoDTO);
                 if ($resultado &&  $upFile) {
                     header('Location: ' . BASE_URL . 'index.php?url=RouteController/dashboardfiles&success=1');
