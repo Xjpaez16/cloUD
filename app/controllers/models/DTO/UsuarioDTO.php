@@ -7,8 +7,9 @@ class UsuarioDTO
     protected $correo;
     protected $contrasena;
     protected $respuesta_preg;
+    protected $activo;
     
-    public function __construct($codigo, $nombre, $correo, $contrasena, $respuesta_preg)
+    public function __construct($codigo, $nombre, $correo, $contrasena, $respuesta_preg, $activo = 1)
     {
         $this->codigo = $codigo;
         $this->nombre = $nombre;
@@ -71,4 +72,7 @@ class UsuarioDTO
         $this->respuesta_preg = $respuesta_preg;
         return $this;
     }
+
+    public function getActivo() { return $this->activo; }
+    public function setActivo($activo) { $this->activo = $activo; return $this; }
 }
