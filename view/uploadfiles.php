@@ -1,7 +1,13 @@
 <?php
 
 require_once(__DIR__ . '/../app/controllers/models/DTO/EstudianteDTO.php');
+require_once(__DIR__ . '/../app/controllers/models/DTO/TutorDTO.php');
 session_start();
+
+if (!isset($_SESSION['usuario']) || !in_array($_SESSION['rol'], ['estudiante', 'tutor'])) {
+    header('Location: ' . BASE_URL . 'index.php?url=RouteController/login&error=4');
+    exit();
+}
 require_once(__DIR__ . '/layouts/nav.php');
 
 ?>
@@ -63,39 +69,39 @@ require_once(__DIR__ . '/layouts/nav.php');
                             <?php /** @var ProfesorDTO $profesor */
                             ?>
                             <?php foreach ($profesores as $profesor): ?>
-                                <option value="<?= $profesor->getCod() ?>">
-                                    <?= $profesor->getNom() ?>
-                                </option>
+                            <option value="<?= $profesor->getCod() ?>">
+                                <?= $profesor->getNom() ?>
+                            </option>
                             <?php endforeach; ?>
                         </select>
                     </div>
                     <script>
-                        document.getElementById('profesor').addEventListener('change', function() {
-                            const idprofesor = this.value;
+                    document.getElementById('profesor').addEventListener('change', function() {
+                        const idprofesor = this.value;
 
-                            fetch("<?= BASE_URL ?>FilesController/viewareasup?profesorid=" + idprofesor)
-                                .then(response => response.json())
-                                .then(data => {
-                                    const areaselect = document.getElementById(
-                                        'area'
-                                    ); //guardamos el select de areas que esta en el html para usarlo aqui en el JS
-                                    areaselect.innerHTML = ''; // Limpiar opciones anteriores
+                        fetch("<?= BASE_URL ?>FilesController/viewareasup?profesorid=" + idprofesor)
+                            .then(response => response.json())
+                            .then(data => {
+                                const areaselect = document.getElementById(
+                                    'area'
+                                ); //guardamos el select de areas que esta en el html para usarlo aqui en el JS
+                                areaselect.innerHTML = ''; // Limpiar opciones anteriores
 
-                                    const defaultOption = document.createElement('option');
-                                    defaultOption.value = '';
-                                    defaultOption.text = 'Seleccione un área';
-                                    areaselect.appendChild(defaultOption);
+                                const defaultOption = document.createElement('option');
+                                defaultOption.value = '';
+                                defaultOption.text = 'Seleccione un área';
+                                areaselect.appendChild(defaultOption);
 
-                                    data.forEach(area => {
-                                        console.log("papito mire el area", area);
-                                        const areaoption = document.createElement('option');
-                                        areaoption.value = area.codigo;
-                                        areaoption.text = area.nombre;
-                                        areaselect.appendChild(areaoption);
-                                    });
-                                })
-                                .catch(error => console.error('Error al cargar áreas:', error));
-                        });
+                                data.forEach(area => {
+                                    console.log("papito mire el area", area);
+                                    const areaoption = document.createElement('option');
+                                    areaoption.value = area.codigo;
+                                    areaoption.text = area.nombre;
+                                    areaselect.appendChild(areaoption);
+                                });
+                            })
+                            .catch(error => console.error('Error al cargar áreas:', error));
+                    });
                     </script>
 
                     <div class="mb-5">
@@ -108,10 +114,14 @@ require_once(__DIR__ . '/layouts/nav.php');
                     </div>
 
                     <script>
+                    document.getElementById('profesor').addEventListener('change', function() {
+                        const idprofesor = this.value;
+
                         document.getElementById('area').addEventListener('change', function() {
                             const idarea = this.value;
 
-                            fetch("<?= BASE_URL ?>FilesController/viewmateriasup?areacodigo=" + idarea)
+                            fetch("<?= BASE_URL ?>FilesController/viewmateriasup?areacodigo=" + idarea +
+                                    "&profesorid=" + idprofesor)
                                 .then(response => response.json())
                                 .then(data => {
                                     const materiaselect = document.getElementById('materia');
@@ -124,13 +134,15 @@ require_once(__DIR__ . '/layouts/nav.php');
 
                                     data.forEach(materia => {
                                         console.log('papito mire la materia', materia);
-                                        const materiaoption = document.createElement('option');
+                                        const materiaoption = document.createElement(
+                                            'option');
                                         materiaoption.value = materia.id;
                                         materiaoption.text = materia.nombre;
                                         materiaselect.appendChild(materiaoption);
                                     });
                                 });
                         });
+                    })
                     </script>
 
                     <div class="mb-5">
@@ -175,12 +187,12 @@ require_once(__DIR__ . '/layouts/nav.php');
         ];
         $msg = $Messages[$_GET['error']] ?? $Messages[1];
     ?>
-        <script>
-            showErrorRegister(`<?= $msg ?>`, {
-                x: 'right',
-                y: 'top'
-            });
-        </script>
+    <script>
+    showErrorRegister(`<?= $msg ?>`, {
+        x: 'right',
+        y: 'top'
+    });
+    </script>
     <?php } ?>
 </body>
 

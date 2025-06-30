@@ -31,16 +31,16 @@ class MateriaDAO
         }
     }
 
-    public function getMateriasByArea($areacodigo)
+    public function getMateriasByArea($areacodigo, $profesorid)
     {
         try {
-            $sql = "SELECT m.nombre_materia, m.id
+            $sql = "SELECT DISTINCT m.nombre_materia, m.id
                     FROM area a
                     JOIN area_profesor pa ON a.codigo = pa.cod_area 
                     JOIN materia as m ON m.id = pa.cod_materia 
-                    WHERE pa.cod_area = ?";
+                    WHERE pa.cod_area = ? AND pa.cod_profesor = ?";
             $stmt = $this->conn->prepare($sql);
-            $stmt->bind_param("i", $areacodigo);
+            $stmt->bind_param("ii", $areacodigo, $profesorid);
             $stmt->execute();
             $result = $stmt->get_result();
             $materias = [];

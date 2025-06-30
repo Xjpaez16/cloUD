@@ -10,6 +10,7 @@ class FilesController
     private $archivoDTO;
 
 
+
     public function __construct()
     {
         require_once(__DIR__ . '/models/DAO/ProfesorDAO.php');
@@ -19,6 +20,7 @@ class FilesController
         require_once(__DIR__ . '/models/DAO/ArchivoDAO.php');
         require_once(__DIR__ . '/models/DTO/ArchivoDTO.php');
         require_once(__DIR__ . '/models/DTO/EstudianteDTO.php');
+        require_once(__DIR__ . '/models/DTO/TutorDTO.php');
 
         $this->ProfesorDAO = new ProfesorDAO;
         $this->areaDAO = new AreaDAO;
@@ -62,7 +64,8 @@ class FilesController
     public function viewmateriasup()
     {
         $areaid = $_GET['areacodigo'];
-        $materias = $this->materiaDAO->getMateriasByArea($areaid);
+        $profesorid = $_GET['profesorid'];
+        $materias = $this->materiaDAO->getMateriasByArea($areaid, $profesorid);
         $materiasArray = [];
 
         foreach ($materias as $materia) {
