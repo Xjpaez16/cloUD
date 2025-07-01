@@ -28,8 +28,8 @@
 
         <div class="max-w-6xl mx-auto">
             <div class="flex justify-between items-center mb-8">
-                <h1 class="text-2xl font-bold text-white-800">
-                    <i class="fas fa-calendar-check text-purple-500 mr-2"></i>
+                <h1 class="text-2xl font-bold text-white">
+                    <i class="fas fa-calendar-check text-purple-500 mr-2 "></i>
                     Solicitudes de Tutoría
                 </h1>
                 <span class="bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-sm font-medium">
@@ -106,7 +106,7 @@
     </div>
 
     <!-- Modal para rechazar -->
-    <div id="rejectModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center hidden z-50">
+    <div id="rejectModal" class="fixed inset-0 bg-gray-600 bg-opacity-50  items-center justify-center hidden z-50">
         <div class="bg-white rounded-lg shadow-xl max-w-md w-full p-6">
             <h3 class="text-lg font-medium text-gray-900 mb-4">Motivo de rechazo</h3>
             
