@@ -94,5 +94,18 @@ class S3DAO {
 
         return $archivos;
     }
+    public function getfile($filename){
+        error_log('nombre : ' . $filename .'');
+        try{
+            return $this->s3->getObject([
+                'Bucket' => $this->bucket,
+                'Key'    => $filename
+            ]);
+        }catch (AwsException $e) {
+            throw new Exception('❌ Error al traer el archivo: ' . $e->getMessage());
+        }
+        
+    }
+
 }
 ?>

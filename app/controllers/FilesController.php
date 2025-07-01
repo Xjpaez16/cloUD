@@ -216,4 +216,25 @@ class FilesController
             }
         }
     }
+    public function downloadFile(){
+        if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['file'])) {
+
+            $nombre = $_GET['file'];
+            $key = 'uploads/'. $nombre;
+            error_log('nombre archivo a descargar: '. $nombre);
+            try{
+                $archivo = $this->s3->getfile($key);
+                header('Content-Description: File Transfer');
+                header('Content-Type: ' . $archivo['ContentType']);
+                header('Content-Disposition: attachment; filename="' . basename($nombre) . '"');
+                header('Content-Length: ' . $archivo['ContentLength']);
+                echo $archivo['Body'];
+                exit;
+            }catch (Exception $e){
+                header('Location: ' . BASE_URL . 'index.php?url=RouteController/viewallfiles&error=1');
+                error_log( 'error '.$e->getMessage());
+                die ('❌ Archivo no especificado.');
+            }
+        }
+    }
 }

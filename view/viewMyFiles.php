@@ -12,6 +12,8 @@ require_once __DIR__ . '/layouts/nav.php';
     <meta charset="UTF-8">
     <title>Archivos Subidos</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
 </head>
 
 <body class="relative min-h-screen bg-cover bg-bottom bg-no-repeat text-white font-sans"

@@ -11,6 +11,8 @@ require_once __DIR__ . '/layouts/nav.php';
     <meta charset="UTF-8">
     <title>Archivos Subidos</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
 </head>
 
 <body class="relative min-h-screen bg-cover bg-bottom bg-no-repeat text-white font-sans"
@@ -109,7 +111,7 @@ require_once __DIR__ . '/layouts/nav.php';
 
                         <div class="flex justify-between items-center mt-2">
                             <a href="<?= $url ?>" target="_blank" class="text-sm text-blue-600 hover:underline">🔗 Ver</a>
-                            <a href="descargar.php?file=<?= urlencode($nombre) ?>"
+                            <a href="<?= BASE_URL ?>index.php?url=Filescontroller/downloadFile&file=<?= $nombre?>"
                                 class="text-sm text-green-600 hover:underline">⬇️ Descargar</a>
                         </div>
 
@@ -125,6 +127,21 @@ require_once __DIR__ . '/layouts/nav.php';
         <?php endif; ?>
     </div>
     <script src="<?= BASE_URL ?>public/js/filterfiles.js"></script>
+     <script src="<?= BASE_URL ?>public/js/notyf.js"></script>
+    <?php
+    if (isset($_GET['error'])) {
+        $Messages = [
+            1 => 'Error al descargar el archivo',
+
+        ];
+        $msg = $Messages[$_GET['error']] ?? $Messages[1]; ?>
+        <script>
+            showErrorRegister(`<?= $msg ?>`, {
+                x: 'right',
+                y: 'top'
+            });
+        </script>
+    <?php } ?>
 </body>
 
 </html>
