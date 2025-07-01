@@ -97,7 +97,7 @@ require_once __DIR__ . '/layouts/nav.php';
                                 <img src="<?= $url ?>" alt="<?= $nombre ?>"
                                     class="w-full h-48 object-cover rounded mb-2 hover:opacity-90 transition">
                             </a>
-                        <?php elseif ($ext === 'pdf'): ?>
+                        <?php elseif (in_array($ext, ['pdf','mp4','txt'])): ?>
                             <a href="<?= $url ?>" target="_blank">
                                 <iframe src="<?= $url ?>" class="w-full h-48 rounded mb-2 border" frameborder="0"></iframe>
                             </a>
