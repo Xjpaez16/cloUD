@@ -253,5 +253,90 @@ class TutorController
         require __DIR__ . '/../../view/tutor/viewProfileTutor.php';
     }
     
+    /**
+     * Verifica que el usuario sea un tutor con sesión activa
+     */
+    protected function verificarSesionTutor() {
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+        
+        if (!isset($_SESSION['usuario']) || $_SESSION['rol'] !== 'tutor') {
+            header('Location: ' . BASE_URL . 'index.php?url=RouteController/login&error=unauthorized');
+            exit;
+        }
+    }
+    
+    /**
+     * Muestra las solicitudes de tutoría pendientes
+     */
+    public function solicitudesTutoria() {
+        $this->verificarSesionTutor();
+        
+        try {
+            require_once(__DIR__ . '/models/DAO/TutoriaDAO.php');
+            require_once(__DIR__ . '/models/DAO/MotivoDAO.php');
+            
+            $tutoriaDAO = new TutoriaDAO();
+            $motivoDAO = new MotivoDAO();
+            
+            $codTutor = $_SESSION['usuario']->getCodigo();
+            $solicitudes = $tutoriaDAO->obtenerSolicitudesPendientes($codTutor);
+            $motivos = $motivoDAO->listarMotivos();
+            
+            // Cargar vista con los datos
+            $viewPath = __DIR__ . '/../../view/tutor/solicitudes_tutorias.php';
+            if (!file_exists($viewPath)) {
+                throw new Exception("Vista no encontrada: $viewPath");
+            }
+            
+            require_once $viewPath;
+            
+        } catch (Exception $e) {
+            error_log("Error en solicitudesTutoria: " . $e->getMessage());
+            $_SESSION['error_message'] = "Error al cargar las solicitudes";
+            header('Location: ' . BASE_URL . 'index.php?url=RouteController/dashboardTutor');
+            exit;
+        }
+    }
+    
+    public function procesarAprobacion() {
+        $this->verificarSesionTutor();
+        
+        try {
+            if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+                throw new Exception("Método no permitido");
+            }
+            
+            $idTutoria = (int)$_POST['id_tutoria'];
+            $accion = $_POST['accion'];
+            
+            $tutoriaDAO = new TutoriaDAO();
+            
+            if ($accion === 'aprobar') {
+                $result = $tutoriaDAO->aprobarTutoria($idTutoria);
+                $mensaje = 'success_tutoria_aprobada';
+            } elseif ($accion === 'rechazar') {
+                $codMotivo = (int)$_POST['cod_motivo'];
+                $result = $tutoriaDAO->rechazarTutoria($idTutoria, $codMotivo);
+                $mensaje = 'success_tutoria_rechazada';
+            } else {
+                throw new Exception("Acción inválida");
+            }
+            
+            if (!$result) {
+                throw new Exception("Error al procesar la solicitud");
+            }
+            
+            header('Location: ' . BASE_URL . 'index.php?url=TutorController/solicitudesTutoria&success='.$mensaje);
+            exit;
+            
+        } catch (Exception $e) {
+            error_log("Error en procesarAprobacion: " . $e->getMessage());
+            header('Location: ' . BASE_URL . 'index.php?url=TutorController/solicitudesTutoria&error=1');
+            exit;
+        }
+    }
+    
 }
 ?>

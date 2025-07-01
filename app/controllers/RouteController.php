@@ -146,5 +146,55 @@ class RouteController extends Controller
         $adminCorreo = $admin ? $admin->getCorreo() : "soporte@udistrital.edu.co";
         require __DIR__ . '/../../view/viewFAQ.php';
     }
+
+    public function requestTutorial() {
+        require_once(__DIR__ . '/TutoriaController.php');
+        $tutoriaController = new TutoriaController();
+        $tutoriaController->mostrarFormularioSolicitud($_GET['tutor_id'] ?? null);
+    }
+
+    public function processRequest() {
+        require_once(__DIR__ . '/TutoriaController.php');
+        $tutoriaController = new TutoriaController();
+        $tutoriaController->procesarSolicitudTutoria();
+    }
+    
+    public function showTutoriaConfirmation() {
+        require_once(__DIR__ . '/TutoriaController.php');
+        $tutoriaController = new TutoriaController();
+        $tutoriaController->mostrarConfirmacionTutoria($_GET['id'] ?? null);
+    }
+    
+    public function solicitudesTutor() {
+        require_once(__DIR__ . '/TutorController.php');
+        $tutorController = new TutorController();
+        $tutorController->solicitudesTutoria();
+    }
+    
+    public function procesarAprobacionTutoria() {
+        require_once(__DIR__ . '/TutorController.php');
+        $tutorController = new TutorController();
+        $tutorController->procesarAprobacion();
+    }
+    
+    public function showTutorRequests() {
+        require_once(__DIR__ . '/TutoriaController.php');
+        $tutoriaController = new TutoriaController();
+        $tutoriaController->mostrarSolicitudesTutor();
+    }
+    
+    public function aprobarTutoria() {
+        require_once(__DIR__ . '/TutoriaController.php');
+        $tutoriaController = new TutoriaController();
+        $tutoriaController->procesarAprobacion();
+    }
+    
+    public function rechazarTutoria() {
+        require_once(__DIR__ . '/TutoriaController.php');
+        $tutoriaController = new TutoriaController();
+        $tutoriaController->procesarRechazo();
+    }
+    
+    
 }
 ?>

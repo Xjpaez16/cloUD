@@ -1,6 +1,6 @@
 <?php
 
-class AgendarDTO
+class TutoriaDTO
 {
     private $cod_estudiante;
     private $cod_tutor;
@@ -11,8 +11,7 @@ class AgendarDTO
     private $cod_estado;
     private $cod_motivo;
 
-    public function __construct($cod_estudiante, $cod_tutor, $id, $fecha, $hora_inicio, $hora_fin, $cod_estado, $cod_motivo)
-    {
+    public function __construct($cod_estudiante, $cod_tutor, $id, $fecha, $hora_inicio, $hora_fin, $cod_estado, $cod_motivo = null) {
         $this->cod_estudiante = $cod_estudiante;
         $this->cod_tutor = $cod_tutor;
         $this->id = $id;

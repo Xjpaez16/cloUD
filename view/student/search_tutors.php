@@ -84,7 +84,7 @@ if (!is_array($tutorsAvailable)) {
                         </div>
 
                         <div class="mt-4 flex justify-end">
-                            <a href="<?= BASE_URL ?>index.php?url=RouteController/processTutorRequest&code=<?= $tutor['code'] ?>&day=<?= $tutor['day_id'] ?>&start=<?= urlencode($tutor['start_time']) ?>&end=<?= urlencode($tutor['end_time']) ?>"
+                            <a href="<?= BASE_URL ?>index.php?url=RouteController/requestTutorial&tutor_id=<?= $tutor['code'] ?>&day=<?= $tutor['day_id'] ?>&start=<?= urlencode($tutor['start_time']) ?>&end=<?= urlencode($tutor['end_time']) ?>"
                                class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-full text-sm font-semibold transition-colors">
                                 <i class="fas fa-calendar-check mr-1"></i> Solicitar Tutoría
                             </a>

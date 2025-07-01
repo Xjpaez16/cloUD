@@ -1,6 +1,6 @@
 <?php
 
-class MotivoDto
+class MotivoDTO
 {
     private $codigo;
     private $tipo_motivo;

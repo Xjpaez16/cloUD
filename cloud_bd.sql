@@ -75,7 +75,7 @@ CREATE TABLE IF NOT EXISTS agendar (
   hora_inicio TIME NOT NULL,
   hora_final TIME NOT NULL,
   cod_estado INT NOT NULL,
-  cod_motivo INT NOT NULL,
+  cod_motivo INT NULL,
   PRIMARY KEY (id),
   FOREIGN KEY (cod_estudiante) REFERENCES estudiante (codigo),
   FOREIGN KEY (cod_tutor) REFERENCES tutor (codigo),
