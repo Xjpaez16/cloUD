@@ -57,17 +57,23 @@
                     </div>
 
                     <!-- Horario específico -->
+                  
                     <div class="mb-4 p-3 bg-gray-50 rounded-lg">
-                        <div class="flex items-center text-purple-600 mb-1">
-                            <i class="fas fa-calendar-day mr-2"></i>
-                            <span class="font-medium"><?= htmlspecialchars($tutor['nombre_dia'] ?? 'Día no especificado') ?></span>
-                        </div>
+                         
+                            <div class="flex items-center text-purple-600 mb-1">
+                                <i class="fas fa-calendar-day mr-2"></i>
+                                <input type="hidden" name="tutor_id" value="<?= $tutor['codigo'] ?>">
+                                <input type="hidden" name="dia" value="<?=$tutor['nombre_dia']?>">
+                                <span class="font-medium"><?= htmlspecialchars($tutor['nombre_dia'] ?? 'Día no especificado') ?></span>
+                            </div>
+                        
+                    
                         <div class="flex items-center text-gray-700">
                             <i class="fas fa-clock mr-2 text-sm"></i>
                             <span><?= htmlspecialchars($tutor['hora_inicio'] ?? '') ?> - <?= htmlspecialchars($tutor['hora_fin'] ?? '') ?></span>
                         </div>
                     </div>
-
+                   
                     <!-- Botón de Solicitud -->
                     <div class="flex justify-end">
                         <a href="<?= BASE_URL ?>index.php?url=RouteController/requestTutorial&tutor_id=<?= $tutor['codigo'] ?>&horario_id=<?= $tutor['id_horario'] ?? '' ?>"
@@ -75,6 +81,7 @@
                             <i class="fas fa-calendar-check mr-2"></i> Solicitar esta hora
                         </a>
                     </div>
+                   
                 </div>
             </div>
         <?php endforeach; ?>

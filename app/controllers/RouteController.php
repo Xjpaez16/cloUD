@@ -157,7 +157,7 @@ class RouteController extends Controller
     public function requestTutorial() {
         require_once(__DIR__ . '/TutoriaController.php');
         $tutoriaController = new TutoriaController();
-        $tutoriaController->mostrarFormularioSolicitud($_GET['tutor_id'] ?? null);
+        $tutoriaController->mostrarFormularioSolicitud($_GET['tutor_id'] ?? null,$_GET['horario_id'] ?? null);
     }
 
     public function processRequest() {

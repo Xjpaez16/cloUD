@@ -1,5 +1,7 @@
-<?php require_once __DIR__ . '/../layouts/nav.php'; ?>
-
+<?php 
+require_once __DIR__ . '/../layouts/nav.php'; 
+require_once __DIR__ . '/../../app/controllers/models/DTO/HorarioDTO.php';
+?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -70,10 +72,11 @@
                         <label for="fecha" class="block text-gray-700 font-medium mb-2">
                             <i class="fas fa-calendar-day text-purple-500 mr-2"></i>Fecha
                         </label>
-                        <input type="date" id="fecha" name="fecha" 
+                        <input type="date" id="fecha" name="fecha" data-diapermitido="<?= $horario->getId_dia()?>"
                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
                                min="<?= date('Y-m-d') ?>" required>
                     </div>
+                    
 
                     <!-- Horario -->
                     <div class="grid grid-cols-2 gap-4 mb-4">
@@ -132,5 +135,6 @@
             });
         });
     </script>
+    <script src="<?= BASE_URL ?>public/js/validar-fecha.js"></script>
 </body>
 </html>

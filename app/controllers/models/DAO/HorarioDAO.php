@@ -51,5 +51,26 @@ class HorarioDAO {
             return [];
         }
     }
+    public function getscheduleById($cod_tutor,$id_schedule) {
+        try {
+            $sql = "SELECT * FROM horario WHERE cod_tutor = ? AND id = ?";
+            $stm = $this->conn->prepare($sql);
+            $stm->bind_param("ii", $cod_tutor,$id_schedule);
+            $stm->execute();
+            $result = $stm->get_result();
+            if ($row = $result->fetch_assoc()) {
+                return new HorarioDTO(
+                  $row["id"],
+                  $row["id_dia"],
+                  $row["cod_tutor"],
+                  $row["hora_inicio"],
+                  $row["hora_fin"],
+                );
+            }
+            return null;
+        }catch (Exception $e) {
+            error_log("error al traer el horario: ". $e->getMessage());
+        }
+    }
 }
 ?>

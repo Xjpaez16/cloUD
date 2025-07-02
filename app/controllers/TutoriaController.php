@@ -7,26 +7,27 @@ require_once(__DIR__ . '/models/DAO/TutorDAO.php');
 require_once(__DIR__ . '/models/DAO/MotivoDAO.php');
 require_once(__DIR__ . '/models/DAO/EstadoDAO.php');
 require_once(__DIR__ . '/utils/validation.php');
-
+require_once(__DIR__ . '/models/DAO/HorarioDAO.php');
 class TutoriaController {
     private $tutoriaDAO;
     private $tutorDAO;
     private $motivoDAO;
     private $estadoDAO;
     private $validation;
-    
+    private $horariodao;
     public function __construct() {
         $this->tutoriaDAO = new TutoriaDAO();
         $this->tutorDAO = new TutorDAO();
         $this->motivoDAO = new MotivoDAO();
         $this->estadoDAO = new EstadoDAO();
         $this->validation = new validation();
+        $this->horariodao = new HorarioDAO();
     }
     
     /**
      * Muestra el formulario para solicitar tutoría
      */
-    public function mostrarFormularioSolicitud($tutorId) {
+    public function mostrarFormularioSolicitud($tutorId,$id_horario) {
         $this->verificarSesionEstudiante();
         
         try {
@@ -49,10 +50,13 @@ class TutoriaController {
             if (!file_exists($viewPath)) {
                 throw new Exception("Vista no encontrada: $viewPath");
             }
+            error_log("id_horario : " . $id_horario);
+            error_log("id_tutor : " . $tutorId);
+            $horario=$this->horariodao->getscheduleById($tutorId, $id_horario);
             
             // Cargar la vista directamente
             require_once $viewPath;
-            
+            error_log("horario : ". $horario->getId_dia());
         } catch (Exception $e) {
             error_log("Error: " . $e->getMessage());
             $_SESSION['error_message'] = $e->getMessage();
