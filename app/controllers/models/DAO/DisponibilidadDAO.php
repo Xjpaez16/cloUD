@@ -81,12 +81,23 @@ class DisponibilidadDAO {
     }
     public function getAvailableTutorsWithAreas($filtros = [])
     {
-        $sql = "SELECT t.codigo, t.nombre, t.correo,
-            IFNULL(t.calificacion_general, 0) as calificacion_general,
-            GROUP_CONCAT(DISTINCT a.nombre_area SEPARATOR ', ') as areas
+        $sql = "SELECT
+                t.codigo,
+                t.nombre,
+                t.correo,
+                IFNULL(t.calificacion_general, 0) as calificacion_general,
+                GROUP_CONCAT(DISTINCT a.nombre_area SEPARATOR ', ') as areas,
+                dia.dia as nombre_dia,
+                h.id_dia,
+                h.id as id_horario,
+                TIME_FORMAT(h.hora_inicio, '%h:%i %p') as hora_inicio,
+                TIME_FORMAT(h.hora_fin, '%h:%i %p') as hora_fin
             FROM tutor t
             LEFT JOIN area_tutor at ON t.codigo = at.cod_tutor
             LEFT JOIN area a ON at.cod_area = a.codigo
+            LEFT JOIN disponibilidad d ON t.codigo = d.cod_tutor
+            LEFT JOIN horario h ON d.id_horario = h.id
+            LEFT JOIN dia ON h.id_dia = dia.id
             WHERE t.cod_estado = 2"; // Solo tutores verificados
         
         $params = [];
@@ -99,33 +110,36 @@ class DisponibilidadDAO {
             $types .= 'i';
         }
         
-        $sql .= " GROUP BY t.codigo";
-        
-        // Filtro por calificación (modificado para manejar NULL correctamente)
-        if (!empty($filtros['rating'])) {
-            $rating = (float)$filtros['rating'];
-            $sql = "SELECT * FROM ($sql) AS filtered_tutors
-                WHERE calificacion_general >= ? OR (calificacion_general IS NULL AND 0 >= ?)";
-            $params[] = $rating;
-            $params[] = $rating;
-            $types .= 'dd';
-        }
+        // Agregamos GROUP BY con todas las columnas no agregadas
+        $sql .= " GROUP BY t.codigo, t.nombre, t.correo, t.calificacion_general,
+              dia.dia, h.id_dia, h.id, h.hora_inicio, h.hora_fin";
         
         $stmt = $this->conn->prepare($sql);
+        
+        if ($stmt === false) {
+            error_log("Error en prepare: " . $this->conn->error);
+            return [];
+        }
         
         if (!empty($params)) {
             $stmt->bind_param($types, ...$params);
         }
         
-        $stmt->execute();
+        if (!$stmt->execute()) {
+            error_log("Error en execute: " . $stmt->error);
+            return [];
+        }
+        
         $result = $stmt->get_result();
         
         $tutores = [];
         while ($row = $result->fetch_assoc()) {
-            $tutores[] = $row;
+            // Solo agregamos horarios válidos
+            if (!empty($row['hora_inicio']) && !empty($row['hora_fin'])) {
+                $tutores[] = $row;
+            }
         }
         
-        error_log("Tutores encontrados: " . print_r($tutores, true));
         return $tutores;
     }
     
