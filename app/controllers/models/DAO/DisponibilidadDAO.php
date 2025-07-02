@@ -79,55 +79,55 @@ class DisponibilidadDAO {
             return [];
         }
     }
-    public function getAvailableTutors() {
-        try {
-            $sql = "SELECT
-            t.codigo AS code,
-            t.nombre AS name,
-            GROUP_CONCAT(DISTINCT a.nombre_area SEPARATOR ', ') AS subjects,
-            dia.dia AS day_name,
-            h.id_dia AS day_id,
-            TIME_FORMAT(h.hora_inicio, '%h:%i %p') AS start_time,
-            TIME_FORMAT(h.hora_fin, '%h:%i %p') AS end_time,
-            t.calificacion_general AS rating
-        FROM tutor t
-        JOIN disponibilidad d ON t.codigo = d.cod_tutor
-        JOIN estado e1 ON t.cod_estado = e1.codigo
-        JOIN estado e2 ON d.cod_estado = e2.codigo
-        JOIN horario h ON d.id_horario = h.id
-        JOIN dia ON h.id_dia = dia.id
-        LEFT JOIN area_tutor at ON t.codigo = at.cod_tutor
-        LEFT JOIN area a ON at.cod_area = a.codigo
-        WHERE t.cod_estado = 2  -- Tutor Verificado
-          AND d.cod_estado = 7  -- Disponibilidad Activa
-        GROUP BY t.codigo, t.nombre, dia.dia, h.id_dia, h.hora_inicio, h.hora_fin, t.calificacion_general
-        ORDER BY h.id_dia, h.hora_inicio";
-            
-            error_log("Consulta de tutores disponibles ejecutada");
-            
-            $stmt = $this->conn->prepare($sql);
-            if (!$stmt) {
-                error_log("Error en preparación: " . $this->conn->error);
-                return [];
-            }
-            
-            if (!$stmt->execute()) {
-                error_log("Error en ejecución: " . $stmt->error);
-                return [];
-            }
-            
-            $result = $stmt->get_result();
-            $tutors = $result->fetch_all(MYSQLI_ASSOC);
-            
-            error_log("Tutores encontrados: " . count($tutors));
-            return $tutors;
-            
-        } catch (Exception $e) {
-            error_log('Error en getAvailableTutors: ' . $e->getMessage());
-            return [];
+    public function getAvailableTutorsWithAreas($filtros = [])
+    {
+        $sql = "SELECT t.codigo, t.nombre, t.correo,
+            IFNULL(t.calificacion_general, 0) as calificacion_general,
+            GROUP_CONCAT(DISTINCT a.nombre_area SEPARATOR ', ') as areas
+            FROM tutor t
+            LEFT JOIN area_tutor at ON t.codigo = at.cod_tutor
+            LEFT JOIN area a ON at.cod_area = a.codigo
+            WHERE t.cod_estado = 2"; // Solo tutores verificados
+        
+        $params = [];
+        $types = '';
+        
+        // Filtro por área
+        if (!empty($filtros['area'])) {
+            $sql .= " AND a.codigo = ?";
+            $params[] = $filtros['area'];
+            $types .= 'i';
         }
+        
+        $sql .= " GROUP BY t.codigo";
+        
+        // Filtro por calificación (modificado para manejar NULL correctamente)
+        if (!empty($filtros['rating'])) {
+            $rating = (float)$filtros['rating'];
+            $sql = "SELECT * FROM ($sql) AS filtered_tutors
+                WHERE calificacion_general >= ? OR (calificacion_general IS NULL AND 0 >= ?)";
+            $params[] = $rating;
+            $params[] = $rating;
+            $types .= 'dd';
+        }
+        
+        $stmt = $this->conn->prepare($sql);
+        
+        if (!empty($params)) {
+            $stmt->bind_param($types, ...$params);
+        }
+        
+        $stmt->execute();
+        $result = $stmt->get_result();
+        
+        $tutores = [];
+        while ($row = $result->fetch_assoc()) {
+            $tutores[] = $row;
+        }
+        
+        error_log("Tutores encontrados: " . print_r($tutores, true));
+        return $tutores;
     }
-    
     
     
     

@@ -109,6 +109,13 @@ class RouteController extends Controller
         $studentController->displayTutorSearch();
     }
     
+    public function filterTutorsAjax()
+    {
+        require_once(__DIR__ . '/StudentController.php');
+        $studentController = new StudentController();
+        $studentController->filterTutorsAjax();
+    }
+    
     public function processTutorRequest() {
         require_once(__DIR__ . '/StudentController.php');
         $studentController = new StudentController();

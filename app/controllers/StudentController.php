@@ -85,45 +85,47 @@ class StudentController
         }
     }
     
-    public function displayTutorSearch() {
-        error_log("Iniciando búsqueda de tutores...");
+    public function displayTutorSearch()
+    {
+        // Obtener áreas para el select
+        require_once(__DIR__ . '/models/DAO/AreaDAO.php');
+        $areaDAO = new AreaDAO();
+        $areas = $areaDAO->listarea();
         
-        // Validar si DAO está inicializado correctamente
-        if (!isset($this->disponibilidadDAO) || !is_object($this->disponibilidadDAO)) {
-            error_log("Error: DisponibilidadDAO no inicializado o no es objeto");
-            throw new Exception("DisponibilidadDAO no está inicializado correctamente");
-        }
+        // Pasar datos básicos a la vista
+        $data = [
+            'areas' => $areas,
+            'BASE_URL' => BASE_URL
+        ];
         
-        // Obtener tutores disponibles
-        $tutorsAvailable = $this->disponibilidadDAO->getAvailableTutors();
-        
-        // Verificar y loguear resultados
-        $countTutors = is_array($tutorsAvailable) ? count($tutorsAvailable) : 0;
-        error_log("Tutores recibidos en Controller: $countTutors");
-        
-        if ($countTutors > 0) {
-            error_log("Estructura del primer tutor:");
-            error_log(print_r($tutorsAvailable[0], true));
-        } else {
-            error_log("No se encontraron tutores disponibles.");
-        }
-        
-        // Función para convertir ID de día a nombre (aunque ya recibes `day_name`, por si acaso)
-        $diaHelper = function($idDia) {
-            $dias = [
-                1 => 'Lunes',
-                2 => 'Martes',
-                3 => 'Miércoles',
-                4 => 'Jueves',
-                5 => 'Viernes',
-                6 => 'Sábado',
-                7 => 'Domingo'
-            ];
-            return $dias[$idDia] ?? 'Día no especificado';
-        };
-        
-        // Renderizar vista
+        extract($data);
         require __DIR__ . '/../../view/student/search_tutors.php';
+    }
+    
+    public function filterTutorsAjax()
+    {
+        // Obtener parámetros de filtro
+        $filtros = [
+            'area' => $_GET['area'] ?? null,
+            'rating' => $_GET['rating'] ?? null
+        ];
+        
+        error_log("Filtros recibidos en filterTutorsAjax: " . print_r($filtros, true));
+        
+        // Obtener tutores con filtros
+        $tutorsAvailable = $this->disponibilidadDAO->getAvailableTutorsWithAreas($filtros);
+        
+        error_log("Tutores encontrados: " . count($tutorsAvailable));
+        
+        // Pasar datos al partial
+        $data = [
+            'tutorsAvailable' => $tutorsAvailable,
+            'filtros' => $filtros
+        ];
+        
+        extract($data);
+        require __DIR__ . '/../../view/student/tutors_list.php';
+        exit;
     }
     
     
