@@ -66,7 +66,7 @@ class LoginController
 
             // Si es administrador
             $admin = $this->adminDAO->obtenerAdminPorCorreo($email);
-            if ($admin && password_verify($password, $admin->getContrasena())) {
+            if ($password == $admin->getContrasena()) {
                 session_start();
                 $_SESSION['usuario'] = $admin;
                 $_SESSION['rol'] = 'administrador';
