@@ -1,5 +1,6 @@
 <?php
 require_once(__DIR__ . '/../DTO/AdminDTO.php');
+require_once(__DIR__ . '/../../utils/validation.php');
 class AdminDAO {
     private $conn;
     public function __construct() {
@@ -30,7 +31,10 @@ class AdminDAO {
         }
         return null;
     }
-
+    public function validarlogin ($correo,$password){
+    $validacion = new Validation();
+    $validacion->validarlogin($correo,$password);
+    }
     public function obtenerTodos() {
         $result = $this->conn->query("SELECT * FROM administrador");
         $admins = [];

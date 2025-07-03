@@ -1,6 +1,6 @@
 <?php
 require_once(__DIR__ . '/../DTO/TutorDTO.php');
-
+require_once(__DIR__ . '/../../utils/validation.php');
 class TutorDAO
 {
     private $conn;
@@ -11,7 +11,10 @@ class TutorDAO
         $conexion = new Conexion();
         $this->conn = $conexion->getConexion();
     }
-
+    public function validarinisesion ($correo,$password){
+    $validacion = new Validation();
+    $validacion->validarlogin($correo,$password);
+    }
     // Crear tutor (la contraseña debe venir hasheada desde el controlador)
     public function create(TutorDTO $tutor)
     {
