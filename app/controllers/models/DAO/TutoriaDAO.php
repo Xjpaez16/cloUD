@@ -358,9 +358,9 @@ class TutoriaDAO {
             $tutorias = [];
             while($row = $result->fetch_assoc()) {
                 $tutorias[] = new TutoriaDTO(
-                    $row['id'],
                     $row['cod_estudiante'],
                     $row['cod_tutor'],
+                    $row['id'],
                     $row['fecha'],
                     $row['hora_inicio'],
                     $row['hora_final'],

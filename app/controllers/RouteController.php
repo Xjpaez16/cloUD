@@ -146,7 +146,7 @@ class RouteController extends Controller
     
     public function viewFAQ()
     {
-        require_once(__DIR__ . '/adminController.php');
+        require_once(__DIR__ . '/adr.php');
         $adminController = new adminController();
         $admin = $adminController->obtenerAdmin();
         $adminNombre = $admin ? $admin->getNombre() : "Administrador";

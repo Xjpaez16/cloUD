@@ -8,6 +8,7 @@ class StudentController
     private $disponibilidadDAO;
     private $tutorDAO;
     private $tutoriaDAO;
+    private $motivoDAO;
 
     public function __construct()
     {
@@ -46,6 +47,7 @@ class StudentController
         }
 
         $carreras = $this->carrerDAO->listcarrers();
+        
         require_once(__DIR__ . '/../../view/editStudent.php');
     }
 
@@ -262,6 +264,8 @@ class StudentController
         
         // Obtener tutorías pendientes
         $tutoriasPendientes = $this->tutoriaDAO->getTutoriasPendientes($estudiante->getCodigo());
+        error_log("Tutorías andres: " . print_r($this->tutoriaDAO->getTutoriasPendientes($estudiante->getCodigo()), true));
+
         
         // Obtener motivos de cancelación
         $motivoDAO = new MotivoDAO();
@@ -288,7 +292,7 @@ class StudentController
             }
             
             $this->tutoriaDAO->cancelarTutoriaConMotivo($idTutoria, $motivo);
-            
+            error_log("Tutoría cancelada con éxito." . $idTutoria . $motivo);
             $_SESSION['success_message'] = "Tutoría cancelada correctamente.";
             
         } catch (Exception $e) {

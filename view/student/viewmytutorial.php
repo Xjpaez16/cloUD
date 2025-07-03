@@ -5,6 +5,8 @@ if (!isset($_SESSION['usuario']) || $_SESSION['rol'] !== 'estudiante') {
     header('Location: ' . BASE_URL . 'index.php?url=RouteController/login&error=4');
     exit();
 }
+
+
 ?>
 
 <!DOCTYPE html>
@@ -77,6 +79,7 @@ if (!isset($_SESSION['usuario']) || $_SESSION['rol'] !== 'estudiante') {
             <i class="fas fa-calendar-times mr-2"></i> 
             <span class="hidden md:inline">Cancelar Tutorías</span>
         </button>
+        
     </div>
 
     <!-- Modal de cancelación integrado -->
@@ -99,6 +102,7 @@ if (!isset($_SESSION['usuario']) || $_SESSION['rol'] !== 'estudiante') {
                 <?php else: ?>
                     <div class="space-y-3">
                         <?php foreach ($tutoriasPendientes as $tutoria): ?>
+                            <?php error_log("Tutorías pendientes: " . $tutoria->getId());?>
                             <div class="border rounded-lg p-4 hover:bg-gray-50 transition-colors">
                                 <div class="flex justify-between items-start">
                                     <div>
@@ -111,18 +115,19 @@ if (!isset($_SESSION['usuario']) || $_SESSION['rol'] !== 'estudiante') {
                                             <?= htmlspecialchars($tutoria->getHora_inicio()) ?> - <?= htmlspecialchars($tutoria->getHora_fin()) ?>
                                         </p>
                                     </div>
+
                                     <button onclick="document.getElementById('cancelForm<?= $tutoria->getId() ?>').classList.toggle('hidden')" 
                                             class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-lg text-sm flex items-center">
                                         <i class="fas fa-ban mr-1"></i> Cancelar
                                     </button>
                                 </div>
-
+                                
                                 <form id="cancelForm<?= $tutoria->getId() ?>" 
                                       action="<?= BASE_URL ?>index.php?url=RouteController/processCancelation" 
                                       method="POST"
                                       class="hidden mt-3 p-3 bg-gray-50 rounded-lg">
                                     <input type="hidden" name="id_tutoria" value="<?= $tutoria->getId() ?>">
-                                    
+                                    <?php error_log ('id tutoria: ' . $tutoria->getId());?>
                                     <div class="mb-3">
                                         <label class="block text-sm font-medium text-gray-700 mb-1">
                                             <i class="fas fa-comment-alt text-blue-500 mr-1"></i> Motivo:
