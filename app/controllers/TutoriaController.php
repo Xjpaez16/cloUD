@@ -8,6 +8,7 @@ require_once(__DIR__ . '/models/DAO/MotivoDAO.php');
 require_once(__DIR__ . '/models/DAO/EstadoDAO.php');
 require_once(__DIR__ . '/utils/validation.php');
 require_once(__DIR__ . '/models/DAO/HorarioDAO.php');
+require_once(__DIR__ . '/models/DAO/DisponibilidadDAO.php');
 class TutoriaController {
     private $tutoriaDAO;
     private $tutorDAO;
@@ -15,6 +16,7 @@ class TutoriaController {
     private $estadoDAO;
     private $validation;
     private $horariodao;
+    private $disponibilidadDAO;
     public function __construct() {
         $this->tutoriaDAO = new TutoriaDAO();
         $this->tutorDAO = new TutorDAO();
@@ -22,6 +24,7 @@ class TutoriaController {
         $this->estadoDAO = new EstadoDAO();
         $this->validation = new validation();
         $this->horariodao = new HorarioDAO();
+        $this->disponibilidadDAO = new DisponibilidadDAO();
     }
     
     /**
@@ -104,7 +107,7 @@ class TutoriaController {
                 
                 // Guardar en la base de datos
                 $idTutoria = $this->tutoriaDAO->crearTutoria($tutoria);
-                
+                $this->disponibilidadDAO->updatedispo($tutoria->getCod_tutor(),$tutoria->getHora_inicio(),$tutoria->getHora_fin());
                 if (!$idTutoria) {
                     throw new Exception("No se pudo crear la tutoría en la base de datos");
                 }

@@ -162,6 +162,13 @@ if (!isset($_SESSION['usuario']) || $_SESSION['rol'] !== 'estudiante') {
     </div>
 
     <script>
+        
+    function convertirA12Horas(hora24) {
+    const [hora, minutos] = hora24.split(':').map(Number);
+    const ampm = hora >= 12 ? 'PM' : 'AM';
+    const hora12 = (hora % 12) || 12; // El 0 se convierte en 12
+    return `${hora12}:${minutos.toString().padStart(2, '0')} ${ampm}`;
+    }
         const tutorias = <?php echo json_encode($tutorias_json) ?>;
 
         function renderCalendar(date) {
@@ -224,15 +231,15 @@ if (!isset($_SESSION['usuario']) || $_SESSION['rol'] !== 'estudiante') {
                             switch (tutoria.cod_estado) {
                                 case 4: 
                                     tag.classList.add("bg-yellow-500");
-                                    tag.innerHTML = `<i class="fas fa-clock mr-1"></i>${tutoria.hora_inicio}`;
+                                    tag.innerHTML = `<i class="fas fa-clock mr-1"></i> ${convertirA12Horas(tutoria.hora_inicio)} - ${convertirA12Horas(tutoria.hora_fin)}`;
                                     break;
                                 case 5: 
                                     tag.classList.add("bg-green-500");
-                                    tag.innerHTML = `<i class="fas fa-check mr-1"></i>${tutoria.hora_inicio}`;
+                                    tag.innerHTML = `<i class="fas fa-check mr-1"></i>${convertirA12Horas(tutoria.hora_inicio)} - ${convertirA12Horas(tutoria.hora_fin)}`;
                                     break;
                                 case 6: 
                                     tag.classList.add("bg-red-500");
-                                    tag.innerHTML = `<i class="fas fa-times mr-1"></i>${tutoria.hora_inicio}`;
+                                    tag.innerHTML = `<i class="fas fa-times mr-1"></i>${convertirA12Horas(tutoria.hora_inicio)} - ${convertirA12Horas(tutoria.hora_fin)}`;
                                     break;
                                 default: 
                                     tag.classList.add("bg-gray-400");

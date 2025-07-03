@@ -167,5 +167,21 @@ class DisponibilidadDAO {
             return false;
         }
     }
+    public function updatedispo($cod_tutor,$hora_i,$hora_fn){
+        try{
+            $sql = "UPDATE disponibilidad
+            SET cod_estado = 8
+            WHERE cod_tutor = ?
+            AND id_horario = 2
+            AND hora_i >= ?
+            AND hora_fn <= ? ";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bind_param('iss', $cod_tutor,$hora_i,$hora_fn);
+            $stmt->execute();
+            
+        }catch(Exception $e){
+            error_log('Error en updatedispo DisponibilidadDAO' . $e->getMessage());
+        }
+    }
 }
 ?>
