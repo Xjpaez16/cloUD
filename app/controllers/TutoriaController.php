@@ -374,7 +374,6 @@ public function procesarAprobacion() {
     exit;
 }
 
-// En TutoriaController.php
 public function procesarRechazo() {
     if (session_status() === PHP_SESSION_NONE) {
         session_start();

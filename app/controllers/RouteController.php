@@ -207,6 +207,17 @@ class RouteController extends Controller
         $studentController = new StudentController();
         $studentController->viewMyTutorials();
     }
+
+    public function showCancelationPanel() {
+        require_once(__DIR__ . '/StudentController.php');
+        $studentController = new StudentController();
+        $studentController->showCancelationPanel();
+    }
     
+    public function processCancelation() {
+        require_once(__DIR__ . '/StudentController.php');
+        $studentController = new StudentController();
+        $studentController->processCancelation();
+    }
 }
 ?>

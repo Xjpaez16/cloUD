@@ -18,6 +18,7 @@ class StudentController
         require_once(__DIR__ . '/models/DAO/TutorDAO.php');
         require_once(__DIR__ . '/utils/validation.php');
         require_once(__DIR__ . '/models/DAO/TutoriaDAO.php');
+        require_once(__DIR__ . '/models/DAO/MotivoDAO.php');
 
         $this->studentDAO = new EstudianteDAO();
         $this->studentDTO = new EstudianteDTO();
@@ -26,7 +27,7 @@ class StudentController
         $this->disponibilidadDAO = new DisponibilidadDAO(); 
         $this->tutorDAO = new TutorDAO();
         $this->tutoriaDAO = new TutoriaDAO();
-
+        $this->motivoDAO = new MotivoDAO();
     }
     
 
@@ -211,35 +212,92 @@ class StudentController
         require __DIR__ . '/../../view/student/viewProfileStudent.php';
         
     }
-    public function viewMyTutorials(){
+    public function viewMyTutorials() {
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
         }
-
-        $estudiante = isset($_SESSION['usuario']) ? $_SESSION['usuario'] : null;
+        
+        $estudiante = $_SESSION['usuario'] ?? null;
         if (!$estudiante) {
-            error_log('No hay sesión activa de estudiante.');
-            // Puedes redirigir o mostrar un error amigable aquí si lo deseas
             header('Location: ' . BASE_URL . 'index.php?url=RouteController/login&error=4');
             exit;
         }
-
+        
+        // Obtener todas las tutorías para el calendario
         $tutorias = $this->tutoriaDAO->getalltutorialbystudent($estudiante->getCodigo());
         $tutorias_json = array_map(function ($tutoria) {
             return [
-
-                    'fecha' => $tutoria->getFecha(),
-                    'hora_inicio' => $tutoria->getHora_inicio(),
-                    'hora_fin' => $tutoria->getHora_fin(),
-                    'cod_estado' => $tutoria->getCod_estado(),
-                    
+                'fecha' => $tutoria->getFecha(),
+                'hora_inicio' => $tutoria->getHora_inicio(),
+                'hora_fin' => $tutoria->getHora_fin(),
+                'cod_estado' => $tutoria->getCod_estado(),
             ];
-        },$tutorias);
-        
-        require_once(__DIR__ . '/../../view/student/viewmytutorial.php');
+        }, $tutorias);
+            
+            // Obtener tutorías pendientes para el modal
+            $tutoriasPendientes = $this->tutoriaDAO->getTutoriasPendientes($estudiante->getCodigo());
+            
+            // Obtener motivos de cancelación
+            $motivoDAO = new MotivoDAO();
+            $motivos = $motivoDAO->listarMotivos();
+            
+            // Pasar todos los datos a la vista
+            include __DIR__ . '/../../view/student/viewmytutorial.php';
     }
 
 
+    /**
+     * Muestra el panel de cancelación de tutorías
+     */
+    public function showCancelationPanel() {
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+        
+        $estudiante = $_SESSION['usuario'] ?? null;
+        if (!$estudiante) {
+            header('Location: ' . BASE_URL . 'index.php?url=RouteController/login&error=4');
+            exit;
+        }
+        
+        // Obtener tutorías pendientes
+        $tutoriasPendientes = $this->tutoriaDAO->getTutoriasPendientes($estudiante->getCodigo());
+        
+        // Obtener motivos de cancelación
+        $motivoDAO = new MotivoDAO();
+        $motivos = $motivoDAO->listarMotivos();
+        
+        // Incluir vista parcial
+        include __DIR__ . '/../../view/student/cancelation_panel.php';
+    }
+    
+    /**
+     * Procesa la cancelación de una tutoría
+     */
+    public function processCancelation() {
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+        
+        try {
+            $idTutoria = $_POST['id_tutoria'] ?? null;
+            $motivo = $_POST['motivo'] ?? null;
+            
+            if (empty($idTutoria) || empty($motivo)) {
+                throw new Exception("Datos incompletos para cancelar la tutoría.");
+            }
+            
+            $this->tutoriaDAO->cancelarTutoriaConMotivo($idTutoria, $motivo);
+            
+            $_SESSION['success_message'] = "Tutoría cancelada correctamente.";
+            
+        } catch (Exception $e) {
+            $_SESSION['error_message'] = $e->getMessage();
+        }
+        
+        header('Location: ' . BASE_URL . 'index.php?url=RouteController/viewMyTutorial');
+        exit;
+    }
     
     
 }

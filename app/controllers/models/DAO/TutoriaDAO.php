@@ -302,5 +302,93 @@ class TutoriaDAO {
         }
     
     }
+    
+    public function getPendingTutorialsByStudent($codEstudiante) {
+        try {
+            $sql = "SELECT * FROM agendar WHERE cod_estudiante = ? AND cod_estado = 4"; // Estado 4 = Pendiente
+            $stm = $this->conn->prepare($sql);
+            $stm->bind_param("i", $codEstudiante);
+            $stm->execute();
+            $result = $stm->get_result();
+            $tutorias = [];
+            while($row = $result->fetch_assoc()){
+                $tutorias[] = new TutoriaDTO(
+                    $row['id'],
+                    $row['cod_estudiante'],
+                    $row['cod_tutor'],
+                    $row['fecha'],
+                    $row['hora_inicio'],
+                    $row['hora_final'],
+                    $row['cod_estado'],
+                    $row['cod_motivo']
+                    );
+            }
+            return $tutorias;
+        } catch(Exception $e) {
+            error_log("Error en getPendingTutorialsByStudent: " . $e->getMessage());
+            return [];
+        }
+    }
+    
+    public function cancelTutorial($idTutoria, $codMotivo) {
+        try {
+            $sql = "UPDATE agendar SET cod_estado = 6, cod_motivo = ? WHERE id = ?"; // Estado 6 = Cancelada
+            $stm = $this->conn->prepare($sql);
+            $stm->bind_param("ii", $codMotivo, $idTutoria);
+            return $stm->execute();
+        } catch(Exception $e) {
+            error_log("Error en cancelTutorial: " . $e->getMessage());
+            return false;
+        }
+    }
+    
+    /**
+     * Obtiene tutorías pendientes de cancelación para un estudiante
+     */
+    public function getTutoriasPendientes($codEstudiante) {
+        try {
+            $sql = "SELECT * FROM agendar
+                WHERE cod_estudiante = ?
+                AND cod_estado = 4 OR cod_estado = 5"; 
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bind_param("i", $codEstudiante);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            
+            $tutorias = [];
+            while($row = $result->fetch_assoc()) {
+                $tutorias[] = new TutoriaDTO(
+                    $row['id'],
+                    $row['cod_estudiante'],
+                    $row['cod_tutor'],
+                    $row['fecha'],
+                    $row['hora_inicio'],
+                    $row['hora_final'],
+                    $row['cod_estado'],
+                    $row['cod_motivo']
+                    );
+            }
+            return $tutorias;
+        } catch(Exception $e) {
+            error_log("Error en getTutoriasPendientes: " . $e->getMessage());
+            return [];
+        }
+    }
+    
+    /**
+     * Cancela una tutoría con motivo específico
+     */
+    public function cancelarTutoriaConMotivo($idTutoria, $codMotivo) {
+        try {
+            $sql = "UPDATE agendar SET cod_estado = 6, cod_motivo = ? WHERE id = ?";
+            $stm = $this->conn->prepare($sql);
+            $stm->bind_param("ii", $codMotivo, $idTutoria);
+            return $stm->execute();
+        } catch(Exception $e) {
+            error_log("Error en cancelarTutoriaConMotivo: " . $e->getMessage());
+            return false;
+        }
+    }
+    
 }
 ?>
