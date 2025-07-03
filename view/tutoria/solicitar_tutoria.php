@@ -10,6 +10,8 @@ require_once __DIR__ . '/../../app/controllers/models/DTO/HorarioDTO.php';
     <title>Solicitar Tutoría | cloUD</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
 </head>
 
 <body class="bg-gray-100" style="background-image: url('<?= BASE_URL ?>public/img/cloudfondo.jpg'); background-size: cover;">
@@ -84,7 +86,7 @@ require_once __DIR__ . '/../../app/controllers/models/DTO/HorarioDTO.php';
                             <label for="hora_inicio" class="block text-gray-700 font-medium mb-2">
                                 <i class="fas fa-clock text-purple-500 mr-2"></i>Hora inicio
                             </label>
-                            <input type="time" id="hora_inicio" name="hora_inicio" 
+                            <input type="time" step="3600" id="hora_inicio" name="hora_inicio" data-horamin="<?= $horario->getHora_inicio()?>"
                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
                                    required>
                         </div>
@@ -92,7 +94,7 @@ require_once __DIR__ . '/../../app/controllers/models/DTO/HorarioDTO.php';
                             <label for="hora_fin" class="block text-gray-700 font-medium mb-2">
                                 <i class="fas fa-clock text-purple-500 mr-2"></i>Hora fin
                             </label>
-                            <input type="time" id="hora_fin" name="hora_fin" 
+                            <input type="time" step="3600"  id="hora_fin" name="hora_fin" data-horafin="<?= $horario->getHora_fin()?>"
                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
                                    required>
                         </div>
@@ -136,5 +138,6 @@ require_once __DIR__ . '/../../app/controllers/models/DTO/HorarioDTO.php';
         });
     </script>
     <script src="<?= BASE_URL ?>public/js/validar-fecha.js"></script>
+    <script src="<?= BASE_URL ?>public/js/validar-hora.js"></script>
 </body>
 </html>

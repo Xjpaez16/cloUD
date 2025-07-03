@@ -271,5 +271,36 @@ class TutoriaDAO {
         $stmt->bind_param("iii", $estado, $motivo, $idTutoria);
         return $stmt->execute();
     }
+    public function getalltutorialbystudent($codEstudiante){
+        try{
+            $sql = "SELECT * FROM agendar WHERE cod_estudiante = ?";
+            $stm = $this->conn->prepare($sql);
+            $stm->bind_param("i", $codEstudiante);
+            $stm->execute();
+            $result = $stm->get_result();
+            $tutorias = [];
+            while($row = $result->fetch_assoc()){
+                $tutorias[] = new TutoriaDTO(
+                    $row['id'],
+                    $row['cod_estudiante'],
+                    $row['cod_tutor'],
+                    $row['fecha'],
+                    $row['hora_inicio'],
+                    $row['hora_final'],
+                    $row['cod_estado'],
+                    $row['cod_motivo']
+                );
+            }
+            return $tutorias;
+
+
+            
+        
+        }catch(Exception $e){
+            error_log("Error en getalltutorialbystudent: " . $e->getMessage());
+            return [];
+        }
+    
+    }
 }
 ?>

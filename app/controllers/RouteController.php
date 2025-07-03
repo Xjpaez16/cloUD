@@ -201,7 +201,12 @@ class RouteController extends Controller
         $tutoriaController = new TutoriaController();
         $tutoriaController->procesarRechazo();
     }
-    
+    public function viewMyTutorial(){
+        require_once(__DIR__ . '/StudentController.php');
+        //$this->processRequest();
+        $studentController = new StudentController();
+        $studentController->viewMyTutorials();
+    }
     
 }
 ?>
