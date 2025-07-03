@@ -48,7 +48,7 @@ class AdminController {
             exit;
         }
 
-        header('Location: ' . BASE_URL . 'index.php?url=AdminController/index');
+        header('Location: ' . BASE_URL . 'index.php?url=AdminController/index&success=1');
         exit;
     }
 
@@ -69,13 +69,14 @@ class AdminController {
             exit;
         }
 
-        header('Location: ' . BASE_URL . 'index.php?url=AdminController/index');
+        header('Location: ' . BASE_URL . 'index.php?url=AdminController/index&success=2');
         exit;
     }
 
     public function delete() {
         $id = $_GET['codigo'];
         $this->adminDAO->desactivarAdmin($id);
+        
     }
 
     public function activar() {

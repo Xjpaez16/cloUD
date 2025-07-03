@@ -35,6 +35,40 @@
             </a>
         </div>
     </div>
+     <?php if (isset($_GET['session']) && $_GET['session'] === 'success') { ?>
+        <script>
+            const notyf = new Notyf({
+            duration: 1000,
+            className: 'rounded-lg text-white text-[11px] sm:text-sm md:text-base px-2 sm:px-4 py-1.5 sm:py-2 shadow-md font-sans font-semibold max-w-[95vw] w-fit min-w-[120px] min-h-[36px] sm:min-h-[44px]',
+            position: {
+                x: 'right',
+                y: 'top',
+            },
+            types: [
+                {
+                type: 'sucess',
+                background: '#76dd77',
+                icon: {
+                    className: 'material-icons',
+                    tagName: 'i',
+                    text: 'w'
+                }
+                },
+                {
+                type: 'success',
+                background: '#76dd77',
+                duration: 2000,
+                dismissible: true
+                }
+            ]
+            });
+
+                notyf.open({
+                    type: 'success',
+                    message: '¡Bienvenido al panel de administrador!'
+                });
+        </script>
+    <?php }?>
     <script>
         window.addEventListener('pageshow', function(event) {
             if (event.persisted) {

@@ -16,7 +16,22 @@
                 <button class="bg-gradient-to-r from-red-500 to-red-700 hover:from-red-700 hover:to-red-500 text-white font-bold py-3 px-6 rounded-xl shadow-lg text-lg transition-all duration-300 transform hover:scale-105">Cerrar sesión</button>
             </a>
         </div>
-        <h2 class="text-2xl font-semibold text-[#803cb9] mb-4">Ver administradores</h2>
+        <h2 class="text-2xl font-semibold text-[#803cb9] mb-4">Ver administradores</h2> 
+        <div class="pb-8">
+            <label for="default-search" class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
+            <div class="relative">
+                <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                    <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
+                    </svg>
+                </div>
+            <input type="search" id="default-search" class="block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500" placeholder="Buscar por ID, nombre o correo..." />
+
+                
+            </div>
+        </div>
+        
+
         <div class="overflow-x-auto mb-8">
             <table class="min-w-full bg-white bg-opacity-80 rounded-lg shadow">
                 <thead>
@@ -30,10 +45,10 @@
                 <tbody>
                     <?php foreach ($data['admins'] as $admin): ?>
                     <?php $activo = $admin->getActivo(); ?>
-                    <tr id="adminRow-<?= $admin->getCodigo() ?>" class="<?= $activo ? '' : 'opacity-50 bg-gray-300' ?>">
+                    <tr id="adminRow-<?= $admin->getCodigo()?>" class="admin-row <?= $activo ? '' : 'opacity-50 bg-gray-300' ?>">
                         <td class="py-2 px-4 text-center text-[#5232a8]"><?= htmlspecialchars($admin->getCodigo()) ?></td>
-                        <td class="py-2 px-4 text-[#5232a8]"><?= htmlspecialchars($admin->getNombre()) ?></td>
-                        <td class="py-2 px-4 text-[#5232a8]"><?= htmlspecialchars($admin->getCorreo()) ?></td>
+                        <td class="py-2 px-4 text-[#5232a8] admin-nombre"><?= htmlspecialchars($admin->getNombre()) ?></td>
+                        <td class="py-2 px-4 text-[#5232a8] admin-correo"><?= htmlspecialchars($admin->getCorreo()) ?></td>
                         <td class="py-2 px-4 flex gap-2 justify-center">
                             <button type="button" onclick="toggleEstado(<?= $admin->getCodigo() ?>)" id="btnEstado-<?= $admin->getCodigo() ?>" class="w-28 <?= $activo ? 'bg-red-500 hover:bg-red-700' : 'bg-green-500 hover:bg-green-700' ?> text-white font-semibold px-3 py-2 rounded shadow transition text-base">
                                 <?= $activo ? 'Desactivar' : 'Activar' ?>
@@ -72,7 +87,7 @@
             </div>
             <button type="submit" class="bg-gradient-to-r from-[#803cb9] to-[#5232a8] hover:from-[#5232a8] hover:to-[#803cb9] text-white font-bold py-3 px-6 rounded-xl shadow-lg text-lg transition-all duration-300 transform hover:scale-105 w-full">Agregar Admin</button>
         </form>
-        <div id="editModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div id="editModal" class="fixed inset-0 bg-black bg-opacity-50 items-center justify-center z-50 hidden">
             <form id="editForm" action="<?= BASE_URL ?>AdminController/update" method="POST" class="bg-white p-8 rounded-2xl shadow-lg w-full max-w-md">
             <input type="hidden" name="codigo_actual" id="editCodigoActual">
             <div class="mb-4">
@@ -141,6 +156,12 @@
                     // Llamar al backend para activar
                     fetch(`<?= BASE_URL ?>AdminController/activar?codigo=${id}`)
                         .catch(error => alert("Error al activar el administrador."));
+                        Swal.fire({
+                        icon: 'success',
+                        title: 'Activacion',
+                        text: 'Admin activado correctamente',
+                        confirmButtonColor: '#76dd77'
+                        });
                 } else {
                     // Desactivar visual
                     row.classList.add('opacity-50', 'bg-gray-300');
@@ -156,35 +177,74 @@
                     // Llamar al backend para desactivar
                     fetch(`<?= BASE_URL ?>AdminController/delete?codigo=${id}`)
                         .catch(error => alert("Error al desactivar el administrador."));
+                        Swal.fire({
+                        icon: 'success',
+                        title: 'Desactivado',
+                        text: 'Admin desactivado correctamente',
+                        confirmButtonColor: '#76dd77'
+                        });
                 }
             }
+            document.getElementById('default-search').addEventListener('keyup', function () {
+                const filtro = this.value.toLowerCase();
+                document.querySelectorAll('.admin-row').forEach(fila => {
+                    const id = fila.querySelector('.admin-id')?.textContent.toLowerCase() || '';
+                    const nombre = fila.querySelector('.admin-nombre')?.textContent.toLowerCase() || '';
+                    const correo = fila.querySelector('.admin-correo')?.textContent.toLowerCase() || '';
+                    fila.style.display = (id.includes(filtro) || nombre.includes(filtro) || correo.includes(filtro)) ? '' : 'none';
+                });
+            });
         </script>
-    <?php if (isset($_GET['error'])): ?>
-    <script>
-    <?php if ($_GET['error'] === 'idduplicado'): ?>
-        Swal.fire({
-            icon: 'error',
-            title: 'ID duplicado',
-            text: 'Ya existe un administrador con ese ID.',
-            confirmButtonColor: '#803cb9'
-        });
-    <?php elseif ($_GET['error'] === 'emailinvalido'): ?>
-        Swal.fire({
-            icon: 'error',
-            title: 'Correo no válido',
-            text: 'El correo debe ser institucional (@udistrital.edu.co).',
-            confirmButtonColor: '#803cb9'
-        });
-    <?php elseif ($_GET['error'] === 'claveinvalida'): ?>
-        Swal.fire({
-            icon: 'error',
-            title: 'Contraseña insegura',
-            html: 'Debe tener al menos:<br>• Una minúscula<br>• Una mayúscula<br>• Un número<br>• Un símbolo<br>• Mínimo 8 caracteres',
-            confirmButtonColor: '#803cb9'
-        });
-    <?php endif; ?>
-    </script>
-    <?php endif; ?>
+        
+       <?php if (isset($_GET['error']) || isset($_GET['success'])): ?>
+        <script>
+            <?php if (isset($_GET['error'])): ?>
+            <?php if ($_GET['error'] === 'idduplicado'): ?>
+                Swal.fire({
+                icon: 'error',
+                title: 'ID duplicado',
+                text: 'Ya existe un administrador con ese ID.',
+                confirmButtonColor: '#803cb9'
+                });
+            <?php elseif ($_GET['error'] === 'emailinvalido'): ?>
+                Swal.fire({
+                icon: 'error',
+                title: 'Correo no válido',
+                text: 'El correo debe ser institucional (@udistrital.edu.co).',
+                confirmButtonColor: '#803cb9'
+                });
+            <?php elseif ($_GET['error'] === 'claveinvalida'): ?>
+                Swal.fire({
+                icon: 'error',
+                title: 'Contraseña insegura',
+                html: 'Debe tener al menos:<br>• Una minúscula<br>• Una mayúscula<br>• Un número<br>• Un símbolo<br>• Mínimo 8 caracteres',
+                confirmButtonColor: '#803cb9'
+                });
+            <?php endif; ?>
+            <?php endif; ?>
+
+            <?php if (isset($_GET['success'])): ?>
+            <?php if ($_GET['success'] === '1'): ?>
+                Swal.fire({
+                icon: 'success',
+                title: 'Administrador creado',
+                text: 'El administrador fue registrado exitosamente.',
+                confirmButtonColor: '#76dd77'
+                });
+            <?php elseif ($_GET['success'] === '2'): ?>
+                Swal.fire({
+                icon: 'success',
+                title: 'Administrador actualizado',
+                text: 'Los datos del administrador se actualizaron correctamente.',
+                confirmButtonColor: '#76dd77'
+                });
+            
+                 
+            <?php endif; ?>
+            <?php endif; ?>
+        </script>
+        <?php endif; ?>
+
 
     </div>
     
