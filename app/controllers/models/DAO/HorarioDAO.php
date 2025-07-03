@@ -72,5 +72,39 @@ class HorarioDAO {
             error_log("error al traer el horario: ". $e->getMessage());
         }
     }
+    
+    public function update(HorarioDTO $horarioDTO) {
+        try {
+            $sql = "UPDATE horario SET id_dia = ?, hora_inicio = ?, hora_fin = ?
+                WHERE id = ? AND cod_tutor = ?";
+            
+            $stmt = $this->conn->prepare($sql);
+            
+            // Variables intermedias para evitar Notice
+            $id_dia = $horarioDTO->getId_dia();
+            $hora_inicio = $horarioDTO->getHora_inicio();
+            $hora_fin = $horarioDTO->getHora_fin();
+            $id = $horarioDTO->getId();
+            $cod_tutor = $horarioDTO->getCod_tutor();
+            
+            $stmt->bind_param(
+                "sssii",
+                $id_dia,
+                $hora_inicio,
+                $hora_fin,
+                $id,
+                $cod_tutor
+                );
+            
+            return $stmt->execute();
+            
+        } catch (Exception $e) {
+            error_log("Error al actualizar horario: " . $e->getMessage());
+            return false;
+        }
+    }
+    
+    
+    
 }
 ?>

@@ -67,10 +67,12 @@ class DisponibilidadDAO {
             $disponibilidades = [];
             while ($row = $result->fetch_assoc()) {
                 $disponibilidades[] = [
+                    'cod_tutor' => $row['cod_tutor'],
                     'hora_i' => $row['hora_i'],
                     'hora_fn' => $row['hora_fn'],
+                    'id_horario' => $row['id_horario'],
                     'estado' => $row['tipo_estado'],
-                    'dia' => $row['nombre_dia'] 
+                    'dia' => $row['nombre_dia']
                 ];
             }
             return $disponibilidades;
@@ -183,5 +185,122 @@ class DisponibilidadDAO {
             error_log('Error en updatedispo DisponibilidadDAO' . $e->getMessage());
         }
     }
+    
+    /**
+     * Elimina una disponibilidad específica
+     */
+    public function eliminarDisponibilidad($codTutor, $horaI, $horaFn, $idHorario) {
+        try {
+            $sql = "DELETE FROM disponibilidad
+                WHERE cod_tutor = ? AND hora_i = ? AND hora_fn = ? AND id_horario = ?";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bind_param("issi", $codTutor, $horaI, $horaFn, $idHorario);
+            return $stmt->execute();
+        } catch (Exception $e) {
+            error_log("Error en eliminarDisponibilidad: " . $e->getMessage());
+            return false;
+        }
+    }
+    
+    
+    /**
+     * Obtiene una disponibilidad por ID
+     */
+    public function obtenerPorId($codTutor, $idHorario) {
+        try {
+            $sql = "SELECT d.cod_tutor, d.id_horario, h.id_dia, h.hora_inicio, h.hora_fin
+                FROM disponibilidad d
+                JOIN horario h ON d.id_horario = h.id
+                WHERE d.cod_tutor = ? AND d.id_horario = ?";
+            
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bind_param("ii", $codTutor, $idHorario);
+            $stmt->execute();
+            
+            $result = $stmt->get_result();
+            if ($row = $result->fetch_assoc()) {
+                return $row;
+            } else {
+                return false;
+            }
+        } catch(Exception $e) {
+            error_log("Error en obtenerPorId: " . $e->getMessage());
+            return false;
+        }
+    }
+    
+    
+    
+    
+    
+    
+    /**
+     * Actualiza una disponibilidad
+     */
+    public function actualizarDisponibilidad() {
+        $this->verificarSesionTutor();
+        
+        $id_horario = $_POST['id_horario'] ?? null;
+        $id_dia = $_POST['dia'] ?? null;
+        $hora_inicio = $_POST['hora_inicio'] ?? null;
+        $hora_fin = $_POST['hora_fin'] ?? null;
+        $cod_tutor = $_POST['cod_tutor'] ?? null;
+        
+        if (!$id_horario || !$id_dia || !$hora_inicio || !$hora_fin || !$cod_tutor) {
+            header("Location: " . BASE_URL . "index.php?url=RouteController/viewAvailability&error=1");
+            exit();
+        }
+        
+        // Validar que la hora final sea al menos 1 hora mayor
+        if (!$this->validateTimeInterval($hora_inicio, $hora_fin)) {
+            header('Location: ' . BASE_URL . 'index.php?url=RouteController/viewAvailability&error=4');
+            exit;
+        }
+        
+        // Actualizar horario
+        $horarioDTO = new HorarioDTO($id_horario, $id_dia, $cod_tutor, $hora_inicio, $hora_fin);
+        $resultado = $this->horarioDAO->update($horarioDTO);
+        
+        if (!$resultado) {
+            header("Location: " . BASE_URL . "index.php?url=RouteController/viewAvailability&error=2");
+            exit();
+        }
+        
+        // Eliminar bloques de disponibilidad actuales
+        $this->disponibilidadDAO->eliminarPorHorario($cod_tutor, $id_horario);
+        
+        // Insertar nuevos bloques de disponibilidad por cada hora
+        $this->registerTimeSlots($cod_tutor, $hora_inicio, $hora_fin, $id_horario);
+        
+        header("Location: " . BASE_URL . "index.php?url=RouteController/viewAvailability&success=2");
+        exit();
+    }
+    
+    
+    public function actualizarDisponibilidadPorID($idDisponibilidad, $idDia, $horaInicio, $horaFin, $codTutor) {
+        $conn = $this->db->getConnection();
+        
+        $query = "UPDATE disponibilidad SET id_dia = ?, hora_inicio = ?, hora_fin = ?
+              WHERE id_horario = ? AND cod_tutor = ?";
+        
+        $stmt = $conn->prepare($query);
+        $stmt->bind_param("sssii", $idDia, $horaInicio, $horaFin, $idDisponibilidad, $codTutor);
+        
+        return $stmt->execute();
+    }
+    
+    public function eliminarPorHorario($codTutor, $idHorario) {
+        try {
+            $sql = "DELETE FROM disponibilidad WHERE cod_tutor = ? AND id_horario = ?";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bind_param("ii", $codTutor, $idHorario);
+            return $stmt->execute();
+        } catch (Exception $e) {
+            error_log("Error al eliminar disponibilidad: " . $e->getMessage());
+            return false;
+        }
+    }
+    
+    
 }
 ?>

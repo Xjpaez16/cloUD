@@ -338,5 +338,118 @@ class TutorController
         }
     }
     
+    /**
+     * Procesa la eliminación de disponibilidad
+     */
+    public function eliminarDisponibilidad() {
+        $this->verificarSesionTutor();
+        
+        try {
+            $codTutor = $_POST['cod_tutor'] ?? null;
+            $horaI = $_POST['hora_i'] ?? null;
+            $horaFn = $_POST['hora_fn'] ?? null;
+            $idHorario = $_POST['id_horario'] ?? null;
+            
+            if (empty($codTutor) || empty($horaI) || empty($horaFn) || empty($idHorario)) {
+                throw new Exception("Datos incompletos para eliminar");
+            }
+            
+            $resultado = $this->disponibilidadDAO->eliminarDisponibilidad($codTutor, $horaI, $horaFn, $idHorario);
+            
+            if (!$resultado) {
+                throw new Exception("No se pudo eliminar la disponibilidad");
+            }
+            
+            $_SESSION['success_message'] = "Disponibilidad eliminada correctamente";
+            header('Location: ' . BASE_URL . 'index.php?url=RouteController/viewAvailability&success=3');
+            exit;
+            
+        } catch (Exception $e) {
+            error_log("Error en eliminarDisponibilidad: " . $e->getMessage());
+            header('Location: ' . BASE_URL . 'index.php?url=RouteController/viewAvailability&error=1');
+            exit;
+        }
+    }
+    
+    
+    /**
+     * Muestra el formulario de edición
+     */
+    public function mostrarFormularioEdicion() {
+        $this->verificarSesionTutor();
+        
+        try {
+            $codTutor = $_SESSION['usuario']->getCodigo();
+            $idHorario = $_GET['id_horario'] ?? null;
+            
+            if (empty($idHorario)) {
+                throw new Exception("Parámetro incompleto");
+            }
+            
+            $disponibilidad = $this->disponibilidadDAO->obtenerPorId($codTutor, $idHorario);
+            
+            if (!$disponibilidad) {
+                throw new Exception("Disponibilidad no encontrada");
+            }
+            
+            $dias = $this->diaDAO->getAll();
+            include __DIR__ . '/../../view/tutor/edit_availability.php';
+            
+        } catch (Exception $e) {
+            error_log("Error en mostrarFormularioEdicion: " . $e->getMessage());
+            header('Location: ' . BASE_URL . 'index.php?url=RouteController/viewAvailability&error=2');
+            exit;
+        }
+    }
+    
+    
+    
+    
+    
+    
+    /**
+     * Procesa la actualización de disponibilidad
+     */
+    public function actualizarDisponibilidad() {
+        $this->verificarSesionTutor();
+        
+        $id_horario = $_POST['id_horario'] ?? null;
+        $id_dia = $_POST['dia'] ?? null;
+        $hora_inicio = $_POST['hora_inicio'] ?? null;
+        $hora_fin = $_POST['hora_fin'] ?? null;
+        $cod_tutor = $_POST['cod_tutor'] ?? null;
+        
+        if (!$id_horario || !$id_dia || !$hora_inicio || !$hora_fin || !$cod_tutor) {
+            header("Location: " . BASE_URL . "index.php?url=RouteController/viewAvailability&error=1");
+            exit();
+        }
+        
+        if (!$this->validateTimeInterval($hora_inicio, $hora_fin)) {
+            header('Location: ' . BASE_URL . 'index.php?url=RouteController/viewAvailability&error=4');
+            exit;
+        }
+        
+        // Actualizas la tabla horario
+        $horarioDTO = new HorarioDTO($id_horario, $id_dia, $cod_tutor, $hora_inicio, $hora_fin);
+        $resultado = $this->horarioDAO->update($horarioDTO);
+        
+        if (!$resultado) {
+            header("Location: " . BASE_URL . "index.php?url=RouteController/viewAvailability&error=2");
+            exit();
+        }
+        
+        // Eliminamos bloques de disponibilidad actuales
+        $this->disponibilidadDAO->eliminarPorHorario($cod_tutor, $id_horario);
+        
+        // Insertamos los nuevos bloques de disponibilidad por cada hora
+        $this->registerTimeSlots($cod_tutor, $hora_inicio, $hora_fin, $id_horario);
+        
+        header("Location: " . BASE_URL . "index.php?url=RouteController/viewAvailability&success=2");
+        exit();
+    }
+    
+    
+    
+    
 }
 ?>

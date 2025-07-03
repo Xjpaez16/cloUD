@@ -219,5 +219,23 @@ class RouteController extends Controller
         $studentController = new StudentController();
         $studentController->processCancelation();
     }
+
+    public function editAvailability() {
+        require_once(__DIR__ . '/TutorController.php');
+        $tutorController = new TutorController();
+        $tutorController->mostrarFormularioEdicion();
+    }
+    
+    public function updateAvailability() {
+        require_once(__DIR__ . '/TutorController.php');
+        $tutorController = new TutorController();
+        $tutorController->actualizarDisponibilidad();
+    }
+    
+    public function deleteAvailability() {
+        require_once(__DIR__ . '/TutorController.php');
+        $tutorController = new TutorController();
+        $tutorController->eliminarDisponibilidad();
+    }
 }
 ?>
