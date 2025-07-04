@@ -1,6 +1,17 @@
 <?php 
+
+$notificacion = null;
+if (isset($_SESSION['notificacion'])) {
+    $notificacion = $_SESSION['notificacion'];
+    unset($_SESSION['notificacion']);
+}
+
+
 require_once __DIR__ . '/../layouts/nav.php'; 
 require_once __DIR__ . '/../../app/controllers/models/DTO/HorarioDTO.php';
+require_once __DIR__ . '/../../app/controllers/models/DTO/DiaDTO.php';
+require_once __DIR__ . '/../../app/controllers/models/DTO/TutoriaDTO.php';
+
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -35,7 +46,11 @@ require_once __DIR__ . '/../../app/controllers/models/DTO/HorarioDTO.php';
                             <p class="text-gray-600"><?= htmlspecialchars($tutor->getCorreo()) ?></p>
                         </div>
                     </div>
-
+                    <!--Dia de horario -->
+                    <div class="flex items-center text-purple-600 mb-1">
+                                <i class="fas fa-calendar-day mr-2"></i>
+                                <span class="font-medium"><?= htmlspecialchars($dia->getDia() ?? 'Día no especificado') ?></span>
+                    </div>
                     <!-- Calificación - Versión corregida -->
                     <div class="mb-4">
                         <span class="text-gray-700 font-medium">Calificación:</span>
@@ -77,6 +92,7 @@ require_once __DIR__ . '/../../app/controllers/models/DTO/HorarioDTO.php';
                         <input type="date" id="fecha" name="fecha" data-diapermitido="<?= $horario->getId_dia()?>"
                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
                                min="<?= date('Y-m-d') ?>" required>
+                        <input type="hidden" name="horario_id" value="<?= $horario->getId_dia()?>">
                     </div>
                     
 
@@ -137,6 +153,23 @@ require_once __DIR__ . '/../../app/controllers/models/DTO/HorarioDTO.php';
             });
         });
     </script>
+    <?php if (isset($notificacion)) : ?>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const notyf = new Notyf({
+                duration: 4000,
+                position: {
+                    x: 'center',
+                    y: 'bottom',
+                }
+            });
+
+            notyf.<?= htmlspecialchars($notificacion['type'], ENT_QUOTES, 'UTF-8') ?>(
+                "<?= htmlspecialchars($notificacion['message'], ENT_QUOTES, 'UTF-8') ?>"
+            );
+        });
+    </script>
+<?php endif; ?>
     <script src="<?= BASE_URL ?>public/js/validar-fecha.js"></script>
     <script src="<?= BASE_URL ?>public/js/validar-hora.js"></script>
 </body>

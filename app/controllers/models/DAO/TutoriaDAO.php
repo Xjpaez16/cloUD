@@ -389,6 +389,32 @@ class TutoriaDAO {
             return false;
         }
     }
+    public function verificardispo($cod_tutor,$fecha){
+        try {
+            $sql = "SELECT * FROM agendar WHERE cod_estado = 5 AND cod_tutor = ? AND fecha = ?";
+            $stm = $this->conn->prepare($sql);
+            $stm->bind_param("is", $cod_tutor, $fecha);
+            $stm->execute();
+            $result = $stm->get_result();
+            $tutoscheduled = [];
+            while($row = $result->fetch_assoc()){
+                $dto = new TutoriaDTO(
+                    $row['cod_estudiante'],
+                    $row['cod_tutor'],
+                    $row['id'],
+                    $row['fecha'],
+                    $row['hora_inicio'],
+                    $row['hora_final'],
+                    $row['cod_estado'],
+                    $row['cod_motivo'],
+                );
+                $tutoscheduled[] = $dto;
+            }
+            return $tutoscheduled;
+        }catch(Exception $e) {
+        }
+        
+    }
     
 }
 ?>

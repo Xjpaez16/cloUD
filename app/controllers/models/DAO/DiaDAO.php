@@ -41,5 +41,20 @@ class DiaDAO {
             return null;
         }
     }
+    public function getdaybyId($id_dia) {
+        try {
+            $sql = "SELECT dia FROM dia WHERE id = ?";
+            $stm = $this->conn->prepare($sql);
+            $stm->bind_param("i", $id_dia);
+            $stm->execute();
+            $result = $stm->get_result();
+            if ($row = $result->fetch_assoc()) {
+                return new DiaDTO($row["id"], $row["dia"]);
+            }
+        }catch(Exception $e) {
+        error_log("error al traer el dia". $e->getMessage());
+        }
+        
+    }
 }
 ?>

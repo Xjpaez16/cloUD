@@ -9,6 +9,7 @@ require_once(__DIR__ . '/models/DAO/EstadoDAO.php');
 require_once(__DIR__ . '/utils/validation.php');
 require_once(__DIR__ . '/models/DAO/HorarioDAO.php');
 require_once(__DIR__ . '/models/DAO/DisponibilidadDAO.php');
+require_once(__DIR__ . '/models/DAO/DiaDAO.php');
 class TutoriaController {
     private $tutoriaDAO;
     private $tutorDAO;
@@ -17,6 +18,7 @@ class TutoriaController {
     private $validation;
     private $horariodao;
     private $disponibilidadDAO;
+    private $diaDAO;
     public function __construct() {
         $this->tutoriaDAO = new TutoriaDAO();
         $this->tutorDAO = new TutorDAO();
@@ -25,14 +27,16 @@ class TutoriaController {
         $this->validation = new validation();
         $this->horariodao = new HorarioDAO();
         $this->disponibilidadDAO = new DisponibilidadDAO();
+        $this->diaDAO = new DiaDAO();
     }
     
     /**
      * Muestra el formulario para solicitar tutoría
      */
-    public function mostrarFormularioSolicitud($tutorId,$id_horario) {
+    public function mostrarFormularioSolicitud($tutorId,$horario) {
         $this->verificarSesionEstudiante();
         
+
         try {
             $tutor = $this->tutorDAO->getid($tutorId);
             if (!$tutor) {
@@ -53,10 +57,10 @@ class TutoriaController {
             if (!file_exists($viewPath)) {
                 throw new Exception("Vista no encontrada: $viewPath");
             }
-            error_log("id_horario : " . $id_horario);
+            error_log("id_horario : " . $horario);
             error_log("id_tutor : " . $tutorId);
-            $horario=$this->horariodao->getscheduleById($tutorId, $id_horario);
-            
+            $horario=$this->horariodao->getscheduleById($tutorId, $horario);
+            $dia = $this->diaDAO->getdaybyId($horario->getId_dia());
             // Cargar la vista directamente
             require_once $viewPath;
             error_log("horario : ". $horario->getId_dia());
@@ -72,61 +76,81 @@ class TutoriaController {
      */
     public function procesarSolicitudTutoria() {
         $this->verificarSesionEstudiante();
-        
-        try {
-            // Debug: Verificar datos recibidos
-            error_log("Datos POST recibidos: " . print_r($_POST, true));
+        error_log("Entró a procesarSolicitudTutoria()");
+        $tutorId = $_POST['tutor_id'];
+        $fecha = $_POST['fecha'];
+        $scheduled = $this->tutoriaDAO->verificardispo($tutorId, $fecha);
+        foreach ($scheduled as $tscheduled) {
             
-            // Validación básica
-            if (empty($_POST['tutor_id']) || empty($_POST['fecha']) ||
-                empty($_POST['hora_inicio']) || empty($_POST['hora_fin'])) {
-                    throw new Exception("Todos los campos son requeridos");
+                if($_POST['hora_fin']<=$tscheduled->getHora_inicio() || $_POST['hora_inicio']>=$tscheduled->getHora_fin()){
+                    try {
+                        // Debug: Verificar datos recibidos
+                        error_log("Datos POST recibidos: " . print_r($_POST, true));
+                        
+                        // Validación básica
+                        if (empty($_POST['tutor_id']) || empty($_POST['fecha']) ||
+                            empty($_POST['hora_inicio']) || empty($_POST['hora_fin'])) {
+                                throw new Exception("Todos los campos son requeridos");
+                            }
+                            
+                            // Preparar los datos de la tutoría
+
+                            $tutoria = new TutoriaDTO(
+                                $_SESSION['usuario']->getCodigo(), // cod_estudiante
+                                (int)$_POST['tutor_id'],          // cod_tutor
+                                null,                             // id (se generará automáticamente)
+                                $_POST['fecha'],                  // fecha
+                                $_POST['hora_inicio'],            // hora_inicio
+                                $_POST['hora_fin'],               // hora_fin
+                                4,                                // cod_estado (4 = Pendiente)
+                                null                              // cod_motivo (inicialmente null)
+                                );
+                            
+                            // Debug: Verificar objeto tutoria creado
+                            error_log("TutoriaDTO creado: " . print_r([
+                                'estudiante' => $tutoria->getCod_estudiante(),
+                                'tutor' => $tutoria->getCod_tutor(),
+                                'fecha' => $tutoria->getFecha(),
+                                'hora_inicio' => $tutoria->getHora_inicio(),
+                                'hora_fin' => $tutoria->getHora_fin(),
+                                'estado' => $tutoria->getCod_estado()
+                            ], true));
+                            $id_horario = $_POST['horario_id'];
+                            error_log('id de horario recibido en el controlador : '. $id_horario);
+                            // Guardar en la base de datos
+                            $idTutoria = $this->tutoriaDAO->crearTutoria($tutoria);
+                            $this->disponibilidadDAO->updatedispo($tutoria->getCod_tutor(),$id_horario,$tutoria->getHora_inicio(),$tutoria->getHora_fin());
+                            if (!$idTutoria) {
+                                throw new Exception("No se pudo crear la tutoría en la base de datos");
+                            }
+                            
+                            // Debug: Confirmar ID generado
+                            error_log("Tutoría creada con ID: " . $idTutoria);
+                            
+                            // Redirección exitosa
+                            header('Location: ' . BASE_URL . 'index.php?url=RouteController/showTutoriaConfirmation&id=' . $idTutoria);
+                            exit;
+                            
+                    } catch (Exception $e) {
+                        // Debug: Mostrar error
+                        error_log("Error en procesarSolicitudTutoria: " . $e->getMessage());
+                        
+                        // Redirección con error
+                        $_SESSION['error_message'] = $e->getMessage();
+                        header('Location: ' . BASE_URL . 'index.php?url=RouteController/requestTutorial&tutor_id=' . ($_POST['tutor_id'] ?? ''));
+                        exit;
+                    }
+                }else {
+                    $_SESSION['notificacion'] = [
+                        'type' => 'error',
+                        'message' => 'Ya hay una tutoría agendada en la franja de '.$tscheduled->getHora_inicio().' a '.$tscheduled->getHora_fin().' para el día '.$tscheduled->getFecha(),
+                    ];
+                    
+                    
+                    header('Location: ' . BASE_URL . 'index.php?url=RouteController/requestTutorial&tutor_id=' . ($_POST['tutor_id'] ?? ''));
+                    exit;
+
                 }
-                
-                // Preparar los datos de la tutoría
-                $tutoria = new TutoriaDTO(
-                    $_SESSION['usuario']->getCodigo(), // cod_estudiante
-                    (int)$_POST['tutor_id'],          // cod_tutor
-                    null,                             // id (se generará automáticamente)
-                    $_POST['fecha'],                  // fecha
-                    $_POST['hora_inicio'],            // hora_inicio
-                    $_POST['hora_fin'],               // hora_fin
-                    4,                                // cod_estado (4 = Pendiente)
-                    null                              // cod_motivo (inicialmente null)
-                    );
-                
-                // Debug: Verificar objeto tutoria creado
-                error_log("TutoriaDTO creado: " . print_r([
-                    'estudiante' => $tutoria->getCod_estudiante(),
-                    'tutor' => $tutoria->getCod_tutor(),
-                    'fecha' => $tutoria->getFecha(),
-                    'hora_inicio' => $tutoria->getHora_inicio(),
-                    'hora_fin' => $tutoria->getHora_fin(),
-                    'estado' => $tutoria->getCod_estado()
-                ], true));
-                
-                // Guardar en la base de datos
-                $idTutoria = $this->tutoriaDAO->crearTutoria($tutoria);
-                $this->disponibilidadDAO->updatedispo($tutoria->getCod_tutor(),$tutoria->getHora_inicio(),$tutoria->getHora_fin());
-                if (!$idTutoria) {
-                    throw new Exception("No se pudo crear la tutoría en la base de datos");
-                }
-                
-                // Debug: Confirmar ID generado
-                error_log("Tutoría creada con ID: " . $idTutoria);
-                
-                // Redirección exitosa
-                header('Location: ' . BASE_URL . 'index.php?url=RouteController/showTutoriaConfirmation&id=' . $idTutoria);
-                exit;
-                
-        } catch (Exception $e) {
-            // Debug: Mostrar error
-            error_log("Error en procesarSolicitudTutoria: " . $e->getMessage());
-            
-            // Redirección con error
-            $_SESSION['error_message'] = $e->getMessage();
-            header('Location: ' . BASE_URL . 'index.php?url=RouteController/requestTutorial&tutor_id=' . ($_POST['tutor_id'] ?? ''));
-            exit;
         }
     }
     
