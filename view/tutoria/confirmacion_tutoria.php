@@ -128,7 +128,7 @@
                             <i class="fas fa-search mr-2"></i> Buscar más tutores
                         </a>
                         
-                        <a href="<?= BASE_URL ?>index.php?url=RouteController/misTutorias" 
+                        <a href="<?= BASE_URL ?>index.php?url=RouteController/viewMyTutorial" 
                            class="flex-1 bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-lg text-center transition-all duration-300 flex items-center justify-center">
                             <i class="far fa-list-alt mr-2"></i> Ver mis tutorías
                         </a>
