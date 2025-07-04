@@ -8,6 +8,10 @@ class AdminDAO {
         $conexion = new Conexion();
         $this->conn = $conexion->getConexion();
     }
+     public function validarlogin ($correo,$password){
+    $validacion = new Validation();
+    $validacion->validarlogin($correo,$password);
+    }
 
     public function obtenerAdminPorId($id) {
         $stmt = $this->conn->prepare("SELECT * FROM administrador WHERE id = ?");
