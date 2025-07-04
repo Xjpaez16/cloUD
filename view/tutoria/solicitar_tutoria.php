@@ -92,7 +92,7 @@ require_once __DIR__ . '/../../app/controllers/models/DTO/TutoriaDTO.php';
                         <input type="date" id="fecha" name="fecha" data-diapermitido="<?= $horario->getId_dia()?>"
                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
                                min="<?= date('Y-m-d') ?>" required>
-                        <input type="hidden" name="horario_id" value="<?= $horario->getId_dia()?>">
+                        <input type="hidden" name="horario_id" value="<?= $horario->getid()?>">
                     </div>
                     
 

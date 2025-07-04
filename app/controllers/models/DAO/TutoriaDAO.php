@@ -391,7 +391,7 @@ class TutoriaDAO {
     }
     public function verificardispo($cod_tutor,$fecha){
         try {
-            $sql = "SELECT * FROM agendar WHERE cod_estado = 5 AND cod_tutor = ? AND fecha = ?";
+            $sql = "SELECT * FROM agendar WHERE cod_estado = 5 OR cod_estado = 4 AND cod_tutor = ? AND fecha = ?";
             $stm = $this->conn->prepare($sql);
             $stm->bind_param("is", $cod_tutor, $fecha);
             $stm->execute();
@@ -412,6 +412,8 @@ class TutoriaDAO {
             }
             return $tutoscheduled;
         }catch(Exception $e) {
+            error_log("Error en verificardispo: " . $e->getMessage());
+            return [];
         }
         
     }

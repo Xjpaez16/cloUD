@@ -156,14 +156,10 @@ class RouteController extends Controller
 
     public function requestTutorial() {
         require_once(__DIR__ . '/TutoriaController.php');
-        require_once(__DIR__ . '/models/DAO/HorarioDAO.php');
-        require_once(__DIR__ . '/models/DAO/DiaDAO.php');
+        $tutorId = $_GET['tutor_id'] ?? null;
+        $horarioId = $_GET['horario_id'] ?? null;
         $tutoriaController = new TutoriaController();
-        $horariodao = new HorarioDAO();
-        $diaDAO = new DiaDAO();
-        $horario=$horariodao->getscheduleById($_GET['tutor_id'], $_GET['horario_id']);
-        $dia = $diaDAO->getdaybyId($horario->getId_dia());
-        $tutoriaController->mostrarFormularioSolicitud($_GET['tutor_id'] ?? null,$_GET['horario_id'] ?? null);
+        $tutoriaController->mostrarFormularioSolicitud($tutorId, $horarioId);
         
     }
 

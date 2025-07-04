@@ -43,7 +43,7 @@ class DiaDAO {
     }
     public function getdaybyId($id_dia) {
         try {
-            $sql = "SELECT dia FROM dia WHERE id = ?";
+            $sql = "SELECT * FROM dia WHERE id = ?";
             $stm = $this->conn->prepare($sql);
             $stm->bind_param("i", $id_dia);
             $stm->execute();

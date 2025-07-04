@@ -77,13 +77,29 @@ class TutoriaController {
     public function procesarSolicitudTutoria() {
         $this->verificarSesionEstudiante();
         error_log("Entró a procesarSolicitudTutoria()");
+        error_log ("horario para enviar : " . $_POST['horario_id']);
         $tutorId = $_POST['tutor_id'];
         $fecha = $_POST['fecha'];
         $scheduled = $this->tutoriaDAO->verificardispo($tutorId, $fecha);
+        error_log("Hora inicio solicitada: " . $_POST['hora_inicio']);
+        error_log("Hora fin solicitada: " . $_POST['hora_fin']);
         foreach ($scheduled as $tscheduled) {
-            
-                if($_POST['hora_fin']<=$tscheduled->getHora_inicio() || $_POST['hora_inicio']>=$tscheduled->getHora_fin()){
-                    try {
+            error_log("Comparando contra tutoría agendada: " . $tscheduled->getHora_inicio() . " - " . $tscheduled->getHora_fin());
+
+                if(strtotime($_POST['hora_inicio']) < strtotime($tscheduled->getHora_fin()) && strtotime($_POST['hora_fin']) > strtotime($tscheduled->getHora_inicio()) ){
+                     $_SESSION['notificacion'] = [
+                        'type' => 'error',
+                        'message' => 'Ya hay una tutoría agendada en la franja de '.$tscheduled->getHora_inicio().' a '.$tscheduled->getHora_fin().' para el día '.$tscheduled->getFecha(),
+                    ];
+                    
+                    
+                    header('Location: ' . BASE_URL . 'index.php?url=RouteController/requestTutorial&tutor_id=' . $_POST['tutor_id'] . '&horario_id=' . $_POST['horario_id']);
+                    exit;
+                }
+               
+        }
+
+        try {
                         // Debug: Verificar datos recibidos
                         error_log("Datos POST recibidos: " . print_r($_POST, true));
                         
@@ -140,18 +156,6 @@ class TutoriaController {
                         header('Location: ' . BASE_URL . 'index.php?url=RouteController/requestTutorial&tutor_id=' . ($_POST['tutor_id'] ?? ''));
                         exit;
                     }
-                }else {
-                    $_SESSION['notificacion'] = [
-                        'type' => 'error',
-                        'message' => 'Ya hay una tutoría agendada en la franja de '.$tscheduled->getHora_inicio().' a '.$tscheduled->getHora_fin().' para el día '.$tscheduled->getFecha(),
-                    ];
-                    
-                    
-                    header('Location: ' . BASE_URL . 'index.php?url=RouteController/requestTutorial&tutor_id=' . ($_POST['tutor_id'] ?? ''));
-                    exit;
-
-                }
-        }
     }
     
     /**
