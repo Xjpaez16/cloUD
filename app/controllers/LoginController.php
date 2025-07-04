@@ -4,13 +4,16 @@ class LoginController
 {
     private $estudianteDAO;
     private $tutorDAO;
+    private $adminDAO;
 
     public function __construct()
     {
         require_once(__DIR__ . '/models/DAO/EstudianteDAO.php');
         require_once(__DIR__ . '/models/DAO/TutorDAO.php');
+        require_once(__DIR__ . '/models/DAO/AdminDAO.php');
         $this->estudianteDAO = new EstudianteDAO();
         $this->tutorDAO = new TutorDAO();
+        $this->adminDAO = new AdminDAO();
     }
 
     public function login()
@@ -59,6 +62,16 @@ class LoginController
                     error_log('Error de inicio de sesión: contraseña incorrecta para el correo ' . $tutor->getContrasena());
                     exit;
                 }
+            }
+
+            // Si es administrador
+            $admin = $this->adminDAO->obtenerAdminPorCorreo($email);
+            if ($password == $admin->getContrasena()) {
+                session_start();
+                $_SESSION['usuario'] = $admin;
+                $_SESSION['rol'] = 'administrador';
+                header('Location: ' . BASE_URL . 'index.php?url=RouteController/admin&session=success');
+                exit;
             }
 
             // Si no existe el correo en ninguna tabla
