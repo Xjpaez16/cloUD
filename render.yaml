@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: mi-app-php
+    env: docker
+    plan: free
+    branch: main
+    region: oregon
+    dockerfilePath: ./Dockerfile
+    buildCommand: ""     # no necesitas si no hay pasos de build
+    startCommand: ""     # tampoco si usas Apache por defecto
