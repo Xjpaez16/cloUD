@@ -1,4 +1,5 @@
 <?php
+
 require_once(__DIR__ . '/../app/controllers/models/DTO/EstudianteDTO.php');
 
 
@@ -54,8 +55,7 @@ require_once(__DIR__ . '/../app/controllers/models/DTO/EstudianteDTO.php');
                                 class="block mb-2 text-sm md:text-md xl:text-lg font-medium text-gray-900 dark:text-black">Carrera</label>
                             <select name="carrer" id="carrera" class=" bg-gray-50 border border-gray-300 text-gray-900
                                 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5
-                                dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white
-                                dark:focus:ring-blue-500 dark:focus:border-blue-500 ">
+                                ">
                                 <?php /** @var CarreraDTO $carrera */
                                 ?>
                                 <?php foreach ($carreras as $carrera): ?>
@@ -80,7 +80,7 @@ require_once(__DIR__ . '/../app/controllers/models/DTO/EstudianteDTO.php');
                                 type="submit">
                                 Guardar Cambios
                             </button>
-                            <a href="<?= BASE_URL ?>index.php?ruta=RouteController/student"
+                            <a href="<?= BASE_URL ?>index.php?url=RouteController/student"
                                 class="text-[#5D54A4] font-semibold hover:text-[#4A4192]">
                                 Cancelar
                             </a>

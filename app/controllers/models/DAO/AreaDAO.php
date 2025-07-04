@@ -33,5 +33,32 @@ class AreaDAO
             return [];
         }
     }
-   
+
+    public function getAreabyteacher($id_profesor)
+    {
+        try {
+            $sql = "SELECT DISTINCT a.nombre_area, a.codigo 
+                    FROM area a 
+                    JOIN area_profesor pa 
+                    ON a.codigo = pa.cod_area 
+                    WHERE pa.cod_profesor = ?";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bind_param("i", $id_profesor);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            $areas = [];
+
+            while ($row = $result->fetch_assoc()) {
+                $dto = new AreaDTO();
+                $dto->setCodigo($row['codigo']);
+                $dto->setNombre($row['nombre_area']);
+                $areas[] = $dto;
+            }
+
+            return $areas;
+        } catch (Exception $e) {
+            error_log('Error al obtener áreas por profesor: ' . $e->getMessage());
+            return [];
+        }
+    }
 }

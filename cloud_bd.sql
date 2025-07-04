@@ -164,11 +164,13 @@ CREATE TABLE IF NOT EXISTS materia (
 -- Tabla archivo
 CREATE TABLE IF NOT EXISTS archivo (
   id INT AUTO_INCREMENT NOT NULL,
+  nombre VARCHAR(200) NOT NULL,
   ruta VARCHAR(200) NOT NULL,
   cod_profesor BIGINT NOT NULL,
   cod_estudiante BIGINT,
   cod_tutor BIGINT,
   cod_estado INT NOT NULL,
+  cod_area INT NOT NULL,
   id_tipo INT NOT NULL,
   id_materia INT NOT NULL,
   tamaño VARCHAR(10) NOT NULL,
@@ -178,7 +180,8 @@ CREATE TABLE IF NOT EXISTS archivo (
   FOREIGN KEY (cod_estado) REFERENCES estado (codigo),
   FOREIGN KEY (id_tipo) REFERENCES tipo_archivo (id),
   FOREIGN KEY (cod_tutor) REFERENCES tutor (codigo),
-  FOREIGN KEY (id_materia) REFERENCES materia (id)
+  FOREIGN KEY (id_materia) REFERENCES materia (id),
+  FOREIGN KEY (cod_area) REFERENCES area (codigo)
 ) ENGINE=InnoDB;
 
 -- Restaurar restricciones
