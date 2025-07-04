@@ -320,5 +320,97 @@ class TutorDAO
         }
     }
     
+    public function obtenerTutoresFiltrados($filtroArea = null, $filtroRating = null) {
+        try {
+            $sql = "SELECT t.*,
+                GROUP_CONCAT(DISTINCT a.nombre_area SEPARATOR ', ') AS areas_enseñanza,
+                AVG(c.calificacion) AS rating_promedio
+                FROM tutor t
+                LEFT JOIN area_tutor at ON t.codigo = at.cod_tutor
+                LEFT JOIN area a ON at.cod_area = a.codigo
+                LEFT JOIN calificacion c ON t.codigo = c.cod_tutor
+                WHERE t.cod_estado = 2"; // Solo tutores verificados
+            
+            $params = [];
+            $types = '';
+            
+            // Aplicar filtros
+            if ($filtroArea) {
+                $sql .= " AND a.codigo = ?";
+                $params[] = $filtroArea;
+                $types .= 'i';
+            }
+            
+            if ($filtroRating) {
+                $sql .= " HAVING rating_promedio >= ?";
+                $params[] = $filtroRating;
+                $types .= 'i';
+            } else {
+                $sql .= " GROUP BY t.codigo";
+            }
+            
+            $stmt = $this->conn->prepare($sql);
+            
+            if (!empty($params)) {
+                $stmt->bind_param($types, ...$params);
+            }
+            
+            $stmt->execute();
+            $result = $stmt->get_result();
+            
+            $tutores = [];
+            while ($row = $result->fetch_assoc()) {
+                $tutor = new TutorDTO(
+                    $row['codigo'],
+                    $row['nombre'],
+                    $row['correo'],
+                    null, // No necesitamos la contraseña
+                    $row['calificacion_general'],
+                    null, // No necesitamos respuesta de seguridad
+                    $row['cod_estado']
+                    );
+                
+                // Agregar información adicional
+                $tutor->setAreas($row['areas_enseñanza']);
+                $tutor->setCalificacion_general($row['rating_promedio'] ?? $row['calificacion_general']);
+                
+                $tutores[] = [
+                    'tutor' => $tutor,
+                    'rating' => $row['rating_promedio'] ?? 0,
+                    'areas' => $row['areas_enseñanza'] ?? 'Sin áreas especificadas'
+                ];
+            }
+            
+            return $tutores;
+        } catch (Exception $e) {
+            error_log('Error en obtenerTutoresFiltrados: ' . $e->getMessage());
+            return [];
+        }
+    }
+    
+    public function mostrarTutoresFiltrados() {
+        require_once(__DIR__ . '/../DAO/AreaDAO.php');
+        $areaDAO = new AreaDAO();
+        
+        // Obtener parámetros de filtro
+        $filtroArea = $_GET['area'] ?? null;
+        $filtroRating = $_GET['rating'] ?? null;
+        
+        // Obtener tutores con filtros
+        $tutorsAvailable = $this->tutorDAO->obtenerTutoresFiltrados($filtroArea, $filtroRating);
+        $areas = $areaDAO->listarea();
+        
+        // Pasar datos a la vista
+        $data = [
+            'tutorsAvailable' => $tutorsAvailable,
+            'areas' => $areas,
+            'filtroArea' => $filtroArea,
+            'filtroRating' => $filtroRating,
+            'BASE_URL' => BASE_URL
+        ];
+        
+        extract($data);
+        require_once __DIR__ . '/../view/tutor/tutores_disponibles.php';
+    }
 }
 ?>

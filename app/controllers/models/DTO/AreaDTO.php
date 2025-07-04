@@ -33,3 +33,4 @@ class AreaDTO
         return $this;
     }
 }
+?>

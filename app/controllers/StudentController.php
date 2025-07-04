@@ -7,6 +7,8 @@ class StudentController
     private $carrerDAO;
     private $disponibilidadDAO;
     private $tutorDAO;
+    private $tutoriaDAO;
+    private $motivoDAO;
 
     public function __construct()
     {
@@ -16,13 +18,17 @@ class StudentController
         require_once(__DIR__ . '/models/DAO/DisponibilidadDAO.php');
         require_once(__DIR__ . '/models/DAO/TutorDAO.php');
         require_once(__DIR__ . '/utils/validation.php');
-        
+        require_once(__DIR__ . '/models/DAO/TutoriaDAO.php');
+        require_once(__DIR__ . '/models/DAO/MotivoDAO.php');
+
         $this->studentDAO = new EstudianteDAO();
         $this->studentDTO = new EstudianteDTO();
         $this->validation = new validation();
         $this->carrerDAO = new CarreraDAO();
         $this->disponibilidadDAO = new DisponibilidadDAO(); 
         $this->tutorDAO = new TutorDAO();
+        $this->tutoriaDAO = new TutoriaDAO();
+        $this->motivoDAO = new MotivoDAO();
     }
     
 
@@ -41,6 +47,7 @@ class StudentController
         }
 
         $carreras = $this->carrerDAO->listcarrers();
+        
         require_once(__DIR__ . '/../../view/editStudent.php');
     }
 
@@ -85,45 +92,47 @@ class StudentController
         }
     }
     
-    public function displayTutorSearch() {
-        error_log("Iniciando búsqueda de tutores...");
+    public function displayTutorSearch()
+    {
+        // Obtener áreas para el select
+        require_once(__DIR__ . '/models/DAO/AreaDAO.php');
+        $areaDAO = new AreaDAO();
+        $areas = $areaDAO->listarea();
         
-        // Validar si DAO está inicializado correctamente
-        if (!isset($this->disponibilidadDAO) || !is_object($this->disponibilidadDAO)) {
-            error_log("Error: DisponibilidadDAO no inicializado o no es objeto");
-            throw new Exception("DisponibilidadDAO no está inicializado correctamente");
-        }
+        // Pasar datos básicos a la vista
+        $data = [
+            'areas' => $areas,
+            'BASE_URL' => BASE_URL
+        ];
         
-        // Obtener tutores disponibles
-        $tutorsAvailable = $this->disponibilidadDAO->getAvailableTutors();
-        
-        // Verificar y loguear resultados
-        $countTutors = is_array($tutorsAvailable) ? count($tutorsAvailable) : 0;
-        error_log("Tutores recibidos en Controller: $countTutors");
-        
-        if ($countTutors > 0) {
-            error_log("Estructura del primer tutor:");
-            error_log(print_r($tutorsAvailable[0], true));
-        } else {
-            error_log("No se encontraron tutores disponibles.");
-        }
-        
-        // Función para convertir ID de día a nombre (aunque ya recibes `day_name`, por si acaso)
-        $diaHelper = function($idDia) {
-            $dias = [
-                1 => 'Lunes',
-                2 => 'Martes',
-                3 => 'Miércoles',
-                4 => 'Jueves',
-                5 => 'Viernes',
-                6 => 'Sábado',
-                7 => 'Domingo'
-            ];
-            return $dias[$idDia] ?? 'Día no especificado';
-        };
-        
-        // Renderizar vista
+        extract($data);
         require __DIR__ . '/../../view/student/search_tutors.php';
+    }
+    
+    public function filterTutorsAjax()
+    {
+        // Obtener parámetros de filtro
+        $filtros = [
+            'area' => $_GET['area'] ?? null,
+            'rating' => $_GET['rating'] ?? null
+        ];
+        
+        error_log("Filtros recibidos en filterTutorsAjax: " . print_r($filtros, true));
+        
+        // Obtener tutores con filtros
+        $tutorsAvailable = $this->disponibilidadDAO->getAvailableTutorsWithAreas($filtros);
+        
+        error_log("Tutores encontrados: " . count($tutorsAvailable));
+        
+        // Pasar datos al partial
+        $data = [
+            'tutorsAvailable' => $tutorsAvailable,
+            'filtros' => $filtros
+        ];
+        
+        extract($data);
+        require __DIR__ . '/../../view/student/tutors_list.php';
+        exit;
     }
     
     
@@ -204,6 +213,94 @@ class StudentController
         
         require __DIR__ . '/../../view/student/viewProfileStudent.php';
         
+    }
+    public function viewMyTutorials() {
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+        
+        $estudiante = $_SESSION['usuario'] ?? null;
+        if (!$estudiante) {
+            header('Location: ' . BASE_URL . 'index.php?url=RouteController/login&error=4');
+            exit;
+        }
+        
+        // Obtener todas las tutorías para el calendario
+        $tutorias = $this->tutoriaDAO->getalltutorialbystudent($estudiante->getCodigo());
+        $tutorias_json = array_map(function ($tutoria) {
+            return [
+                'fecha' => $tutoria->getFecha(),
+                'hora_inicio' => $tutoria->getHora_inicio(),
+                'hora_fin' => $tutoria->getHora_fin(),
+                'cod_estado' => $tutoria->getCod_estado(),
+            ];
+        }, $tutorias);
+            
+            // Obtener tutorías pendientes para el modal
+            $tutoriasPendientes = $this->tutoriaDAO->getTutoriasPendientes($estudiante->getCodigo());
+            
+            // Obtener motivos de cancelación
+            $motivoDAO = new MotivoDAO();
+            $motivos = $motivoDAO->listarMotivos();
+            
+            // Pasar todos los datos a la vista
+            include __DIR__ . '/../../view/student/viewmytutorial.php';
+    }
+
+
+    /**
+     * Muestra el panel de cancelación de tutorías
+     */
+    public function showCancelationPanel() {
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+        
+        $estudiante = $_SESSION['usuario'] ?? null;
+        if (!$estudiante) {
+            header('Location: ' . BASE_URL . 'index.php?url=RouteController/login&error=4');
+            exit;
+        }
+        
+        // Obtener tutorías pendientes
+        $tutoriasPendientes = $this->tutoriaDAO->getTutoriasPendientes($estudiante->getCodigo());
+        error_log("Tutorías andres: " . print_r($this->tutoriaDAO->getTutoriasPendientes($estudiante->getCodigo()), true));
+
+        
+        // Obtener motivos de cancelación
+        $motivoDAO = new MotivoDAO();
+        $motivos = $motivoDAO->listarMotivos();
+        
+        // Incluir vista parcial
+        include __DIR__ . '/../../view/student/cancelation_panel.php';
+    }
+    
+    /**
+     * Procesa la cancelación de una tutoría
+     */
+    public function processCancelation() {
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+        
+        try {
+            $idTutoria = $_POST['id_tutoria'] ?? null;
+            $motivo = $_POST['motivo'] ?? null;
+            
+            if (empty($idTutoria) || empty($motivo)) {
+                throw new Exception("Datos incompletos para cancelar la tutoría.");
+            }
+            
+            $this->tutoriaDAO->cancelarTutoriaConMotivo($idTutoria, $motivo);
+            error_log("Tutoría cancelada con éxito." . $idTutoria . $motivo);
+            $_SESSION['success_message'] = "Tutoría cancelada correctamente.";
+            
+        } catch (Exception $e) {
+            $_SESSION['error_message'] = $e->getMessage();
+        }
+        
+        header('Location: ' . BASE_URL . 'index.php?url=RouteController/viewMyTutorial');
+        exit;
     }
     
     

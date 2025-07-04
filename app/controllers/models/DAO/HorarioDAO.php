@@ -51,5 +51,60 @@ class HorarioDAO {
             return [];
         }
     }
+    public function getscheduleById($cod_tutor,$id_schedule) {
+        try {
+            $sql = "SELECT * FROM horario WHERE cod_tutor = ? AND id = ?";
+            $stm = $this->conn->prepare($sql);
+            $stm->bind_param("ii", $cod_tutor,$id_schedule);
+            $stm->execute();
+            $result = $stm->get_result();
+            if ($row = $result->fetch_assoc()) {
+                return new HorarioDTO(
+                  $row["id"],
+                  $row["id_dia"],
+                  $row["cod_tutor"],
+                  $row["hora_inicio"],
+                  $row["hora_fin"],
+                );
+            }
+            return null;
+        }catch (Exception $e) {
+            error_log("error al traer el horario: ". $e->getMessage());
+        }
+    }
+    
+    public function update(HorarioDTO $horarioDTO) {
+        try {
+            $sql = "UPDATE horario SET id_dia = ?, hora_inicio = ?, hora_fin = ?
+                WHERE id = ? AND cod_tutor = ?";
+            
+            $stmt = $this->conn->prepare($sql);
+            
+            // Variables intermedias para evitar Notice
+            $id_dia = $horarioDTO->getId_dia();
+            $hora_inicio = $horarioDTO->getHora_inicio();
+            $hora_fin = $horarioDTO->getHora_fin();
+            $id = $horarioDTO->getId();
+            $cod_tutor = $horarioDTO->getCod_tutor();
+            
+            $stmt->bind_param(
+                "sssii",
+                $id_dia,
+                $hora_inicio,
+                $hora_fin,
+                $id,
+                $cod_tutor
+                );
+            
+            return $stmt->execute();
+            
+        } catch (Exception $e) {
+            error_log("Error al actualizar horario: " . $e->getMessage());
+            return false;
+        }
+    }
+    
+    
+    
 }
 ?>

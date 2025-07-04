@@ -46,7 +46,7 @@ require_once __DIR__ . '/layouts/nav.php';
                 <br>
                 <br>
                 <div class="grid grid-cols-2 gap-2 xl:w-[500px] lg:w-[500px] md:w-[500px] mx-auto ">
-                    <a href="#">
+                    <a href="<?= BASE_URL ?>index.php?url=RouteController/viewMyTutorial">
                         <div class="bg-[#5232a8] p-4 w-26 h-[250px] xl:w-60 xl:h-56 overflow-hidden rounded-lg border border-white hover:scale-90 transition-transform duration-300">
                             <img class="w-full h-full object-cover rounded-lg" src="<?= BASE_URL ?>public/img/tuto.png" alt="">
                         </div>

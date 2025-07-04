@@ -110,6 +110,13 @@ class RouteController extends Controller
         $studentController->displayTutorSearch();
     }
     
+    public function filterTutorsAjax()
+    {
+        require_once(__DIR__ . '/StudentController.php');
+        $studentController = new StudentController();
+        $studentController->filterTutorsAjax();
+    }
+    
     public function processTutorRequest() {
         require_once(__DIR__ . '/StudentController.php');
         $studentController = new StudentController();
@@ -140,12 +147,99 @@ class RouteController extends Controller
     
     public function viewFAQ()
     {
-        require_once(__DIR__ . '/adminController.php');
+        require_once(__DIR__ . '/adr.php');
         $adminController = new adminController();
         $admin = $adminController->obtenerAdmin();
         $adminNombre = $admin ? $admin->getNombre() : "Administrador";
         $adminCorreo = $admin ? $admin->getCorreo() : "soporte@udistrital.edu.co";
         require __DIR__ . '/../../view/viewFAQ.php';
+    }
+
+    public function requestTutorial() {
+        require_once(__DIR__ . '/TutoriaController.php');
+        $tutorId = $_GET['tutor_id'] ?? null;
+        $horarioId = $_GET['horario_id'] ?? null;
+        $tutoriaController = new TutoriaController();
+        $tutoriaController->mostrarFormularioSolicitud($tutorId, $horarioId);
+        
+    }
+
+    public function processRequest() {
+        require_once(__DIR__ . '/TutoriaController.php');
+        $tutoriaController = new TutoriaController();
+        $tutoriaController->procesarSolicitudTutoria();
+    }
+    
+    public function showTutoriaConfirmation() {
+        require_once(__DIR__ . '/TutoriaController.php');
+        $tutoriaController = new TutoriaController();
+        $tutoriaController->mostrarConfirmacionTutoria($_GET['id'] ?? null);
+    }
+    
+    public function solicitudesTutor() {
+        require_once(__DIR__ . '/TutorController.php');
+        $tutorController = new TutorController();
+        $tutorController->solicitudesTutoria();
+    }
+    
+    public function procesarAprobacionTutoria() {
+        require_once(__DIR__ . '/TutorController.php');
+        $tutorController = new TutorController();
+        $tutorController->procesarAprobacion();
+    }
+    
+    public function showTutorRequests() {
+        require_once(__DIR__ . '/TutoriaController.php');
+        $tutoriaController = new TutoriaController();
+        $tutoriaController->mostrarSolicitudesTutor();
+    }
+    
+    public function aprobarTutoria() {
+        require_once(__DIR__ . '/TutoriaController.php');
+        $tutoriaController = new TutoriaController();
+        $tutoriaController->procesarAprobacion();
+    }
+    
+    public function rechazarTutoria() {
+        require_once(__DIR__ . '/TutoriaController.php');
+        $tutoriaController = new TutoriaController();
+        $tutoriaController->procesarRechazo();
+    }
+    public function viewMyTutorial(){
+        require_once(__DIR__ . '/StudentController.php');
+        //$this->processRequest();
+        $studentController = new StudentController();
+        $studentController->viewMyTutorials();
+    }
+
+    public function showCancelationPanel() {
+        require_once(__DIR__ . '/StudentController.php');
+        $studentController = new StudentController();
+        $studentController->showCancelationPanel();
+    }
+    
+    public function processCancelation() {
+        require_once(__DIR__ . '/StudentController.php');
+        $studentController = new StudentController();
+        $studentController->processCancelation();
+    }
+
+    public function editAvailability() {
+        require_once(__DIR__ . '/TutorController.php');
+        $tutorController = new TutorController();
+        $tutorController->mostrarFormularioEdicion();
+    }
+    
+    public function updateAvailability() {
+        require_once(__DIR__ . '/TutorController.php');
+        $tutorController = new TutorController();
+        $tutorController->actualizarDisponibilidad();
+    }
+    
+    public function deleteAvailability() {
+        require_once(__DIR__ . '/TutorController.php');
+        $tutorController = new TutorController();
+        $tutorController->eliminarDisponibilidad();
     }
     public function dashboardfiles()
     {

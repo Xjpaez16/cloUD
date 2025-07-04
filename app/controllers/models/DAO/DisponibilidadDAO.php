@@ -67,10 +67,12 @@ class DisponibilidadDAO {
             $disponibilidades = [];
             while ($row = $result->fetch_assoc()) {
                 $disponibilidades[] = [
+                    'cod_tutor' => $row['cod_tutor'],
                     'hora_i' => $row['hora_i'],
                     'hora_fn' => $row['hora_fn'],
+                    'id_horario' => $row['id_horario'],
                     'estado' => $row['tipo_estado'],
-                    'dia' => $row['nombre_dia'] 
+                    'dia' => $row['nombre_dia']
                 ];
             }
             return $disponibilidades;
@@ -79,55 +81,69 @@ class DisponibilidadDAO {
             return [];
         }
     }
-    public function getAvailableTutors() {
-        try {
-            $sql = "SELECT
-            t.codigo AS code,
-            t.nombre AS name,
-            GROUP_CONCAT(DISTINCT a.nombre_area SEPARATOR ', ') AS subjects,
-            dia.dia AS day_name,
-            h.id_dia AS day_id,
-            TIME_FORMAT(h.hora_inicio, '%h:%i %p') AS start_time,
-            TIME_FORMAT(h.hora_fin, '%h:%i %p') AS end_time,
-            t.calificacion_general AS rating
-        FROM tutor t
-        JOIN disponibilidad d ON t.codigo = d.cod_tutor
-        JOIN estado e1 ON t.cod_estado = e1.codigo
-        JOIN estado e2 ON d.cod_estado = e2.codigo
-        JOIN horario h ON d.id_horario = h.id
-        JOIN dia ON h.id_dia = dia.id
-        LEFT JOIN area_tutor at ON t.codigo = at.cod_tutor
-        LEFT JOIN area a ON at.cod_area = a.codigo
-        WHERE t.cod_estado = 2  -- Tutor Verificado
-          AND d.cod_estado = 7  -- Disponibilidad Activa
-        GROUP BY t.codigo, t.nombre, dia.dia, h.id_dia, h.hora_inicio, h.hora_fin, t.calificacion_general
-        ORDER BY h.id_dia, h.hora_inicio";
-            
-            error_log("Consulta de tutores disponibles ejecutada");
-            
-            $stmt = $this->conn->prepare($sql);
-            if (!$stmt) {
-                error_log("Error en preparación: " . $this->conn->error);
-                return [];
-            }
-            
-            if (!$stmt->execute()) {
-                error_log("Error en ejecución: " . $stmt->error);
-                return [];
-            }
-            
-            $result = $stmt->get_result();
-            $tutors = $result->fetch_all(MYSQLI_ASSOC);
-            
-            error_log("Tutores encontrados: " . count($tutors));
-            return $tutors;
-            
-        } catch (Exception $e) {
-            error_log('Error en getAvailableTutors: ' . $e->getMessage());
+    public function getAvailableTutorsWithAreas($filtros = [])
+    {
+        $sql = "SELECT
+                t.codigo,
+                t.nombre,
+                t.correo,
+                IFNULL(t.calificacion_general, 0) as calificacion_general,
+                GROUP_CONCAT(DISTINCT a.nombre_area SEPARATOR ', ') as areas,
+                dia.dia as nombre_dia,
+                h.id_dia,
+                h.id as id_horario,
+                TIME_FORMAT(h.hora_inicio, '%h:%i %p') as hora_inicio,
+                TIME_FORMAT(h.hora_fin, '%h:%i %p') as hora_fin
+            FROM tutor t
+            LEFT JOIN area_tutor at ON t.codigo = at.cod_tutor
+            LEFT JOIN area a ON at.cod_area = a.codigo
+            LEFT JOIN disponibilidad d ON t.codigo = d.cod_tutor
+            LEFT JOIN horario h ON d.id_horario = h.id
+            LEFT JOIN dia ON h.id_dia = dia.id
+            WHERE t.cod_estado = 2"; // Solo tutores verificados
+        
+        $params = [];
+        $types = '';
+        
+        // Filtro por área
+        if (!empty($filtros['area'])) {
+            $sql .= " AND a.codigo = ?";
+            $params[] = $filtros['area'];
+            $types .= 'i';
+        }
+        
+        // Agregamos GROUP BY con todas las columnas no agregadas
+        $sql .= " GROUP BY t.codigo, t.nombre, t.correo, t.calificacion_general,
+              dia.dia, h.id_dia, h.id, h.hora_inicio, h.hora_fin";
+        
+        $stmt = $this->conn->prepare($sql);
+        
+        if ($stmt === false) {
+            error_log("Error en prepare: " . $this->conn->error);
             return [];
         }
+        
+        if (!empty($params)) {
+            $stmt->bind_param($types, ...$params);
+        }
+        
+        if (!$stmt->execute()) {
+            error_log("Error en execute: " . $stmt->error);
+            return [];
+        }
+        
+        $result = $stmt->get_result();
+        
+        $tutores = [];
+        while ($row = $result->fetch_assoc()) {
+            // Solo agregamos horarios válidos
+            if (!empty($row['hora_inicio']) && !empty($row['hora_fin'])) {
+                $tutores[] = $row;
+            }
+        }
+        
+        return $tutores;
     }
-    
     
     
     
@@ -153,5 +169,138 @@ class DisponibilidadDAO {
             return false;
         }
     }
+    public function updatedispo($cod_tutor,$id_horario,$hora_i,$hora_fn){
+        try{
+            $sql = "UPDATE disponibilidad
+            SET cod_estado = 8
+            WHERE cod_tutor = ?
+            AND id_horario = ?
+            AND hora_i >= ?
+            AND hora_fn <= ? ";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bind_param('iiss', $cod_tutor,$id_horario,$hora_i,$hora_fn);
+            $stmt->execute();
+            
+        }catch(Exception $e){
+            error_log('Error en updatedispo DisponibilidadDAO' . $e->getMessage());
+        }
+    }
+    
+    /**
+     * Elimina una disponibilidad específica
+     */
+    public function eliminarDisponibilidad($codTutor, $horaI, $horaFn, $idHorario) {
+        try {
+            $sql = "DELETE FROM disponibilidad
+                WHERE cod_tutor = ? AND hora_i = ? AND hora_fn = ? AND id_horario = ?";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bind_param("issi", $codTutor, $horaI, $horaFn, $idHorario);
+            return $stmt->execute();
+        } catch (Exception $e) {
+            error_log("Error en eliminarDisponibilidad: " . $e->getMessage());
+            return false;
+        }
+    }
+    
+    
+    /**
+     * Obtiene una disponibilidad por ID
+     */
+    public function obtenerPorId($codTutor, $idHorario) {
+        try {
+            $sql = "SELECT d.cod_tutor, d.id_horario, h.id_dia, h.hora_inicio, h.hora_fin
+                FROM disponibilidad d
+                JOIN horario h ON d.id_horario = h.id
+                WHERE d.cod_tutor = ? AND d.id_horario = ?";
+            
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bind_param("ii", $codTutor, $idHorario);
+            $stmt->execute();
+            
+            $result = $stmt->get_result();
+            if ($row = $result->fetch_assoc()) {
+                return $row;
+            } else {
+                return false;
+            }
+        } catch(Exception $e) {
+            error_log("Error en obtenerPorId: " . $e->getMessage());
+            return false;
+        }
+    }
+    
+    
+    
+    
+    
+    
+    /**
+     * Actualiza una disponibilidad
+     */
+    public function actualizarDisponibilidad() {
+        $this->verificarSesionTutor();
+        
+        $id_horario = $_POST['id_horario'] ?? null;
+        $id_dia = $_POST['dia'] ?? null;
+        $hora_inicio = $_POST['hora_inicio'] ?? null;
+        $hora_fin = $_POST['hora_fin'] ?? null;
+        $cod_tutor = $_POST['cod_tutor'] ?? null;
+        
+        if (!$id_horario || !$id_dia || !$hora_inicio || !$hora_fin || !$cod_tutor) {
+            header("Location: " . BASE_URL . "index.php?url=RouteController/viewAvailability&error=1");
+            exit();
+        }
+        
+        // Validar que la hora final sea al menos 1 hora mayor
+        if (!$this->validateTimeInterval($hora_inicio, $hora_fin)) {
+            header('Location: ' . BASE_URL . 'index.php?url=RouteController/viewAvailability&error=4');
+            exit;
+        }
+        
+        // Actualizar horario
+        $horarioDTO = new HorarioDTO($id_horario, $id_dia, $cod_tutor, $hora_inicio, $hora_fin);
+        $resultado = $this->horarioDAO->update($horarioDTO);
+        
+        if (!$resultado) {
+            header("Location: " . BASE_URL . "index.php?url=RouteController/viewAvailability&error=2");
+            exit();
+        }
+        
+        // Eliminar bloques de disponibilidad actuales
+        $this->disponibilidadDAO->eliminarPorHorario($cod_tutor, $id_horario);
+        
+        // Insertar nuevos bloques de disponibilidad por cada hora
+        $this->registerTimeSlots($cod_tutor, $hora_inicio, $hora_fin, $id_horario);
+        
+        header("Location: " . BASE_URL . "index.php?url=RouteController/viewAvailability&success=2");
+        exit();
+    }
+    
+    
+    public function actualizarDisponibilidadPorID($idDisponibilidad, $idDia, $horaInicio, $horaFin, $codTutor) {
+        $conn = $this->db->getConnection();
+        
+        $query = "UPDATE disponibilidad SET id_dia = ?, hora_inicio = ?, hora_fin = ?
+              WHERE id_horario = ? AND cod_tutor = ?";
+        
+        $stmt = $conn->prepare($query);
+        $stmt->bind_param("sssii", $idDia, $horaInicio, $horaFin, $idDisponibilidad, $codTutor);
+        
+        return $stmt->execute();
+    }
+    
+    public function eliminarPorHorario($codTutor, $idHorario) {
+        try {
+            $sql = "DELETE FROM disponibilidad WHERE cod_tutor = ? AND id_horario = ?";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bind_param("ii", $codTutor, $idHorario);
+            return $stmt->execute();
+        } catch (Exception $e) {
+            error_log("Error al eliminar disponibilidad: " . $e->getMessage());
+            return false;
+        }
+    }
+    
+    
 }
 ?>
