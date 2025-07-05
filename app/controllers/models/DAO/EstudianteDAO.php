@@ -14,7 +14,7 @@ class EstudianteDAO {
     // Crear estudiante
     public function create(EstudianteDTO $estudiante) {
         try {
-            $sql = "INSERT INTO estudiante (codigo, nombre, correo, contrasena, respuesta_preg, cod_carrera, cod_estado) VALUES (?, ?, ?, ?, ?, ?, ?)";
+            $sql = "INSERT INTO estudiante (codigo, nombre, correo, contrasena, respuesta_preg, cod_carrera, cod_estado, activo) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
             $stmt = $this->conn->prepare($sql);
             $codigo = $estudiante->getCodigo();
             $nombre = $estudiante->getNombre();
@@ -23,15 +23,17 @@ class EstudianteDAO {
             $respuesta_preg = $estudiante->getRespuesta_preg();
             $cod_carrera = $estudiante->getCod_carrera();
             $cod_estado = $estudiante->getCod_estado();
+            $activo = $estudiante->getActivo();
             $stmt->bind_param(
-                'issssii',
+                'issssiii',
                 $codigo,
                 $nombre,
                 $correo,
                 $contrasena,
                 $respuesta_preg,
                 $cod_carrera,
-                $cod_estado
+                $cod_estado,
+                $activo
             );
             return $stmt->execute();
         } catch (Exception $e) {
@@ -53,10 +55,11 @@ class EstudianteDAO {
                     $row['codigo'],
                     $row['nombre'],
                     $row['correo'],
-                    $row['contraseña'],
+                    $row['contrasena'],
                     $row['respuesta_preg'],
                     $row['cod_carrera'],
-                    $row['cod_estado']
+                    $row['cod_estado'],
+                    $row['activo']
                 );
             }
             return null;
@@ -77,10 +80,11 @@ class EstudianteDAO {
                     $row['codigo'],
                     $row['nombre'],
                     $row['correo'],
-                    $row['contraseña'],
+                    $row['contrasena'],
                     $row['respuesta_preg'],
                     $row['cod_carrera'],
-                    $row['cod_estado']
+                    $row['cod_estado'],
+                    $row['activo']
                 );
             }
             return $estudiantes;
@@ -91,10 +95,11 @@ class EstudianteDAO {
     }
 
     // Actualizar estudiante
-    public function update($codigo, EstudianteDTO $estudiante) {
+    public function update($codigo_actual, EstudianteDTO $estudiante) {
         try {
-            $sql = "UPDATE estudiante SET nombre = ?, correo = ?, contrasena = ?, respuesta_preg = ?, cod_carrera = ?, cod_estado = ? WHERE codigo = ?";
+            $sql = "UPDATE estudiante SET codigo = ?, nombre = ?, correo = ?, contrasena = ?, respuesta_preg = ?, cod_carrera = ?, cod_estado = ? WHERE codigo = ?";
             $stmt = $this->conn->prepare($sql);
+            $codigo = $estudiante->getCodigo();
             $nombre = $estudiante->getNombre();
             $correo = $estudiante->getCorreo();
             $contrasena = $estudiante->getContrasena();
@@ -102,14 +107,15 @@ class EstudianteDAO {
             $cod_carrera = $estudiante->getCod_carrera();
             $cod_estado = $estudiante->getCod_estado();
             $stmt->bind_param(
-                'ssssiii',
+                'issssiii',
+                $codigo,
                 $nombre,
                 $correo,
                 $contrasena,
                 $respuesta_preg,
                 $cod_carrera,
                 $cod_estado,
-                $codigo
+                $codigo_actual
             );
             return $stmt->execute();
         } catch (Exception $e) {
@@ -246,6 +252,17 @@ class EstudianteDAO {
         }
     }
     
-   
+    // Métodos para activar/desactivar
+public function desactivarEstudiante($codigo) {
+    $stmt = $this->conn->prepare("UPDATE estudiante SET activo = 0 WHERE codigo = ?");
+    $stmt->bind_param("i", $codigo);
+    return $stmt->execute();
+}
+
+public function activarEstudiante($codigo) {
+    $stmt = $this->conn->prepare("UPDATE estudiante SET activo = 1 WHERE codigo = ?");
+    $stmt->bind_param("i", $codigo);
+    return $stmt->execute();
+}
 }
 ?>

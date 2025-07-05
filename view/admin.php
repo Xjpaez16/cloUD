@@ -21,6 +21,11 @@
                     Ver Administradores
                 </button>
             </a>
+            <a href="<?= BASE_URL ?>StudentAdminController/index" class="flex-1">
+                <button class="w-full bg-gradient-to-r from-[#32a852] to-[#3cb980] hover:from-[#3cb980] hover:to-[#32a852] text-white font-bold py-6 px-4 rounded-xl shadow-lg text-xl transition-all duration-300 transform hover:scale-105">
+                    Ver Estudiantes
+                </button>
+            </a>
             <a href="<?= BASE_URL ?>LoginController/logout" class="flex-1">
                 <button class="w-full bg-gradient-to-r from-red-500 to-red-700 hover:from-red-700 hover:to-red-500 text-white font-bold py-6 px-4 rounded-xl shadow-lg text-xl transition-all duration-300 transform hover:scale-105">
                     <svg class="inline-block w-7 h-7 mr-2 -mt-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v1"/></svg>

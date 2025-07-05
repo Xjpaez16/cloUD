@@ -4,7 +4,7 @@ class Conexion
     private $host = 'localhost';
     private $db = 'cloud';
     private $user = 'root';
-    private $pass = '123456';
+    private $pass = '';
     private $conn;
 
     public function __construct()
