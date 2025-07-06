@@ -30,8 +30,7 @@ class TutorAdminController {
         $calificacion_general = isset($_POST['calificacion_general']) ? $_POST['calificacion_general'] : 0;
         $respuesta_preg = $_POST['respuesta_preg'];
         // Permitir calificación desde el formulario, si no viene, poner 0
-        $cod_estado = 2; // Por defecto activo
-        $activo = 1;
+        $cod_estado = 2;
 
         if (!$this->validation->validateEmail($correo)) {
             header('Location: ' . BASE_URL . 'index.php?url=TutorAdminController/index&error=emailinvalido');
@@ -42,7 +41,7 @@ class TutorAdminController {
             exit;
         }
 
-        $tutor = new TutorDTO($codigo, $nombre, $correo, $contrasena, $calificacion_general, $respuesta_preg, $cod_estado, $activo);
+        $tutor = new TutorDTO($codigo, $nombre, $correo, $contrasena, $calificacion_general, $respuesta_preg, $cod_estado);
 
         if (!$this->tutorDAO->create($tutor)) {
             header('Location: ' . BASE_URL . 'index.php?url=TutorAdminController/index&error=idduplicado');

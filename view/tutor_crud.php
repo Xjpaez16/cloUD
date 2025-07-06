@@ -33,18 +33,18 @@
                 </thead>
                 <tbody>
                     <?php foreach ($data['tutores'] as $tut): ?>
-                    <?php $activo = $tut->getActivo(); ?>
-                    <tr id="tutorRow-<?= $tut->getCodigo()?>" class="tutor-row <?= $activo ? '' : 'opacity-50 bg-gray-300' ?>">
+                    <?php $activo = $tut->getCod_estado(); ?>
+                    <tr id="tutorRow-<?= $tut->getCodigo()?>" class="tutor-row <?= $activo == 3 ? 'opacity-50 bg-gray-300' : '' ?>">
                         <td class="py-2 px-4 text-center text-[#3c80b9]"><?= htmlspecialchars($tut->getCodigo()) ?></td>
                         <td class="py-2 px-4 text-[#3c80b9] tutor-nombre"><?= htmlspecialchars($tut->getNombre()) ?></td>
                         <td class="py-2 px-4 text-[#3c80b9] tutor-correo"><?= htmlspecialchars($tut->getCorreo()) ?></td>
                         <td class="py-2 px-4 text-[#3c80b9]"><?= htmlspecialchars((string)($tut->getCalificacion_general() ?? '0.0')) ?></td>
                         <td class="py-2 px-4 text-[#3c80b9]"><?= htmlspecialchars($tut->getRespuesta_preg() ?? '') ?></td>
                         <td class="py-2 px-4 flex gap-2 justify-center">
-                            <button type="button" onclick="toggleEstadoTutor(<?= $tut->getCodigo() ?>)" id="btnEstadoTutor-<?= $tut->getCodigo() ?>" class="w-28 <?= $activo ? 'bg-red-500 hover:bg-red-700' : 'bg-green-500 hover:bg-green-700' ?> text-white font-semibold px-3 py-2 rounded shadow transition text-base">
-                                <?= $activo ? 'Desactivar' : 'Activar' ?>
+                            <button type="button" onclick="toggleEstadoTutor(<?= $tut->getCodigo() ?>)" id="btnEstadoTutor-<?= $tut->getCodigo() ?>" class="w-28 <?= $activo == 2 ? 'bg-red-500 hover:bg-red-700' : 'bg-green-500 hover:bg-green-700' ?> text-white font-semibold px-3 py-2 rounded shadow transition text-base">
+                                <?= $activo == 2 ? 'Desactivar' : 'Activar' ?>
                             </button>
-                            <?php if ($activo): ?>
+                            <?php if ($activo == 2): ?>
                                 <button type="button" class="btn-editar-tutor w-28 bg-blue-500 hover:bg-blue-700 text-white font-semibold px-3 py-2 rounded shadow transition text-base"
                                 onclick="showEditTutor(
                                     '<?= $tut->getCodigo() ?>',

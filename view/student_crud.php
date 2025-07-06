@@ -33,7 +33,7 @@
                 <tbody>
                     <?php foreach ($data['estudiantes'] as $est): ?>
                     <?php $activo = $est->getCod_estado(); ?>
-                    <tr id="studentRow-<?= $est->getCodigo()?>" class="student-row <?= $activo == 3 ? 'opacity-50 bg-gray-300' : '' ?>">>">
+                    <tr id="studentRow-<?= $est->getCodigo()?>" class="student-row <?= $activo == 3 ? 'opacity-50 bg-gray-300' : '' ?>">
                         <td class="py-2 px-4 text-center text-[#5232a8]"><?= htmlspecialchars($est->getCodigo()) ?></td>
                         <td class="py-2 px-4 text-[#5232a8] student-nombre"><?= htmlspecialchars($est->getNombre()) ?></td>
                         <td class="py-2 px-4 text-[#5232a8] student-correo"><?= htmlspecialchars($est->getCorreo()) ?></td>

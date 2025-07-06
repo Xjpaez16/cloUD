@@ -7,14 +7,12 @@ class TutorDTO extends UsuarioDTO
     private $calificacion_general;
     private $cod_estado;
     private $areas = [];
-    protected $activo;
 
-    public function __construct($codigo = null, $nombre = null, $correo = null, $contrasena = null, $calificacion_general = null, $respuesta_preg = null,  $cod_estado = null, $activo = 1)
+    public function __construct($codigo = null, $nombre = null, $correo = null, $contrasena = null, $calificacion_general = null, $respuesta_preg = null,  $cod_estado = 2)
     {
-        parent::__construct($codigo, $nombre, $correo, $contrasena, $respuesta_preg, $activo);
+        parent::__construct($codigo, $nombre, $correo, $contrasena, $respuesta_preg);
         $this->calificacion_general = $calificacion_general;
         $this->cod_estado = $cod_estado;
-        $this->activo = $activo;
     }
 
     public function getCalificacion_general()
@@ -50,7 +48,5 @@ class TutorDTO extends UsuarioDTO
         return $this;
     }
 
-    public function getActivo() { return $this->activo; }
-    public function setActivo($activo) { $this->activo = $activo; return $this; }
 }
 ?>

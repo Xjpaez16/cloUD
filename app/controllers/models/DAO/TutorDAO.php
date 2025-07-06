@@ -16,7 +16,7 @@ class TutorDAO
     public function create(TutorDTO $tutor)
     {
         try {
-            $sql = "INSERT INTO tutor (codigo, nombre, correo, contrasena, calificacion_general, respuesta_preg, cod_estado, activo) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+            $sql = "INSERT INTO tutor (codigo, nombre, correo, contrasena, calificacion_general, respuesta_preg, cod_estado) VALUES (?, ?, ?, ?, ?, ?, ?)";
             $stmt = $this->conn->prepare($sql);
             $codigo = $tutor->getCodigo();
             $nombre = $tutor->getNombre();
@@ -25,7 +25,6 @@ class TutorDAO
             $calificacion_general = $tutor->getCalificacion_general();
             $respuesta_preg = $tutor->getRespuesta_preg();
             $cod_estado = $tutor->getCod_estado();
-            $activo = $tutor->getActivo();
             $stmt->bind_param(
                 'isssissi',
                 $codigo,
@@ -34,8 +33,7 @@ class TutorDAO
                 $contrasena,
                 $calificacion_general,
                 $respuesta_preg,
-                $cod_estado,
-                $activo
+                $cod_estado
             );
             return $stmt->execute();
         } catch (Exception $e) {
@@ -61,8 +59,7 @@ class TutorDAO
                     $row['contrasena'],
                     $row['calificacion_general'],
                     $row['respuesta_preg'],
-                    $row['cod_estado'],
-                    $row['activo']
+                    $row['cod_estado']
                 );
             }
             return null;
@@ -89,8 +86,7 @@ class TutorDAO
                     $row['contrasena'],
                     $row['calificacion_general'],
                     $row['respuesta_preg'],
-                    $row['cod_estado'],
-                    $row['activo']
+                    $row['cod_estado']
                 );
             }
             return $tutores;
@@ -424,13 +420,13 @@ class TutorDAO
     }
 
     public function desactivarTutor($codigo) {
-        $stmt = $this->conn->prepare("UPDATE tutor SET activo = 0 WHERE codigo = ?");
+        $stmt = $this->conn->prepare("UPDATE tutor SET cod_estado = 3 WHERE codigo = ?");
         $stmt->bind_param("i", $codigo);
         return $stmt->execute();
     }
 
     public function activarTutor($codigo) {
-        $stmt = $this->conn->prepare("UPDATE tutor SET activo = 1 WHERE codigo = ?");
+        $stmt = $this->conn->prepare("UPDATE tutor SET cod_estado = 2 WHERE codigo = ?");
         $stmt->bind_param("i", $codigo);
         return $stmt->execute();
     }
