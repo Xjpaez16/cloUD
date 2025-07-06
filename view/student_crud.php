@@ -32,8 +32,8 @@
                 </thead>
                 <tbody>
                     <?php foreach ($data['estudiantes'] as $est): ?>
-                    <?php $activo = $est->getActivo(); ?>
-                    <tr id="studentRow-<?= $est->getCodigo()?>" class="student-row <?= $activo ? '' : 'opacity-50 bg-gray-300' ?>">
+                    <?php $activo = $est->getCod_estado(); ?>
+                    <tr id="studentRow-<?= $est->getCodigo()?>" class="student-row <?= $activo == 3 ? 'opacity-50 bg-gray-300' : '' ?>">>">
                         <td class="py-2 px-4 text-center text-[#5232a8]"><?= htmlspecialchars($est->getCodigo()) ?></td>
                         <td class="py-2 px-4 text-[#5232a8] student-nombre"><?= htmlspecialchars($est->getNombre()) ?></td>
                         <td class="py-2 px-4 text-[#5232a8] student-correo"><?= htmlspecialchars($est->getCorreo()) ?></td>
@@ -50,10 +50,10 @@
                             ?>
                         </td>
                         <td class="py-2 px-4 flex gap-2 justify-center">
-                            <button type="button" onclick="toggleEstado(<?= $est->getCodigo() ?>)" id="btnEstado-<?= $est->getCodigo() ?>" class="w-28 <?= $activo ? 'bg-red-500 hover:bg-red-700' : 'bg-green-500 hover:bg-green-700' ?> text-white font-semibold px-3 py-2 rounded shadow transition text-base">
-                                <?= $activo ? 'Desactivar' : 'Activar' ?>
+                            <button type="button" onclick="toggleEstado(<?= $est->getCodigo() ?>)" id="btnEstado-<?= $est->getCodigo() ?>" class="w-28 <?= $activo == 2 ? 'bg-red-500 hover:bg-red-700' : 'bg-green-500 hover:bg-green-700' ?> text-white font-semibold px-3 py-2 rounded shadow transition text-base">
+                                <?= $activo == 2 ? 'Desactivar' : 'Activar' ?>
                             </button>
-                            <?php if ($activo): ?>
+                            <?php if ($activo == 2): ?>
                             <button type="button" class="btn-editar w-28 bg-blue-500 hover:bg-blue-700 text-white font-semibold px-3 py-2 rounded shadow transition text-base"
                                 onclick="showEdit('<?= $est->getCodigo() ?>', '<?= htmlspecialchars($est->getNombre()) ?>', '<?= htmlspecialchars($est->getCorreo()) ?>', '<?= htmlspecialchars($est->getRespuesta_preg()) ?>', '<?= $est->getCod_carrera() ?>')">Editar</button>
                             <?php endif; ?>

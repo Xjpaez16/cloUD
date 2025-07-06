@@ -33,8 +33,7 @@ class StudentAdminController {
         $contrasena = $_POST['contrasena'];
         $respuesta_preg = $_POST['respuesta_preg'];
         $cod_carrera = $_POST['cod_carrera'];
-        $cod_estado = 2; // Por defecto activo
-        $activo = 1;
+        $cod_estado = 2;
 
         if (!$this->validation->validateEmail($correo)) {
             header('Location: ' . BASE_URL . 'index.php?url=StudentAdminController/index&error=emailinvalido');
@@ -47,7 +46,7 @@ class StudentAdminController {
 
         $contrasena_hash = password_hash($contrasena, PASSWORD_DEFAULT);
 
-        $estudiante = new EstudianteDTO($codigo, $nombre, $correo, $contrasena_hash, $respuesta_preg, $cod_carrera, $cod_estado, $activo);
+        $estudiante = new EstudianteDTO($codigo, $nombre, $correo, $contrasena_hash, $respuesta_preg, $cod_carrera, $cod_estado);
 
         if (!$this->studentDAO->create($estudiante)) {
             header('Location: ' . BASE_URL . 'index.php?url=StudentAdminController/index&error=idduplicado');
