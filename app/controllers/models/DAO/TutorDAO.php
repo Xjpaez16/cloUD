@@ -16,7 +16,7 @@ class TutorDAO
     public function create(TutorDTO $tutor)
     {
         try {
-            $sql = "INSERT INTO tutor (codigo, nombre, correo, contrasena, calificacion_general, respuesta_preg, cod_estado) VALUES (?, ?, ?, ?,?, ?, ?)";
+            $sql = "INSERT INTO tutor (codigo, nombre, correo, contrasena, calificacion_general, respuesta_preg, cod_estado, activo) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
             $stmt = $this->conn->prepare($sql);
             $codigo = $tutor->getCodigo();
             $nombre = $tutor->getNombre();
@@ -25,15 +25,17 @@ class TutorDAO
             $calificacion_general = $tutor->getCalificacion_general();
             $respuesta_preg = $tutor->getRespuesta_preg();
             $cod_estado = $tutor->getCod_estado();
+            $activo = $tutor->getActivo();
             $stmt->bind_param(
-                'isssisi',
+                'isssissi',
                 $codigo,
                 $nombre,
                 $correo,
                 $contrasena,
                 $calificacion_general,
                 $respuesta_preg,
-                $cod_estado
+                $cod_estado,
+                $activo
             );
             return $stmt->execute();
         } catch (Exception $e) {
@@ -59,12 +61,13 @@ class TutorDAO
                     $row['contrasena'],
                     $row['calificacion_general'],
                     $row['respuesta_preg'],
-                    $row['cod_estado']
+                    $row['cod_estado'],
+                    $row['activo']
                 );
             }
             return null;
         } catch (Exception $e) {
-            error_log('Error en getByCodigo TutorDAO: ' . $e->getMessage());
+            error_log('Error en getid TutorDAO: ' . $e->getMessage());
             return null;
         }
     }
@@ -86,7 +89,8 @@ class TutorDAO
                     $row['contrasena'],
                     $row['calificacion_general'],
                     $row['respuesta_preg'],
-                    $row['cod_estado']
+                    $row['cod_estado'],
+                    $row['activo']
                 );
             }
             return $tutores;
@@ -97,33 +101,39 @@ class TutorDAO
     }
 
     // Actualizar tutor
-    public function update($codigo, TutorDTO $tutor)
+    public function update($codigoActual, TutorDTO $tutor)
     {
         try {
-            $sql = "UPDATE tutor SET nombre = ?, correo = ?, contrasena = ?, calificacion_general = ?, respuesta_preg = ?, cod_estado = ? WHERE codigo = ?";
+            $sql = "UPDATE tutor SET codigo = ?, nombre = ?, correo = ?, contrasena = ?, calificacion_general = ?, respuesta_preg = ?, cod_estado = ? WHERE codigo = ?";
             $stmt = $this->conn->prepare($sql);
+
+            $codigoNuevo = $tutor->getCodigo();
             $nombre = $tutor->getNombre();
             $correo = $tutor->getCorreo();
             $contrasena = $tutor->getContrasena();
             $calificacion_general = $tutor->getCalificacion_general();
             $respuesta_preg = $tutor->getRespuesta_preg();
             $cod_estado = $tutor->getCod_estado();
+
             $stmt->bind_param(
-                'sssdssi',
+                'ssssdssi',
+                $codigoNuevo,
                 $nombre,
                 $correo,
                 $contrasena,
                 $calificacion_general,
                 $respuesta_preg,
                 $cod_estado,
-                $codigo
+                $codigoActual
             );
+
             return $stmt->execute();
         } catch (Exception $e) {
             error_log('Error en update TutorDAO: ' . $e->getMessage());
             return false;
         }
     }
+
 
     // Soft delete tutor (cambiar estado)
     public function softDelete($codigo, $nuevoEstado)
@@ -174,8 +184,8 @@ class TutorDAO
                     $row['nombre'],
                     $row['correo'],
                     $row['contrasena'],
-                    $row['respuesta_preg'],
                     $row['calificacion_general'],
+                    $row['respuesta_preg'],
                     $row['cod_estado']
                 );
             }else{
@@ -397,7 +407,7 @@ class TutorDAO
         $filtroRating = $_GET['rating'] ?? null;
         
         // Obtener tutores con filtros
-        $tutorsAvailable = $this->tutorDAO->obtenerTutoresFiltrados($filtroArea, $filtroRating);
+        $tutorsAvailable = $this->obtenerTutoresFiltrados($filtroArea, $filtroRating);
         $areas = $areaDAO->listarea();
         
         // Pasar datos a la vista
@@ -411,6 +421,18 @@ class TutorDAO
         
         extract($data);
         require_once __DIR__ . '/../view/tutor/tutores_disponibles.php';
+    }
+
+    public function desactivarTutor($codigo) {
+        $stmt = $this->conn->prepare("UPDATE tutor SET activo = 0 WHERE codigo = ?");
+        $stmt->bind_param("i", $codigo);
+        return $stmt->execute();
+    }
+
+    public function activarTutor($codigo) {
+        $stmt = $this->conn->prepare("UPDATE tutor SET activo = 1 WHERE codigo = ?");
+        $stmt->bind_param("i", $codigo);
+        return $stmt->execute();
     }
 }
 ?>

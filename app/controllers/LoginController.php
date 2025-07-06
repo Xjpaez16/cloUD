@@ -51,7 +51,7 @@ class LoginController
                 }
                 $tutor = $this->tutorDAO->validarLogin($email);
 
-                if (password_verify($password, $tutor->getContrasena())) {
+                if ($tutor && password_verify($password, $tutor->getContrasena())) {
                     session_start();
                     $_SESSION['usuario'] = $tutor;
                     $_SESSION['rol'] = 'tutor';
@@ -59,14 +59,14 @@ class LoginController
                     exit;
                 } else {
                     header('Location: ' . BASE_URL . 'index.php?url=RouteController/login&error=1');
-                    error_log('Error de inicio de sesión: contraseña incorrecta para el correo ' . $tutor->getContrasena());
+                    error_log('Error de inicio de sesión: tutor no encontrado o contraseña incorrecta para el correo ' . $email);
                     exit;
                 }
             }
 
             // Si es administrador
             $admin = $this->adminDAO->obtenerAdminPorCorreo($email);
-            if ($password == $admin->getContrasena()) {
+            if ($admin && $password == $admin->getContrasena()) {
                 session_start();
                 $_SESSION['usuario'] = $admin;
                 $_SESSION['rol'] = 'administrador';
