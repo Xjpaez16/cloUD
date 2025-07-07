@@ -1,4 +1,6 @@
-<?php require_once __DIR__ . '/../layouts/nav.php'; ?>
+<?php require_once __DIR__ . '/../layouts/nav.php'; 
+ ?>
+
 
 <!DOCTYPE html>
 <html lang="es">
@@ -8,8 +10,11 @@
     <title>Solicitudes de Tutoría | cloUD</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
 </head>
 <body class="bg-gray-50" class="bg-gray-50" style="background-image: url('<?= BASE_URL ?>public/img/cloudfondo.jpg'); background-size: cover;">
+    
     <div class="container mx-auto px-4 py-8">
         <!-- Mensajes de retroalimentación -->
         <?php if (!empty($_SESSION['error_message'])): ?>
@@ -136,6 +141,34 @@
             </form>
         </div>
     </div>
+                        
+    <!--Boton para modal terminacion de tutorias-->
+     <div class="fixed bottom-6 right-6 z-40">
+        <button onclick="document.getElementById('finishModal').classList.remove('hidden')" 
+                class="bg-[#7cf7a3] hover:bg-transparent hover:text-[#7cf7a3] hover:border-[#7cf7a3] hover:border-2 hover:shadow-2xl hover:transition hover:ease-out hover:duration-500  text-white font-bold px-4 py-3 rounded-full shadow-xl flex items-center transition ease-in-out duration-500">
+            <i class="fas fa-calendar-check mr-2"></i>
+            <span class="hidden md:inline">Terminar Tutorías</span>
+        </button> 
+    </div>
+
+   <?php 
+     
+            include __DIR__ . '/finish_tutorial.php';
+        
+    ?>                             
+    <script src="<?= BASE_URL ?>public/js/notyf.js"></script>
+    
+    <?php if(isset($_GET['success'])) { 
+    $successMessages = [
+        1 => 'Excelente ahora el estudiante podra calificarlo',
+        
+    ];
+    $msg = $successMessages[$_GET['success']] ?? $successMessages[1];
+?>
+    <script>
+      showSuccessPosition('<?= $msg ?>',{ x: 'right', y: 'top' });
+    </script>
+<?php } ?> 
 
     <script>
         // Funciones para manejar el modal
@@ -157,5 +190,6 @@
             }
         }
     </script>
+  
 </body>
 </html>

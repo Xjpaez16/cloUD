@@ -302,7 +302,32 @@ class StudentController
         header('Location: ' . BASE_URL . 'index.php?url=RouteController/viewMyTutorial');
         exit;
     }
-    
+    public function guardarCalificacion() {
+       session_start();
+       $idCalificada = $_POST['id_tutoria'];
+       $cod_tutor = $_POST['cod_tutor'];
+       $calificacion = $_POST['calificacion'];
+       $calificacionbd = $this->tutorDAO->obtenerCalificacion($cod_tutor);
+       $promediocal =($calificacionbd + $calificacion )/2;
+       foreach ($_SESSION['tutorias_a_calificar'] as $index => $tutoria) {
+            if ($tutoria->getId() == $idCalificada) {
+                unset($_SESSION['tutorias_a_calificar'][$index]);
+                break;
+            }
+        }
+        $_SESSION['tutorias_a_calificar'] = array_values($_SESSION['tutorias_a_calificar']); 
+        $this->tutoriaDAO->setcalificaciontutorial($idCalificada);
+        
+        if (!empty($_SESSION['tutorias_a_calificar']) && $this->tutorDAO->setCalificacion($promediocal,$cod_tutor)) {
+            header('Location: ' . BASE_URL . 'index.php?url=RouteController/student');
+        } else {
+            unset($_SESSION['tutorias_a_calificar']);
+            header('Location: ' . BASE_URL . 'index.php?url=RouteController/student&success=1');
+        }
+        exit;
+
+        
+    }
     
 }
 ?>

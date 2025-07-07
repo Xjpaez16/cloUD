@@ -5,15 +5,19 @@ class LoginController
     private $estudianteDAO;
     private $tutorDAO;
     private $adminDAO;
+    private $tutoriaDAO;
 
     public function __construct()
     {
         require_once(__DIR__ . '/models/DAO/EstudianteDAO.php');
         require_once(__DIR__ . '/models/DAO/TutorDAO.php');
         require_once(__DIR__ . '/models/DAO/AdminDAO.php');
+        require_once(__DIR__ . '/models/DAO/TutoriaDAO.php');
+        
         $this->estudianteDAO = new EstudianteDAO();
         $this->tutorDAO = new TutorDAO();
         $this->adminDAO = new AdminDAO();
+        $this->tutoriaDAO = new TutoriaDAO();
     }
 
     public function login()
@@ -28,11 +32,18 @@ class LoginController
                     header('Location: ' . BASE_URL . 'index.php?url=RouteController/login&error=2');
                     exit;
                 }
+                
                 $estudiante = $this->estudianteDAO->validarLogin($email);
+                
                 if (password_verify($password, $estudiante->getContrasena())) {
                     session_start();
                     $_SESSION['usuario'] = $estudiante;
                     $_SESSION['rol'] = 'estudiante';
+                    error_log ("cod_estudiante: " . $estudiante->getCodigo());
+                    $tutoriasfinish = $this->tutoriaDAO->getTutoriasfinal($estudiante->getCodigo());
+                    if(!empty($tutoriasfinish)){
+                        $_SESSION['tutorias_a_calificar'] = $tutoriasfinish;
+                    }
                     header('Location: ' . BASE_URL . 'index.php?url=RouteController/student&session=success');
                     exit;
                 } else {

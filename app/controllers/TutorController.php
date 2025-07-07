@@ -10,6 +10,7 @@ class TutorController
     private $diaDAO;
     private $disponibilidadDAO;
     
+    private $tutoriaDAO;
     public function __construct()
     {
         require_once(__DIR__ . '/models/DAO/TutorDAO.php');
@@ -19,7 +20,8 @@ class TutorController
         require_once(__DIR__ . '/models/DAO/HorarioDAO.php');
         require_once(__DIR__ . '/models/DAO/DiaDAO.php');
         require_once(__DIR__ . '/models/DAO/DisponibilidadDAO.php');
-        
+        require_once(__DIR__ . '/models/DAO/TutoriaDAO.php');
+
         $this->tutorDAO = new TutorDAO();
         $this->tutorDTO = new TutorDTO();
         $this->validation = new validation();
@@ -28,6 +30,7 @@ class TutorController
         $this->horarioDAO = new HorarioDAO();
         $this->diaDAO = new DiaDAO();
         $this->disponibilidadDAO = new DisponibilidadDAO();
+        $this->tutoriaDAO = new TutoriaDAO();
     }
     
     // Métodos existentes para gestión de perfil
@@ -271,35 +274,43 @@ class TutorController
      * Muestra las solicitudes de tutoría pendientes
      */
     public function solicitudesTutoria() {
-        $this->verificarSesionTutor();
+    $this->verificarSesionTutor();
+
+    try {
+        require_once(__DIR__ . '/models/DAO/TutoriaDAO.php');
+        require_once(__DIR__ . '/models/DAO/MotivoDAO.php');
+
+        $tutoriaDAO = new TutoriaDAO();
+        $motivoDAO = new MotivoDAO();
+
+        $codTutor = $_SESSION['usuario']->getCodigo();
+
         
-        try {
-            require_once(__DIR__ . '/models/DAO/TutoriaDAO.php');
-            require_once(__DIR__ . '/models/DAO/MotivoDAO.php');
-            
-            $tutoriaDAO = new TutoriaDAO();
-            $motivoDAO = new MotivoDAO();
-            
-            $codTutor = $_SESSION['usuario']->getCodigo();
-            $solicitudes = $tutoriaDAO->obtenerSolicitudesPendientes($codTutor);
-            $motivos = $motivoDAO->listarMotivos();
-            
-            // Cargar vista con los datos
-            $viewPath = __DIR__ . '/../../view/tutor/solicitudes_tutorias.php';
-            if (!file_exists($viewPath)) {
-                throw new Exception("Vista no encontrada: $viewPath");
-            }
-            
-            require_once $viewPath;
-            
-        } catch (Exception $e) {
-            error_log("Error en solicitudesTutoria: " . $e->getMessage());
-            $_SESSION['error_message'] = "Error al cargar las solicitudes";
-            header('Location: ' . BASE_URL . 'index.php?url=RouteController/dashboardTutor');
-            exit;
+        $solicitudes = $tutoriaDAO->obtenerSolicitudesPendientes($codTutor);
+
+       
+        $tutorias = $tutoriaDAO->getTutoriasfinish($codTutor);
+
+        
+        $motivos = $motivoDAO->listarMotivos();
+
+        // Cargar la vista
+        $viewPath = __DIR__ . '/../../view/tutor/solicitudes_tutorias.php';
+        if (!file_exists($viewPath)) {
+            throw new Exception("Vista no encontrada: $viewPath");
         }
+
+        // Variables disponibles para la vista
+        require_once $viewPath;
+
+    } catch (Exception $e) {
+        error_log("Error en solicitudesTutoria: " . $e->getMessage());
+        $_SESSION['error_message'] = "Error al cargar las solicitudes";
+        header('Location: ' . BASE_URL . 'index.php?url=RouteController/dashboardTutor');
+        exit;
     }
-    
+}
+
     public function procesarAprobacion() {
         $this->verificarSesionTutor();
         
@@ -447,9 +458,38 @@ class TutorController
         header("Location: " . BASE_URL . "index.php?url=RouteController/viewAvailability&success=2");
         exit();
     }
-    
-    
-    
-    
+    public function processCancelation() {
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+        
+        try {
+            $idTutoria = $_POST['id_tutoria'] ?? null;
+            $motivo = $_POST['motivo'] ?? null;
+            
+            if (empty($idTutoria) || empty($motivo)) {
+                throw new Exception("Datos incompletos para cancelar la tutoría.");
+            }
+            
+            $this->tutoriaDAO->cancelarTutoriaConMotivo($idTutoria, $motivo);
+            error_log("Tutoría cancelada con éxito." . $idTutoria . $motivo);
+            $_SESSION['success_message'] = "Tutoría cancelada correctamente.";
+            
+        } catch (Exception $e) {
+            $_SESSION['error_message'] = $e->getMessage();
+        }
+        
+        header('Location: ' . BASE_URL . 'index.php?url=RouteController/solicitudesTutor');
+        exit;
+    }
+    public function processfinish(){
+        $id_tutoria = $_POST['id_tutoria'] ?? null;
+        
+        if($this->tutoriaDAO->setfinishtutorial($id_tutoria)){
+            header ('Location: ' . BASE_URL . 'index.php?url=RouteController/solicitudesTutor&success=1');
+        }
+    } 
 }
+    
+
 ?>

@@ -391,12 +391,13 @@ class TutoriaDAO {
     }
     public function verificardispo($cod_tutor,$fecha){
         try {
-            $sql = "SELECT * FROM agendar WHERE cod_estado = 5 OR cod_estado = 4 AND cod_tutor = ? AND fecha = ?";
+            $sql = "SELECT * FROM agendar WHERE (cod_estado = 5 OR cod_estado = 4) AND cod_tutor = ? AND fecha = ?";
             $stm = $this->conn->prepare($sql);
             $stm->bind_param("is", $cod_tutor, $fecha);
             $stm->execute();
             $result = $stm->get_result();
             $tutoscheduled = [];
+            error_log("fecha : ".$fecha);
             while($row = $result->fetch_assoc()){
                 $dto = new TutoriaDTO(
                     $row['cod_estudiante'],
@@ -417,6 +418,90 @@ class TutoriaDAO {
         }
         
     }
+    public function getTutoriasfinish($codTutor) {
+        try {
+            $sql = "SELECT * FROM agendar
+                WHERE cod_tutor = ?
+                AND cod_estado = 5"; 
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bind_param("i", $codTutor);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            
+            $tutorias = [];
+            while($row = $result->fetch_assoc()) {
+                $tutorias[] = new TutoriaDTO(
+                    $row['cod_estudiante'],
+                    $row['cod_tutor'],
+                    $row['id'],
+                    $row['fecha'],
+                    $row['hora_inicio'],
+                    $row['hora_final'],
+                    $row['cod_estado'],
+                    $row['cod_motivo']
+                    );
+                error_log('mostrando tutorias finish' . $row['cod_estado']);
+            }
+            
+            return $tutorias;
+        } catch(Exception $e) {
+            error_log("Error en getTutoriasPendientes: " . $e->getMessage());
+            return [];
+        }
+    }
+    public function setfinishtutorial($id_tutoria){
+        try{
+            $sql = "UPDATE agendar SET cod_estado = 9 WHERE id = ?";
+            $stm = $this->conn->prepare($sql);
+            $stm->bind_param("i", $id_tutoria);
+            return $stm->execute();
+
+        }catch( Exception $e ){
+            error_log("Error en setfinishtutorial: " . $e->getMessage());
+            return false;
+        }
+    }
+    public function getTutoriasfinal($cod_estudiante) {
+        try{
+            $sql = "SELECT * FROM agendar WHERE cod_estudiante = ? AND cod_estado = 9";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bind_param("i", $cod_estudiante);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            $tutorias = [];
+            while($row = $result->fetch_assoc()) {
+                $tutorias[] = new TutoriaDTO(
+                    $row['cod_estudiante'],
+                    $row['cod_tutor'],
+                    $row['id'],
+                    $row['fecha'],
+                    $row['hora_inicio'],
+                    $row['hora_final'],
+                    $row['cod_estado'],
+                    $row['cod_motivo']
+                    );
+                error_log('mostrando tutorias finish' . $row['cod_estado']);
+            }
+            
+            return $tutorias;
+        } catch(Exception $e) {
+            error_log("Error en getTutoriasPendientes: " . $e->getMessage());
+            return [];
+        }
+    }
+    public function setcalificaciontutorial($id_tutoria){
+        try{
+            $sql = "UPDATE agendar SET cod_estado = 10 WHERE id = ?";
+            $stm = $this->conn->prepare($sql);
+            $stm->bind_param("i", $id_tutoria);
+            return $stm->execute();
+
+        }catch( Exception $e ){
+            error_log("Error en setfinishtutorial: " . $e->getMessage());
+            return false;
+        }
+    }
+
     
 }
 ?>

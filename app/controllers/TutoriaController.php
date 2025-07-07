@@ -360,7 +360,7 @@ class TutoriaController {
             $codTutor = $_SESSION['usuario']->getCodigo();
             $solicitudes = $this->tutoriaDAO->obtenerSolicitudesPendientes($codTutor);
             $motivos = $this->motivoDAO->listarMotivos();
-            
+            $tutorias = $this->tutoriaDAO->getTutoriasfinish($codTutor);
             // Pasar los datos a la vista correctamente
             $data = [
                 'solicitudes' => $solicitudes,
