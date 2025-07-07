@@ -68,6 +68,9 @@ if (!isset($_SESSION['usuario']) || $_SESSION['rol'] !== 'estudiante') {
                 <div class="rounded text-xs text-white px-3 py-1 bg-red-500">
                     <i class="fas fa-times mr-1"></i> Cancelada
                 </div>
+                <div class="rounded text-xs text-white px-3 py-1 bg-[#5e86f2]">
+                    <i class="fa-sharp-duotone fa-solid fa-flag-checkered"></i> Finalizada
+                </div>
             </div>
         </div>
     </div>
@@ -241,9 +244,9 @@ if (!isset($_SESSION['usuario']) || $_SESSION['rol'] !== 'estudiante') {
                                     tag.classList.add("bg-red-500");
                                     tag.innerHTML = `<i class="fas fa-times mr-1"></i>${convertirA12Horas(tutoria.hora_inicio)} - ${convertirA12Horas(tutoria.hora_fin)}`;
                                     break;
-                                default: 
-                                    tag.classList.add("bg-gray-400");
-                                    tag.textContent = tutoria.hora_inicio;
+                                case 10: 
+                                    tag.classList.add("bg-[#5e86f2]");
+                                    tag.innerHTML = `<i class="fa-sharp-duotone fa-solid fa-flag-checkered"></i>${convertirA12Horas(tutoria.hora_inicio)} - ${convertirA12Horas(tutoria.hora_fin)}`;
                             }
 
                             bottom.appendChild(tag); 
