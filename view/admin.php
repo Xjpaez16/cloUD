@@ -32,33 +32,43 @@
                 </button>
             </a>
             <a href="<?= BASE_URL ?>index.php?url=AreaAdminController/index">
-                <button class="w-full bg-gradient-to-r from-[#32a8a8] to-[#3c80b9] hover:from-[#3c80b9] hover:to-[#32a8a8] text-white font-bold py-6 px-4 rounded-xl shadow-lg text-xl transition-all duration-300 transform hover:scale-105">
+                <button class="w-full bg-gradient-to-r from-[#4facfe] to-[#8e44ad] hover:from-[#3b8de3] hover:to-[#732d91] text-white font-bold py-6 px-4 rounded-xl shadow-lg text-xl transition-all duration-300 transform hover:scale-105">
                     Ver Areas
                 </button>
             </a>
             <a href="<?= BASE_URL ?>index.php?url=TipoArchivoAdminController/index">
-                <button class="w-full bg-gradient-to-r from-[#32a8a8] to-[#3c80b9] hover:from-[#3c80b9] hover:to-[#32a8a8] text-white font-bold py-6 px-4 rounded-xl shadow-lg text-xl transition-all duration-300 transform hover:scale-105">
+                <button class="w-full bg-gradient-to-r from-[#ff9966] to-[#ff5e62] hover:from-[#e87d4a] hover:to-[#e64a4e] text-white font-bold py-6 px-4 rounded-xl shadow-lg text-xl transition-all duration-300 transform hover:scale-105">
                     Ver Tipos de Archivo
                 </button>
             </a>
             <a href="<?= BASE_URL ?>index.php?url=MotivoAdminController/index">
-                <button class="w-full bg-gradient-to-r from-[#32a8a8] to-[#3c80b9] hover:from-[#3c80b9] hover:to-[#32a8a8] text-white font-bold py-6 px-4 rounded-xl shadow-lg text-xl transition-all duration-300 transform hover:scale-105">
+                <button class="w-full bg-gradient-to-r from-[#11998e] to-[#38ef7d] hover:from-[#0f786f] hover:to-[#2cc96b] text-white font-bold py-6 px-4 rounded-xl shadow-lg text-xl transition-all duration-300 transform hover:scale-105">
                     Ver Tipos de Motivos
                 </button>
             </a>
             <a href="<?= BASE_URL ?>index.php?url=MateriaAdminController/index">
-                <button class="w-full bg-gradient-to-r from-[#32a8a8] to-[#3c80b9] hover:from-[#3c80b9] hover:to-[#32a8a8] text-white font-bold py-6 px-4 rounded-xl shadow-lg text-xl transition-all duration-300 transform hover:scale-105">
+                <button class="w-full bg-gradient-to-r from-[#f953c6] to-[#b91d73] hover:from-[#d241aa] hover:to-[#931459] text-white font-bold py-6 px-4 rounded-xl shadow-lg text-xl transition-all duration-300 transform hover:scale-105">
                     Ver Materias
                 </button>
             </a>
             <a href="<?= BASE_URL ?>index.php?url=EstadoAdminController/index">
-                <button class="w-full bg-gradient-to-r from-[#32a8a8] to-[#3c80b9] hover:from-[#3c80b9] hover:to-[#32a8a8] text-white font-bold py-6 px-4 rounded-xl shadow-lg text-xl transition-all duration-300 transform hover:scale-105">
+                <button class="w-full bg-gradient-to-r from-[#434343] to-[#000000] hover:from-[#2c2c2c] hover:to-[#000000] text-white font-bold py-6 px-4 rounded-xl shadow-lg text-xl transition-all duration-300 transform hover:scale-105">
                     Ver Estados
                 </button>
             </a>
             <a href="<?= BASE_URL ?>index.php?url=CarreraAdminController/index">
-                <button class="w-full bg-gradient-to-r from-[#32a8a8] to-[#3c80b9] hover:from-[#3c80b9] hover:to-[#32a8a8] text-white font-bold py-6 px-4 rounded-xl shadow-lg text-xl transition-all duration-300 transform hover:scale-105">
+                <button class="w-full bg-gradient-to-r from-[#00c6ff] to-[#0072ff] hover:from-[#009ed1] hover:to-[#0059cc] text-white font-bold py-6 px-4 rounded-xl shadow-lg text-xl transition-all duration-300 transform hover:scale-105">
                     Ver Carreras
+                </button>
+            </a>
+             <a href="<?= BASE_URL ?>index.php?url=RouteController/viewfilesadmin">
+                <button class="w-full bg-gradient-to-r from-[#00c6ff] to-[#0072ff] hover:from-[#009ed1] hover:to-[#0059cc] text-white font-bold py-6 px-4 rounded-xl shadow-lg text-xl transition-all duration-300 transform hover:scale-105">
+                    Ver Archivos
+                </button>
+            </a>
+             <a href="<?= BASE_URL ?>index.php?url=RouteController/reportes">
+                <button class="w-full bg-gradient-to-r from-[#00c6ff] to-[#0072ff] hover:from-[#009ed1] hover:to-[#0059cc] text-white font-bold py-6 px-4 rounded-xl shadow-lg text-xl transition-all duration-300 transform hover:scale-105">
+                    Reportes
                 </button>
             </a>
             <a href="<?= BASE_URL ?>LoginController/logout">

@@ -417,6 +417,42 @@ class TutoriaDAO {
         }
         
     }
+      public function obtenerTutorMasAgendado($desde, $hasta)
+    {
+        try{
+        $sql = "
+            SELECT t.nombre, COUNT(a.id) AS total FROM agendar a
+            INNER JOIN tutor t ON a.cod_tutor = t.codigo
+            WHERE a.fecha BETWEEN ? AND ?
+            GROUP BY t.codigo ORDER BY total DESC LIMIT 1
+        ";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("ss", $desde, $hasta);
+        $stmt->execute();
+        return $stmt->get_result()->fetch_all(MYSQLI_NUM);
+        }catch(Exception $e){
+            error_log('Error en obtener tutor mas agendado ArchivoDAO: ' . $e->getMessage());
+            return false;
+        }
+    }
+       public function obtenerEstudianteMasActivo($desde, $hasta)
+    {
+        try{
+        $sql = "
+            SELECT e.nombre, COUNT(a.id) AS total FROM agendar a
+            INNER JOIN estudiante e ON a.cod_estudiante = e.codigo
+            WHERE a.fecha BETWEEN ? AND ?
+            GROUP BY e.codigo ORDER BY total DESC LIMIT 1
+        ";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("ss", $desde, $hasta);
+        $stmt->execute();
+        return $stmt->get_result()->fetch_all(MYSQLI_NUM);
+        }catch(Exception $e){
+            error_log('Error en obtener estudiante mas activo ArchivoDAO: ' . $e->getMessage());
+            return false;
+        }
+    }
     
 }
 ?>

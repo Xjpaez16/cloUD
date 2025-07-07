@@ -160,8 +160,9 @@ class ArchivoDAO
                 $stm->bind_param('s', $nombre);
                 $stm->execute();
                 $result = $stm->get_result();
-
+               
                 while ($row = $result->fetch_assoc()) {
+                    if($row['nombre']== $nombre){
                     $archivo = new ArchivoDTO();
                     $archivo->setNombre($row['nombre']);
                     $archivo->setRuta($s3archivos->getUrl());
@@ -176,6 +177,47 @@ class ArchivoDAO
                     $archivos[] = $archivo;
                     error_log("Archivos :" . $archivo->getRuta());
                     error_log("Archivos s3 :" . $s3archivos->getUrl());
+                    }
+                }
+                $stm->close();
+            }
+            return $archivos;
+        } catch (Exception $e) {
+            error_log('Error en obtener archivos ArchivoDAO: ' . $e->getMessage());
+            return false;
+        }
+    }
+    public function allfilesadmin($archivosS3)
+    {
+        try {
+            $sql = "SELECT * FROM archivo WHERE (cod_estado = 7  OR cod_estado = 8)AND nombre = ?";
+            $archivos = [];
+            foreach ($archivosS3 as $s3archivos) {
+                $stm = $this->conn->prepare($sql);
+                $rutas3 = $s3archivos->getUrl();
+                $nombre = $s3archivos->getNombre();
+                $stm->bind_param('s', $nombre);
+                $stm->execute();
+                $result = $stm->get_result();
+               
+                while ($row = $result->fetch_assoc()) {
+                    if($row['nombre']== $nombre){
+                    $archivo = new ArchivoDTO();
+                    $archivo->setId($row['id']);
+                    $archivo->setNombre($row['nombre']);
+                    $archivo->setRuta($s3archivos->getUrl());
+                    $archivo->setCod_profesor($row['cod_profesor']);
+                    $archivo->setCod_estudiante($row['cod_estudiante']);
+                    $archivo->setCod_Tutor($row['cod_tutor']);
+                    $archivo->setCod_area($row['cod_area']);
+                    $archivo->setCod_estado($row['cod_estado']);
+                    $archivo->setId_tipo($row['id_tipo']);
+                    $archivo->setId_materia($row['id_materia']);
+                    $archivo->setTamano($s3archivos->getTamaño());
+                    $archivos[] = $archivo;
+                    error_log("Archivos :" . $archivo->getRuta());
+                    error_log("Archivos s3 :" . $s3archivos->getUrl());
+                    }
                 }
                 $stm->close();
             }
@@ -288,4 +330,38 @@ class ArchivoDAO
             return false;
         }
     }
+    public function updateestado($id, $cod_estado)
+    {
+        try {
+            $sql = "UPDATE archivo SET cod_estado = ? WHERE id = ?";
+            $stm = $this->conn->prepare($sql);
+    
+            $stm->bind_param(
+                'ii',
+                
+                $cod_estado,
+            
+                $id
+            );
+           
+            error_log("cod_estado: " . $cod_estado);
+ 
+            error_log("id (WHERE): " . $id);
+            return $stm->execute();
+        } catch (Exception $e) {
+            error_log('Error en actualizar estado archivo ArchivoDAO: ' . $e->getMessage());
+            return false;
+        }
+    }
+     public function estudianteConMasArchivos()
+    {
+        $stmt = $this->conn->prepare("
+            SELECT e.nombre, COUNT(a.id) AS total FROM archivo a
+            INNER JOIN estudiante e ON a.cod_estudiante = e.codigo
+            GROUP BY e.codigo ORDER BY total DESC LIMIT 1
+        ");
+        $stmt->execute();
+        return $stmt->get_result()->fetch_all(MYSQLI_NUM);
+    }
+   
 }

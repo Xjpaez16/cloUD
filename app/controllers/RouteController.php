@@ -270,6 +270,18 @@ class RouteController extends Controller
         $archivoDAO = new ArchivoDAO();
         require_once(__DIR__ . '../../../view/viewallfiles.php'); // muestra la vista de viewallfiles.php
 
+        
+    }
+    public function viewfilesadmin(){
+        require_once(__DIR__ . '/FilesController.php');
+
+        $filesController = new FilesController();
+        $profesores = $filesController->viewteachers(); // retorna array
+        $areas = $filesController->viewareas();
+        $materias = $filesController->viewmaterias();
+        $archivos = $filesController->viewfiles();
+        $archivoDAO = new ArchivoDAO();
+        require_once(__DIR__ . '../../../view/Admin_files.php'); // muestra la vista de viewallfiles.php
     }
     public function viewmyfilesStudent()
     {
@@ -310,6 +322,11 @@ class RouteController extends Controller
     require_once(__DIR__ . '/AreaAdminController.php');
     $controller = new AreaAdminController();
     $controller->delete();
+    }
+    public function reportes(){
+        
+        $this->view('reportes');
+
     }
 
 }
