@@ -16,24 +16,32 @@ class TutorDAO
     public function create(TutorDTO $tutor)
     {
         try {
-            $sql = "INSERT INTO tutor (codigo, nombre, correo, contrasena, calificacion_general, respuesta_preg, cod_estado) VALUES (?, ?, ?, ?, ?, ?, ?)";
-            $stmt = $this->conn->prepare($sql);
             $codigo = $tutor->getCodigo();
-            $nombre = $tutor->getNombre();
             $correo = $tutor->getCorreo();
-            $contrasena = $tutor->getContrasena();
-            $calificacion_general = $tutor->getCalificacion_general();
-            $respuesta_preg = $tutor->getRespuesta_preg();
-            $cod_estado = $tutor->getCod_estado();
+            $nombre = $tutor->getNombre();
+
+            $sql = "SELECT codigo FROM tutor WHERE codigo = ? OR correo = ? OR nombre = ?";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bind_param("iss", $codigo, $correo, $nombre);
+            $stmt->execute();
+            $result = $stmt->get_result();
+
+            if ($result->num_rows > 0) {
+                return "duplicado";
+            }
+
+            $sql = "INSERT INTO tutor (codigo, nombre, correo, contrasena, calificacion_general, respuesta_preg, cod_estado) 
+                    VALUES (?, ?, ?, ?, ?, ?, ?)";
+            $stmt = $this->conn->prepare($sql);
             $stmt->bind_param(
-                'isssissi',
+                'isssdsi',
                 $codigo,
                 $nombre,
                 $correo,
-                $contrasena,
-                $calificacion_general,
-                $respuesta_preg,
-                $cod_estado
+                $tutor->getContrasena(),
+                $tutor->getCalificacion_general(),
+                $tutor->getRespuesta_preg(),
+                $tutor->getCod_estado()
             );
             return $stmt->execute();
         } catch (Exception $e) {

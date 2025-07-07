@@ -206,48 +206,33 @@
         <?php if (isset($_GET['error']) || isset($_GET['success'])): ?>
         <script>
             <?php if (isset($_GET['error'])): ?>
-            <?php if ($_GET['error'] === 'idduplicado'): ?>
-                Swal.fire({
-                icon: 'error',
-                title: 'ID duplicado',
-                text: 'Ya existe un estudiante con ese ID.',
-                confirmButtonColor: '#803cb9'
-                });
-            <?php elseif ($_GET['error'] === 'emailinvalido'): ?>
-                Swal.fire({
-                icon: 'error',
-                title: 'Correo no válido',
-                text: 'El correo debe ser institucional (@udistrital.edu.co).',
-                confirmButtonColor: '#803cb9'
-                });
-            <?php elseif ($_GET['error'] === 'claveinvalida'): ?>
-                Swal.fire({
-                icon: 'error',
-                title: 'Contraseña insegura',
-                html: 'Debe tener al menos:<br>• Una minúscula<br>• Una mayúscula<br>• Un número<br>• Un símbolo<br>• Mínimo 8 caracteres',
-                confirmButtonColor: '#803cb9'
-                });
+                <?php if ($_GET['error'] === 'idduplicado'): ?>
+                    Swal.fire({ icon: 'error', title: 'ID duplicado', text: 'Ya existe un estudiante con ese ID.', confirmButtonColor: '#803cb9' });
+                <?php elseif ($_GET['error'] === 'emailinvalido'): ?>
+                    Swal.fire({ icon: 'error', title: 'Correo no válido', text: 'El correo debe ser institucional (@udistrital.edu.co).', confirmButtonColor: '#803cb9' });
+                <?php elseif ($_GET['error'] === 'claveinvalida'): ?>
+                    Swal.fire({ icon: 'error', title: 'Contraseña insegura', html: 'Debe tener al menos:<br>• Una minúscula<br>• Una mayúscula<br>• Un número<br>• Un símbolo<br>• Mínimo 8 caracteres', confirmButtonColor: '#803cb9' });
+                <?php elseif ($_GET['error'] === 'idocorreooNombre'): ?>
+                    Swal.fire({ icon: 'error', title: 'Duplicado', text: 'Ya existe un estudiante con ese ID, correo o nombre.', confirmButtonColor: '#803cb9' });
+                <?php elseif ($_GET['error'] === 'correooNombreDuplicado'): ?>
+                    Swal.fire({ icon: 'error', title: 'Nombre o Correo duplicado', text: 'Otro estudiante ya tiene ese nombre o correo.', confirmButtonColor: '#803cb9' });
+                <?php elseif ($_GET['error'] === 'updatefail'): ?>
+                    Swal.fire({ icon: 'error', title: 'Error al actualizar', text: 'Hubo un problema al guardar los cambios.', confirmButtonColor: '#803cb9' });
+                <?php elseif ($_GET['error'] === 'notfound'): ?>
+                    Swal.fire({ icon: 'error', title: 'No encontrado', text: 'No se encontró el estudiante para actualizar.', confirmButtonColor: '#803cb9' });
+                <?php endif; ?>
             <?php endif; ?>
-            <?php endif; ?>
+
             <?php if (isset($_GET['success'])): ?>
-            <?php if ($_GET['success'] === '1'): ?>
-                Swal.fire({
-                icon: 'success',
-                title: 'Estudiante creado',
-                text: 'El estudiante fue registrado exitosamente.',
-                confirmButtonColor: '#76dd77'
-                });
-            <?php elseif ($_GET['success'] === '2'): ?>
-                Swal.fire({
-                icon: 'success',
-                title: 'Estudiante actualizado',
-                text: 'Los datos del estudiante se actualizaron correctamente.',
-                confirmButtonColor: '#76dd77'
-                });
-            <?php endif; ?>
+                <?php if ($_GET['success'] === '1'): ?>
+                    Swal.fire({ icon: 'success', title: 'Estudiante creado', text: 'El estudiante fue registrado exitosamente.', confirmButtonColor: '#76dd77' });
+                <?php elseif ($_GET['success'] === '2'): ?>
+                    Swal.fire({ icon: 'success', title: 'Estudiante actualizado', text: 'Los datos del estudiante se actualizaron correctamente.', confirmButtonColor: '#76dd77' });
+                <?php endif; ?>
             <?php endif; ?>
         </script>
         <?php endif; ?>
+
     </div>
 </body>
 </html>

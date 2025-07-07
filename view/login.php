@@ -1,4 +1,21 @@
 <!DOCTYPE html>
+<?php
+session_start();
+if (isset($_SESSION['usuario']) && isset($_SESSION['rol'])) {
+    // Redirige según rol
+    switch ($_SESSION['rol']) {
+        case 'estudiante':
+            header('Location: ' . BASE_URL . 'index.php?url=RouteController/student');
+            exit;
+        case 'tutor':
+            header('Location: ' . BASE_URL . 'index.php?url=RouteController/tutor');
+            exit;
+        case 'administrador':
+            header('Location: ' . BASE_URL . 'index.php?url=RouteController/admin');
+            exit;
+    }
+}
+?>
 <html lang="en">
 
 <head>
@@ -110,6 +127,12 @@ if (isset($_GET['error'])) {
       showSuccess('<?= $msg ?>');
     </script>
 <?php } ?>  
+<script>
+    history.pushState(null, document.title, location.href);
+    window.addEventListener('popstate', function (event) {
+        history.pushState(null, document.title, location.href);
+    });
+</script>
 </body>
 
 </html>

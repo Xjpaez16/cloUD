@@ -201,6 +201,10 @@
                     Swal.fire({ icon: 'error', title: 'Correo no válido', text: 'El correo debe ser institucional (@udistrital.edu.co).', confirmButtonColor: '#3c80b9' });
                 <?php elseif ($_GET['error'] === 'claveinvalida'): ?>
                     Swal.fire({ icon: 'error', title: 'Contraseña insegura', html: 'Debe tener al menos:<br>• Una minúscula<br>• Una mayúscula<br>• Un número<br>• Un símbolo<br>• Mínimo 8 caracteres', confirmButtonColor: '#3c80b9' });
+                <?php elseif ($_GET['error'] === 'idocorreooNombre'): ?>
+                    Swal.fire({ icon: 'error', title: 'Duplicado', text: 'Ya existe un tutor con ese ID, correo o nombre.', confirmButtonColor: '#3c80b9' });
+                <?php elseif ($_GET['error'] === 'correooNombreDuplicado'): ?>
+                    Swal.fire({ icon: 'error', title: 'Nombre o Correo duplicado', text: 'Otro tutor ya tiene ese nombre o correo.', confirmButtonColor: '#3c80b9' });
                 <?php endif; ?>
             <?php endif; ?>
 

@@ -39,9 +39,23 @@ class StudentAdminController {
             header('Location: ' . BASE_URL . 'index.php?url=StudentAdminController/index&error=emailinvalido');
             exit;
         }
+
         if (!$this->validation->validatepassword($contrasena)) {
             header('Location: ' . BASE_URL . 'index.php?url=StudentAdminController/index&error=claveinvalida');
             exit;
+        }
+
+        // Validar duplicados por código, nombre o correo
+        $todos = $this->studentDAO->getAll();
+        foreach ($todos as $est) {
+            if (
+                $est->getCodigo() == $codigo ||
+                strtolower($est->getCorreo()) == strtolower($correo) ||
+                strtolower($est->getNombre()) == strtolower($nombre)
+            ) {
+                header('Location: ' . BASE_URL . 'index.php?url=StudentAdminController/index&error=idocorreooNombre');
+                exit;
+            }
         }
 
         $contrasena_hash = password_hash($contrasena, PASSWORD_DEFAULT);
@@ -52,9 +66,11 @@ class StudentAdminController {
             header('Location: ' . BASE_URL . 'index.php?url=StudentAdminController/index&error=idduplicado');
             exit;
         }
+
         header('Location: ' . BASE_URL . 'index.php?url=StudentAdminController/index&success=1');
         exit;
-    }
+}
+
 
     public function update() {
         $codigo_actual = $_POST['codigo_actual'];
@@ -74,6 +90,27 @@ class StudentAdminController {
             header('Location: ' . BASE_URL . 'index.php?url=StudentAdminController/index&error=notfound');
             exit;
         }
+
+        // Validar duplicados de correo o nombre en otro estudiante
+        $todos = $this->studentDAO->getAll();
+        foreach ($todos as $otro) {
+            if ($otro->getCodigo() != $codigo_actual) {
+                if (
+                    strtolower($otro->getCorreo()) == strtolower($correo) ||
+                    strtolower($otro->getNombre()) == strtolower($nombre)
+                ) {
+                    header('Location: ' . BASE_URL . 'index.php?url=StudentAdminController/index&error=correooNombreDuplicado');
+                    exit;
+                }
+            }
+        }
+
+        // Validar si el nuevo ID ya existe en otro estudiante
+        if ($codigo != $codigo_actual && $this->studentDAO->getid($codigo)) {
+            header('Location: ' . BASE_URL . 'index.php?url=StudentAdminController/index&error=idduplicado');
+            exit;
+        }
+
         $estudiante->setCodigo($codigo);
         $estudiante->setNombre($nombre);
         $estudiante->setCorreo($correo);
@@ -88,6 +125,7 @@ class StudentAdminController {
             exit;
         }
     }
+
 
     public function delete() {
         $codigo = $_GET['codigo'];

@@ -99,7 +99,11 @@ class LoginController
         session_start();
         session_unset();
         session_destroy();
-        header('Location: ' . BASE_URL . 'index.php?url=RouteController/home');
+        echo "<script>
+            history.pushState(null, null, location.href);
+            history.replaceState(null, null, location.href);
+            window.location.href = '" . BASE_URL . "index.php?url=RouteController/login';
+        </script>";
         exit;
     }
-}
+    }
