@@ -430,5 +430,35 @@ class TutorDAO
         $stmt->bind_param("i", $codigo);
         return $stmt->execute();
     }
+    public function obtenerCalificacion($cod_tutor){
+        $calificacionbd = null;
+        try {
+            $sql = "SELECT calificacion_general FROM tutor WHERE codigo = ?";
+            $stm = $this->conn->prepare($sql);
+            $stm->bind_param('i', $cod_tutor);
+            $stm->execute();
+            $stm->bind_result($calificacionbd);
+            if ($stm->fetch()) {
+                return $calificacionbd;
+            } else {
+                return null;
+            }
+        } catch (Exception $e) {
+            error_log('Error en traer la calificacion general: ' . $e->getMessage());
+            return false;
+        }
+    }
+    public function setCalificacion($calificacion,$cod_tutor){
+        try{
+            $sql = "UPDATE tutor SET calificacion_general = ? WHERE codigo = ?";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bind_param('ii', $calificacion,$cod_tutor);
+            return $stmt->execute();
+        }catch(Exception $e){
+            error_log('Error en setCalificacion TutorDAO: ' . $e->getMessage());
+            return false;
+        }
+    }
+
 }
 ?>

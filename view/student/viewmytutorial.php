@@ -83,7 +83,7 @@ if (!isset($_SESSION['usuario']) || $_SESSION['rol'] !== 'estudiante') {
     </div>
 
     <!-- Modal de cancelación integrado -->
-    <div id="cancelationModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+    <div id="cancelationModal" class="fixed inset-0 bg-black bg-opacity-50  items-center justify-center z-50 hidden">
         <div class="bg-white rounded-xl shadow-xl w-full max-w-2xl max-h-[80vh] overflow-hidden mx-4">
             <div class="flex justify-between items-center border-b p-4">
                 <h3 class="text-xl font-bold text-gray-800">Tutorías Pendientes</h3>

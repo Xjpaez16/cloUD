@@ -193,6 +193,7 @@ class RouteController extends Controller
         $tutorController->procesarAprobacion();
     }
     
+    
     public function showTutorRequests() {
         require_once(__DIR__ . '/TutoriaController.php');
         $tutoriaController = new TutoriaController();
@@ -227,6 +228,11 @@ class RouteController extends Controller
         require_once(__DIR__ . '/StudentController.php');
         $studentController = new StudentController();
         $studentController->processCancelation();
+    }
+    public function processCancelationTutor() {
+        require_once(__DIR__ . '/TutorController.php');
+        $tutorController = new TutorController();
+        $tutorController->processCancelation();
     }
 
     public function editAvailability() {
@@ -283,4 +289,5 @@ class RouteController extends Controller
         $archivoDAO = new ArchivoDAO();
         require_once(__DIR__ . '../../../view/viewMyFiles.php'); // muestra la vista de viewmyfiles.php
     }
+       
 }

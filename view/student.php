@@ -1,5 +1,6 @@
 <?php
 require_once(__DIR__ . '/../app/controllers/models/DTO/EstudianteDTO.php');
+require_once(__DIR__ . '/../app/controllers/models/DTO/TutoriaDTO.php');
 session_start();
 header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
 header("Cache-Control: post-check=0, pre-check=0", false);
@@ -23,7 +24,9 @@ require_once __DIR__ . '/layouts/nav.php';
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Tailwind CSS vía CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="<?= BASE_URL ?>public/css/home.css">
+    
     <!-- notyf vía CDN -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css">
     <script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
@@ -74,6 +77,8 @@ require_once __DIR__ . '/layouts/nav.php';
             <p class="font-bold text-right p-9 ">FAQ</p>
         </div>
     </div>
+   
+
     <?php if (isset($_GET['session']) && $_GET['session'] === 'success') { ?>
         <script>
             const notyf = new Notyf({
@@ -108,6 +113,21 @@ require_once __DIR__ . '/layouts/nav.php';
                 });
         </script>
     <?php }?>
+
+    <script src="<?= BASE_URL ?>public/js/notyf.js"></script>
+    
+    <?php if(isset($_GET['success'])) { 
+    $successMessages = [
+        1 => 'El tutor ha sido calificado con exito ¡Gracias!',
+        
+    ];
+    $msg = $successMessages[$_GET['success']] ?? $successMessages[1];
+?>
+    <script>
+      showSuccess('<?= $msg ?>');
+    </script>
+<?php } ?>  
+
     <script>
         window.addEventListener('pageshow', function(event) {
         if (event.persisted) {
@@ -115,6 +135,17 @@ require_once __DIR__ . '/layouts/nav.php';
         }
         });
     </script>
+
+    <?php if (!empty($_SESSION['tutorias_a_calificar'])): ?>
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('calificacionModal').classList.remove('hidden');
+        });
+    </script>
+    <?php include __DIR__ . '/modal_calificacion.php'; ?>
+    <?php endif; ?>
+    
+   
 </body>
 
 </html>
