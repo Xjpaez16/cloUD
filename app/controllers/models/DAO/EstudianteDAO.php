@@ -24,7 +24,7 @@ class EstudianteDAO {
             $cod_carrera = $estudiante->getCod_carrera();
             $cod_estado = $estudiante->getCod_estado();
             $stmt->bind_param(
-                'issssiii',
+                'issssii',
                 $codigo,
                 $nombre,
                 $correo,

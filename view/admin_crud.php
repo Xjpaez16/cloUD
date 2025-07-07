@@ -12,8 +12,8 @@
     <div class="bg-white bg-opacity-90 rounded-2xl shadow-2xl p-8 max-w-3xl w-full mt-16 mb-8">
         <div class="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
             <h1 class="text-4xl font-extrabold text-[#5232a8] drop-shadow mb-2 md:mb-0">Administradores</h1>
-            <a href="<?= BASE_URL ?>LoginController/logout">
-                <button class="bg-gradient-to-r from-red-500 to-red-700 hover:from-red-700 hover:to-red-500 text-white font-bold py-3 px-6 rounded-xl shadow-lg text-lg transition-all duration-300 transform hover:scale-105">Cerrar sesión</button>
+            <a href="<?= BASE_URL ?>RouteController/admin">
+                <button class="bg-gradient-to-r from-purple-500 to-purple-700 hover:from-purple-700 hover:to-purple-500 text-white font-bold py-3 px-6 rounded-xl shadow-lg text-lg transition-all duration-300 transform hover:scale-105">Volver</button>
             </a>
         </div>
         <h2 class="text-2xl font-semibold text-[#803cb9] mb-4">Ver administradores</h2> 

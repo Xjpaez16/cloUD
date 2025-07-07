@@ -15,23 +15,23 @@
     <div class="bg-white bg-opacity-90 rounded-2xl shadow-2xl p-10 max-w-2xl w-full mt-16 mb-8">
         <h1 class="text-4xl font-extrabold text-center text-[#5232a8] mb-2 drop-shadow">Panel de Administrador</h1>
         <p class="text-lg text-center text-gray-700 mb-8">Gestiona los administradores</p>
-        <div class="flex flex-col md:flex-row gap-6 justify-center mb-8">
-            <a href="<?= BASE_URL ?>AdminController/index" class="flex-1">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+            <a href="<?= BASE_URL ?>AdminController/index">
                 <button class="w-full bg-gradient-to-r from-[#803cb9] to-[#5232a8] hover:from-[#5232a8] hover:to-[#803cb9] text-white font-bold py-6 px-4 rounded-xl shadow-lg text-xl transition-all duration-300 transform hover:scale-105">
                     Ver Administradores
                 </button>
             </a>
-            <a href="<?= BASE_URL ?>StudentAdminController/index" class="flex-1">
+            <a href="<?= BASE_URL ?>StudentAdminController/index">
                 <button class="w-full bg-gradient-to-r from-[#32a852] to-[#3cb980] hover:from-[#3cb980] hover:to-[#32a852] text-white font-bold py-6 px-4 rounded-xl shadow-lg text-xl transition-all duration-300 transform hover:scale-105">
                     Ver Estudiantes
                 </button>
             </a>
-            <a href="<?= BASE_URL ?>TutorAdminController/index" class="flex-1">
+            <a href="<?= BASE_URL ?>TutorAdminController/index">
                 <button class="w-full bg-gradient-to-r from-[#32a8a8] to-[#3c80b9] hover:from-[#3c80b9] hover:to-[#32a8a8] text-white font-bold py-6 px-4 rounded-xl shadow-lg text-xl transition-all duration-300 transform hover:scale-105">
                     Ver Tutores
                 </button>
             </a>
-            <a href="<?= BASE_URL ?>LoginController/logout" class="flex-1">
+            <a href="<?= BASE_URL ?>LoginController/logout">
                 <button class="w-full bg-gradient-to-r from-red-500 to-red-700 hover:from-red-700 hover:to-red-500 text-white font-bold py-6 px-4 rounded-xl shadow-lg text-xl transition-all duration-300 transform hover:scale-105">
                     <svg class="inline-block w-7 h-7 mr-2 -mt-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v1"/></svg>
                     Cerrar sesión
