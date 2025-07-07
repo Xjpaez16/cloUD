@@ -87,7 +87,7 @@
             </div>
             <button type="submit" class="bg-gradient-to-r from-[#803cb9] to-[#5232a8] hover:from-[#5232a8] hover:to-[#803cb9] text-white font-bold py-3 px-6 rounded-xl shadow-lg text-lg transition-all duration-300 transform hover:scale-105 w-full">Agregar Admin</button>
         </form>
-        <div id="editModal" class="fixed inset-0 bg-black bg-opacity-50 items-center justify-center z-50 hidden">
+        <div id="editModal" class="fixed flex inset-0 bg-black bg-opacity-50 items-center justify-center z-50 hidden">
             <form id="editForm" action="<?= BASE_URL ?>AdminController/update" method="POST" class="bg-white p-8 rounded-2xl shadow-lg w-full max-w-md">
             <input type="hidden" name="codigo_actual" id="editCodigoActual">
             <div class="mb-4">

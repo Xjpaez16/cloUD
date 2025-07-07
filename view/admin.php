@@ -31,6 +31,36 @@
                     Ver Tutores
                 </button>
             </a>
+            <a href="<?= BASE_URL ?>index.php?url=AreaAdminController/index">
+                <button class="w-full bg-gradient-to-r from-[#32a8a8] to-[#3c80b9] hover:from-[#3c80b9] hover:to-[#32a8a8] text-white font-bold py-6 px-4 rounded-xl shadow-lg text-xl transition-all duration-300 transform hover:scale-105">
+                    Ver Areas
+                </button>
+            </a>
+            <a href="<?= BASE_URL ?>index.php?url=TipoArchivoAdminController/index">
+                <button class="w-full bg-gradient-to-r from-[#32a8a8] to-[#3c80b9] hover:from-[#3c80b9] hover:to-[#32a8a8] text-white font-bold py-6 px-4 rounded-xl shadow-lg text-xl transition-all duration-300 transform hover:scale-105">
+                    Ver Tipos de Archivo
+                </button>
+            </a>
+            <a href="<?= BASE_URL ?>index.php?url=MotivoAdminController/index">
+                <button class="w-full bg-gradient-to-r from-[#32a8a8] to-[#3c80b9] hover:from-[#3c80b9] hover:to-[#32a8a8] text-white font-bold py-6 px-4 rounded-xl shadow-lg text-xl transition-all duration-300 transform hover:scale-105">
+                    Ver Tipos de Motivos
+                </button>
+            </a>
+            <a href="<?= BASE_URL ?>index.php?url=MateriaAdminController/index">
+                <button class="w-full bg-gradient-to-r from-[#32a8a8] to-[#3c80b9] hover:from-[#3c80b9] hover:to-[#32a8a8] text-white font-bold py-6 px-4 rounded-xl shadow-lg text-xl transition-all duration-300 transform hover:scale-105">
+                    Ver Materias
+                </button>
+            </a>
+            <a href="<?= BASE_URL ?>index.php?url=EstadoAdminController/index">
+                <button class="w-full bg-gradient-to-r from-[#32a8a8] to-[#3c80b9] hover:from-[#3c80b9] hover:to-[#32a8a8] text-white font-bold py-6 px-4 rounded-xl shadow-lg text-xl transition-all duration-300 transform hover:scale-105">
+                    Ver Estados
+                </button>
+            </a>
+            <a href="<?= BASE_URL ?>index.php?url=CarreraAdminController/index">
+                <button class="w-full bg-gradient-to-r from-[#32a8a8] to-[#3c80b9] hover:from-[#3c80b9] hover:to-[#32a8a8] text-white font-bold py-6 px-4 rounded-xl shadow-lg text-xl transition-all duration-300 transform hover:scale-105">
+                    Ver Carreras
+                </button>
+            </a>
             <a href="<?= BASE_URL ?>LoginController/logout">
                 <button class="w-full bg-gradient-to-r from-red-500 to-red-700 hover:from-red-700 hover:to-red-500 text-white font-bold py-6 px-4 rounded-xl shadow-lg text-xl transition-all duration-300 transform hover:scale-105">
                     <svg class="inline-block w-7 h-7 mr-2 -mt-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v1"/></svg>

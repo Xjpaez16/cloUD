@@ -5,7 +5,7 @@ class Tipo_archivoDTO
     private $id;
     private $tipo;
 
-    public function __construct($id, $tipo)
+    public function __construct($tipo = null, $id = null)
     {
         $this->id = $id;
         $this->tipo = $tipo;

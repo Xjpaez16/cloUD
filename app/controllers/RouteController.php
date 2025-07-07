@@ -283,4 +283,33 @@ class RouteController extends Controller
         $archivoDAO = new ArchivoDAO();
         require_once(__DIR__ . '../../../view/viewMyFiles.php'); // muestra la vista de viewmyfiles.php
     }
+
+    public function manageAreas()
+    {
+    require_once(__DIR__ . '/AreaAdminController.php');
+    $controller = new AreaAdminController();
+    $controller->index();
+    }
+
+    public function createArea()
+    {
+    require_once(__DIR__ . '/AreaAdminController.php');
+    $controller = new AreaAdminController();
+    $controller->create();
+    }
+
+    public function updateArea()
+    {
+    require_once(__DIR__ . '/AreaAdminController.php');
+    $controller = new AreaAdminController();
+    $controller->update();
+    }
+
+    public function deleteArea()
+    {
+    require_once(__DIR__ . '/AreaAdminController.php');
+    $controller = new AreaAdminController();
+    $controller->delete();
+    }
+
 }

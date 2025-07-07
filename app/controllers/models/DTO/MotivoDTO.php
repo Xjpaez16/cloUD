@@ -5,7 +5,7 @@ class MotivoDTO
     private $codigo;
     private $tipo_motivo;
 
-    public function __construct($codigo, $tipo_motivo)
+    public function __construct($codigo = null, $tipo_motivo = null)
     {
         $this->codigo = $codigo;
         $this->tipo_motivo = $tipo_motivo;
