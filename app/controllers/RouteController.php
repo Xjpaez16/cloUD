@@ -107,39 +107,42 @@ class RouteController extends Controller
         $tutorController = new TutorController();
         $tutorController->registerAvailability();
     }
-    
+
     public function showTutorSearch()
     {
         require_once(__DIR__ . '/StudentController.php');
         $studentController = new StudentController();
         $studentController->displayTutorSearch();
     }
-    
+
     public function filterTutorsAjax()
     {
         require_once(__DIR__ . '/StudentController.php');
         $studentController = new StudentController();
         $studentController->filterTutorsAjax();
     }
-    
-    public function processTutorRequest() {
+
+    public function processTutorRequest()
+    {
         require_once(__DIR__ . '/StudentController.php');
         $studentController = new StudentController();
         $studentController->handleTutorRequest();
-    }   
-    
-    public function viewProfileStudent() {
+    }
+
+    public function viewProfileStudent()
+    {
         require_once __DIR__ . '/StudentController.php';
         $controller = new StudentController();
         $controller->viewProfile();
     }
-    
-    public function viewProfileTutor() {
+
+    public function viewProfileTutor()
+    {
         require_once __DIR__ . '/TutorController.php';
         $controller = new TutorController();
         $controller->viewProfile();
     }
-    
+
     public function viewSupport()
     {
         require_once(__DIR__ . '/adminController.php');
@@ -149,7 +152,7 @@ class RouteController extends Controller
         $adminCorreo = $admin ? $admin->getCorreo() : "soporte@udistrital.edu.co";
         require __DIR__ . '/../../view/viewSupport.php';
     }
-    
+
     public function viewFAQ()
     {
         require_once(__DIR__ . '/AdminController.php');
@@ -160,71 +163,81 @@ class RouteController extends Controller
         require __DIR__ . '/../../view/viewFAQ.php';
     }
 
-    public function requestTutorial() {
+    public function requestTutorial()
+    {
         require_once(__DIR__ . '/TutoriaController.php');
         $tutorId = $_GET['tutor_id'] ?? null;
         $horarioId = $_GET['horario_id'] ?? null;
         $tutoriaController = new TutoriaController();
         $tutoriaController->mostrarFormularioSolicitud($tutorId, $horarioId);
-        
     }
 
-    public function processRequest() {
+    public function processRequest()
+    {
         require_once(__DIR__ . '/TutoriaController.php');
         $tutoriaController = new TutoriaController();
         $tutoriaController->procesarSolicitudTutoria();
     }
-    
-    public function showTutoriaConfirmation() {
+
+    public function showTutoriaConfirmation()
+    {
         require_once(__DIR__ . '/TutoriaController.php');
         $tutoriaController = new TutoriaController();
         $tutoriaController->mostrarConfirmacionTutoria($_GET['id'] ?? null);
     }
-    
-    public function solicitudesTutor() {
+
+    public function solicitudesTutor()
+    {
         require_once(__DIR__ . '/TutorController.php');
         $tutorController = new TutorController();
         $tutorController->solicitudesTutoria();
     }
-    
-    public function procesarAprobacionTutoria() {
+
+    public function procesarAprobacionTutoria()
+    {
         require_once(__DIR__ . '/TutorController.php');
         $tutorController = new TutorController();
         $tutorController->procesarAprobacion();
     }
     
-    
-    public function showTutorRequests() {
+
+    public function showTutorRequests()
+    {
         require_once(__DIR__ . '/TutoriaController.php');
         $tutoriaController = new TutoriaController();
         $tutoriaController->mostrarSolicitudesTutor();
     }
-    
-    public function aprobarTutoria() {
+
+    public function aprobarTutoria()
+    {
         require_once(__DIR__ . '/TutoriaController.php');
         $tutoriaController = new TutoriaController();
         $tutoriaController->procesarAprobacion();
     }
-    
-    public function rechazarTutoria() {
+
+    public function rechazarTutoria()
+    {
         require_once(__DIR__ . '/TutoriaController.php');
         $tutoriaController = new TutoriaController();
         $tutoriaController->procesarRechazo();
     }
-    public function viewMyTutorial(){
+    public function viewMyTutorial()
+    {
         require_once(__DIR__ . '/StudentController.php');
         //$this->processRequest();
         $studentController = new StudentController();
         $studentController->viewMyTutorials();
     }
 
-    public function showCancelationPanel() {
+    public function showCancelationPanel()
+    {
         require_once(__DIR__ . '/StudentController.php');
         $studentController = new StudentController();
         $studentController->showCancelationPanel();
     }
-    
-    public function processCancelation() {
+
+    public function processCancelation()
+    {
         require_once(__DIR__ . '/StudentController.php');
         $studentController = new StudentController();
         $studentController->processCancelation();
@@ -235,19 +248,22 @@ class RouteController extends Controller
         $tutorController->processCancelation();
     }
 
-    public function editAvailability() {
+    public function editAvailability()
+    {
         require_once(__DIR__ . '/TutorController.php');
         $tutorController = new TutorController();
         $tutorController->mostrarFormularioEdicion();
     }
-    
-    public function updateAvailability() {
+
+    public function updateAvailability()
+    {
         require_once(__DIR__ . '/TutorController.php');
         $tutorController = new TutorController();
         $tutorController->actualizarDisponibilidad();
     }
-    
-    public function deleteAvailability() {
+
+    public function deleteAvailability()
+    {
         require_once(__DIR__ . '/TutorController.php');
         $tutorController = new TutorController();
         $tutorController->eliminarDisponibilidad();
@@ -304,24 +320,25 @@ class RouteController extends Controller
 
     public function manageAreas()
     {
-    require_once(__DIR__ . '/AreaAdminController.php');
-    $controller = new AreaAdminController();
-    $controller->index();
+        require_once(__DIR__ . '/AreaAdminController.php');
+        $controller = new AreaAdminController();
+        $controller->index();
     }
 
     public function createArea()
     {
-    require_once(__DIR__ . '/AreaAdminController.php');
-    $controller = new AreaAdminController();
-    $controller->create();
+        require_once(__DIR__ . '/AreaAdminController.php');
+        $controller = new AreaAdminController();
+        $controller->create();
     }
 
     public function updateArea()
     {
-    require_once(__DIR__ . '/AreaAdminController.php');
-    $controller = new AreaAdminController();
-    $controller->update();
+        require_once(__DIR__ . '/AreaAdminController.php');
+        $controller = new AreaAdminController();
+        $controller->update();
     }
+}
 
     public function deleteArea()
     {
