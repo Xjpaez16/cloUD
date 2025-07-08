@@ -58,4 +58,44 @@ class MateriaDAO
             return [];
         }
     }
+
+    public function crearMateria($id, $nombre_materia) {
+        $nombreLimpio = $this->limpiarEspacios($nombre_materia);
+        $nombreComparar = strtolower($nombreLimpio);
+
+        $stmt = $this->conn->prepare("SELECT * FROM materia WHERE id = ? OR TRIM(LOWER(nombre_materia)) = ?");
+        $stmt->bind_param("is", $id, $nombreComparar);
+        $stmt->execute();
+
+        if ($stmt->get_result()->num_rows > 0) {
+            return false;
+        }
+
+        $stmt = $this->conn->prepare("INSERT INTO materia (id, nombre_materia) VALUES (?, ?)");
+        $stmt->bind_param("is", $id, $nombreLimpio);
+        return $stmt->execute();
+    }
+
+    public function actualizarMateria($id_actual, $id_nuevo, $nombre_materia) {
+        $nombreLimpio = $this->limpiarEspacios($nombre_materia);
+        $nombreComparar = strtolower($nombreLimpio);
+
+        $stmt = $this->conn->prepare("SELECT * FROM materia WHERE (id = ? OR TRIM(LOWER(nombre_materia)) = ?) AND id != ?");
+        $stmt->bind_param("isi", $id_nuevo, $nombreComparar, $id_actual);
+        $stmt->execute();
+
+        if ($stmt->get_result()->num_rows > 0) {
+            return false;
+        }
+
+        $stmt = $this->conn->prepare("UPDATE materia SET id = ?, nombre_materia = ? WHERE id = ?");
+        $stmt->bind_param("isi", $id_nuevo, $nombreLimpio, $id_actual);
+        return $stmt->execute();
+    }
+
+
+    private function limpiarEspacios($texto) {
+        return trim(preg_replace('/\s+/', ' ', $texto));
+    }
+
 }

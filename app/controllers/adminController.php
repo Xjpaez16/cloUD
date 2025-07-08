@@ -41,9 +41,9 @@ class AdminController {
             exit;
         }
 
-        $clave_hash = password_hash($clave, PASSWORD_DEFAULT);
+        //$clave_hash = password_hash($clave, PASSWORD_DEFAULT);
 
-        if (!$this->adminDAO->crearAdmin($id, $nombre, $correo, $clave_hash, $respuesta_preg)) {
+        if (!$this->adminDAO->crearAdmin($id, $nombre, $correo, $clave, $respuesta_preg)) {
             header('Location: ' . BASE_URL . 'index.php?url=AdminController/index&error=idduplicado');
             exit;
         }

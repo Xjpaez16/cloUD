@@ -438,6 +438,24 @@ class TutorDAO
         $stmt->bind_param("i", $codigo);
         return $stmt->execute();
     }
+    public function top3TutoresPorCalificacion()
+    {
+        try{
+        $sql ="
+            SELECT nombre, calificacion_general FROM tutor
+            WHERE calificacion_general IS NOT NULL
+            ORDER BY calificacion_general DESC LIMIT 3
+        ";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute();
+        return $stmt->get_result()->fetch_all(MYSQLI_NUM);
+        }
+        catch (Exception $e) {
+            error_log('Error en top3TutoresPorCalificacion: ' . $e->getMessage());
+            return [];
+        }
+
+    }
     public function obtenerCalificacion($cod_tutor){
         $calificacionbd = null;
         try {

@@ -82,7 +82,7 @@ class FilesController
     {
 
         $archivosS3  = $this->s3->viewfiles();
-        $archivos = $this->archivoDAO->allfiles($archivosS3);
+        $archivos = $this->archivoDAO->allfilesadmin($archivosS3);
         return $archivos;
     }
     public function uploadfiles()
@@ -197,6 +197,7 @@ class FilesController
             error_log("rol = " . $rol);
             return $archivosest;
         }
+
     }
     public function updatefile()
     {
@@ -213,6 +214,22 @@ class FilesController
                 header('Location: ' . BASE_URL . 'index.php?url=RouteController/viewmyfilesStudent&success=1');
             } else {
                 header('Location: ' . BASE_URL . 'index.php?url=RouteController/viewmyfilesStudent&error=1');
+            }
+        }
+    }
+    public function updateestado()
+    {
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $id = $_POST['id'];
+            $cod_estado = $_POST['estado'];
+            error_log("id = " . $id);
+            error_log("estado = " . $cod_estado);
+            $editado = $this->archivoDAO->updateestado($id, $cod_estado);
+
+            if ($editado) {
+                header('Location: ' . BASE_URL . 'index.php?url=RouteController/viewfilesadmin&success=1');
+            } else {
+                header('Location: ' . BASE_URL . 'index.php?url=RouteController/viewfilesadmin&error=1');
             }
         }
     }
